@@ -1,0 +1,201 @@
+    
+    .single__product__top__link__container{
+        position: relative;
+        padding: 20px; 
+    }
+    .b_n{
+        padding-bottom: 0;
+    }
+    .t_n{
+        padding-top: 0;
+    }
+    .single__qa__container{
+        position: relative;
+        width: 100%;
+        padding: 10px;
+        background-color: rgba($color: white, $alpha: .1);
+    } 
+
+.product__image__view__container{ 
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 50px;
+    grid-gap: 40px;
+    width: 100%;
+    img{
+        border: 1px solid rgb(221, 221, 221);
+    }
+    .single__image__container{  
+        position: relative;
+        width: 100%;
+        img{
+            position: relative;
+            width: 100%;
+        }
+    }
+    .image__up__grid__container{
+        position: relative;
+        display: grid;
+        grid-template-columns: auto;
+        grid-gap: 10px;
+        height: fit-content;
+    }
+}
+
+.multiple__image__container{
+    position: relative;
+    width: 100%;
+    display: grid; 
+    grid-template-columns: auto auto auto auto auto auto auto auto;
+    grid-gap: 10px;
+
+    img{
+        position: relative;
+        width: 100%;
+    }
+}
+
+.top__single__Product__main__view{
+    background-color: white;
+    display: grid;
+    grid-template-columns: calc(50% - 20px) calc(50% - 20px); 
+    justify-content: space-between;
+    
+}
+
+.bg__white{
+    background-color: white !important;
+}
+
+.bottom__details__view__fill__next{ 
+    display: grid;
+    grid-template-columns: calc(100% - 540px) 500px;
+    grid-gap: 40px;
+}
+
+@media only screen and (max-width: 1100px){
+    .product__image__view__container{
+        grid-gap: 10px;
+    }
+    .top__single__Product__main__view{
+        grid-template-columns: auto;
+        grid-gap: 40px;
+    }
+    .bottom__details__view__fill__next{  
+        grid-template-columns: auto; 
+        grid-gap: 0;
+    }
+}
+
+.related__product__details__container{
+    position: relative;
+    width: 100%;  
+}
+
+
+
+.related_product__container{
+    position: relative;
+    width: 100%; 
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 20px;   
+    .single__related__product__container{
+        position: relative;
+        width: 100%;
+        height: fit-content;
+        background-color: rgba($color: #000000, $alpha: .1);
+        padding: 4px;
+    }
+}
+
+.left__right__free__middle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title__history__color{
+    background-color: rgba($color: #000000, $alpha: .1);
+}
+.grid__related__product__container{
+    display: grid;
+    grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
+    grid-gap: 0;
+}
+.large__cart{
+    display: grid;
+}
+.small__cart{
+    display: none;
+}
+
+.margin__bottom__30{
+    margin-bottom: 30px;
+}
+
+.padding__right__10{
+    padding-right: 10px;
+}
+    
+@media only screen and (max-width: 1800px){
+    .grid__related__product__container{
+        grid-template-columns: 16.66% 16.66% 16.66% 16.66% 16.66%;
+    }
+}
+
+@media only screen and (max-width: 1600px){
+    .grid__related__product__container{
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+}
+
+
+@media only screen and (max-width: 1400px){
+    .grid__related__product__container{
+        grid-template-columns: 25% 25% 25% 25% ;
+    }
+}
+
+
+@media only screen and (max-width: 1100px){
+    .large__cart{
+        display: none;
+    }
+    .small__cart{
+        display: grid;
+    }
+        
+    .grid__related__product__container{
+        grid-template-columns: 33.33% 33.34% 33.33%;
+    }
+
+    .bottom__details__view__fill__next{  
+        grid-template-columns: auto; 
+        grid-gap: 0;
+    }
+
+        
+    .related_product__container{ 
+        grid-template-columns: auto auto auto; 
+    }
+}
+
+
+@media only screen and (max-width: 700px){
+    .related_product__container{ 
+        grid-template-columns: auto auto; 
+    }
+
+    .grid__related__product__container{
+        grid-template-columns: 50% 50%;
+    }
+}
+
+
+
+
+.details__more__container{
+    position: relative;
+    width: 100%;
+}

@@ -1,0 +1,41 @@
+@import 'variables';
+.application__navbar{
+    position: absolute;  
+    min-width: 350px;
+    max-width: 393px; 
+    height: 100%;
+    overflow: scroll; 
+    z-index: 1;
+    left: -100%;
+    top: 0;
+    transition: all .3s;
+    background-color: var(--app__background__color);
+}
+.application__navbar::-webkit-scrollbar{
+    width: 0px;
+    height: 0px;
+}
+
+.application__navbar.active{
+    left: 0;
+}
+
+.custom__color{
+    color: var(--app__color);
+}
+
+.row__link__item{
+    position: relative;
+    display: block;
+    width: 100%; 
+    font-size: 15px !important;
+    padding-bottom: 4px;
+}
+
+.second__nav__link__button{
+    position: relative; 
+    cursor: pointer;
+    padding: 5px !important;
+    z-index: 55;
+    margin-right: 5px;
+}

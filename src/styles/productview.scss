@@ -1,0 +1,99 @@
+.product__view__main__container{
+    position: relative;
+    padding: 5px;
+
+    .top__link__box{
+        position: relative; 
+        margin: 10px;
+    }
+
+}
+
+.top__filter__and__product__calculate{
+    position: relative; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    padding: 0;
+
+    .filter__and__sort{ 
+        display: flex;
+        flex-direction: row; 
+        flex-wrap: wrap;
+        align-items: center;
+    }
+}
+
+.filter__sidebar__main__container{
+    position: fixed;
+    min-width: 350px;
+    max-width: 393px;
+    height: 100%; 
+    background-color: var(--app__background__color);
+    z-index: 12;
+    left: -100%;
+    top: 0;
+    transition: all .3s; 
+    overflow: scroll; 
+    overflow-x: hidden;
+    padding: 15px;
+    .closeButton{
+        cursor: pointer;
+        position: absolute;
+        right: 10px;
+        top: 10px; 
+        z-index: 13;
+    }
+    .main__container{
+        position: relative;
+        width: 100%;
+        height: 100%; 
+    }
+}
+.filter__sidebar__main__container.active{
+    left: 0;
+}
+.filter__sidebar__main__container::-webkit-scrollbar{
+    width: 0;
+}
+
+.range__slider{ 
+    position: relative;   
+    padding: 10px;
+}
+
+.select__item__main__container{
+    position: relative;  
+    .select__main__container{
+        padding: 10px;
+        position: relative; 
+        display: flex;
+        align-items: flex-start;  
+    }
+}
+
+.header__text__item{
+    text-transform: capitalize;
+}
+
+.pagination__main__container{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 0 20px 0;
+    margin-bottom: 30px;
+    button{
+        margin-left: 5px;
+    }
+}
+
+
+.fitler__apply__button{
+    position: relative;
+    padding: 20px 0; 
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+

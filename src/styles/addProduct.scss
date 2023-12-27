@@ -1,0 +1,84 @@
+.form__item__view__main__container{
+    position: relative;
+    width: 100%;
+    display: grid;  
+    grid-gap: 40px;
+    grid-template-columns: auto auto auto;
+
+    .register__button{
+        height: 100%;
+        position: relative; 
+        display: flex;
+        justify-content: flex-end; 
+        align-items:last baseline;
+    }
+}
+
+.image__preview__main__container{
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px 100px 100px;
+    grid-gap: 10px;
+    padding: 20px 0;
+}
+
+.specification__two__section{ 
+    display: grid;
+    grid-template-columns: auto 40px;
+    grid-gap: 10px; 
+    align-items:last baseline;
+}
+.preview__image{
+    opacity: 1; 
+    border: 2px solid white;
+    box-sizing: border-box;
+}
+.preview__image.active{
+    opacity: .3; 
+    border: 2px solid tomato;
+    box-sizing: border-box;
+}
+
+.filter__items__main__container{
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto;
+    grid-gap: 20px;
+    .filter__item{
+        background-color: rgba($color: #9ACD32, $alpha: .1);
+        padding: 10px;
+        border-radius: 4px;
+        border: 2px solid rgba($color: #9ACD32, $alpha: .1);
+    }
+    .filter__item.active{
+        background-color: #9ACD32;
+        color: white;
+    }
+
+}
+
+.and__edit__delete__tabs__container{
+    position: relative;  
+    display: grid;
+    grid-template-columns: 100px 700px;
+    grid-gap: 40px;
+    justify-content: space-between;
+    background-color: white !important;
+    margin-top: 15px;
+}
+
+.delete__brand__view__main__container{
+    position: relative;
+    display: grid;
+    grid-template-columns: calc(14.28% - 10px) calc(14.28% - 10px) calc(14.28% - 10px) calc(14.28% - 10px) calc(14.28% - 10px) calc(14.28% - 10px) calc(14.28% - 10px) ;
+    grid-gap: 10px;
+
+}
+
+.filter__grid__for__delete{
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: calc(25% - 10px) calc(25% - 10px) calc(25% - 10px);
+}

@@ -1,0 +1,57 @@
+.loading__page__upper__container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 5000;
+    top: 0;
+    left: 0; 
+
+    .loading__page__main__container{
+        position: relative;
+        width: 100%;
+        height: 100%; 
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        .content__main__container{
+            position: relative;
+            max-width: 400px;
+            height: fit-content; 
+
+            img{
+                position: relative;
+                width: 100%;
+            }
+
+            .loading__main__title__text{
+                position: relative;
+                text-align: center;
+                font-size: 30px; 
+                color: #FEA422;
+            }
+        }
+    }
+}
+
+.not__found{
+    background-color: #F4F5F4;
+}
+
+.loading{
+    background-color: #f9f9f9;
+}
+
+.add__product__main__container{
+    position: relative;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1{
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+}

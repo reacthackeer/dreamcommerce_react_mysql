@@ -1,0 +1,260 @@
+
+// padding start
+// padding start
+// padding start
+// padding start 
+
+@for $i from 1 through 100 {
+    .p__#{$i} {
+      padding: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .p__x__#{$i} {
+      padding: $i * 1px 0;
+    }
+}
+
+
+@for $i from 1 through 100 {
+    .p__y__#{$i} {
+      padding: 0 $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .p__t__#{$i} {
+      padding-top: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .p__l__#{$i} {
+      padding-left: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .p__b__#{$i} {
+      padding-bottom: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .p__r__#{$i} {
+      padding-right: $i * 1px;
+    }
+}
+// padding end
+// padding end
+// padding end 
+
+// margin start
+// margin start
+// margin start
+@for $i from 1 through 100 {
+    .m__#{$i} {
+      margin: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .m__x__#{$i} {
+      margin: $i * 1px 0;
+    }
+}
+
+
+@for $i from 1 through 100 {
+    .m__y__#{$i} {
+      margin: 0 $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .m__t__#{$i} {
+      margin-top: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .m__l__#{$i} {
+      margin-left: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .m__b__#{$i} {
+      margin-bottom: $i * 1px;
+    }
+}
+
+@for $i from 1 through 100 {
+    .m__r__#{$i} {
+      margin-right: $i * 1px;
+    }
+}
+// margin end
+// margin end
+// margin end 
+
+.w__h__100{
+  width: 100%;
+  height: 100%;
+}
+
+.w__h__100__r{
+  position: relative;
+  width: 100%;
+  height: 100%; 
+}
+.w__h__100__a{
+  position: absolute; 
+  width: 100%;
+  height: 100%;
+}
+.t__l__0{
+  top: 0;
+  left: 0;
+}
+
+.t__lm100{
+  top: 0;
+  left: -100%;
+}
+.d__f__a__c{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bg__blur{
+  backdrop-filter: blur(5px);
+}
+
+.t__t__03{
+  transition: all .3s;
+  transform: scale(0);
+}
+
+.t__03{
+  transition: all .3s;
+  transform: scale(0);
+}
+
+.t__1{ 
+  transform: scale(1);
+}
+.ovf__scroll__5{
+  overflow: scroll;
+}
+// .ovf__scroll__5::-webkit-scrollbar{
+//   width: 0;
+//   height: 0;
+// }
+
+.chakra-ui-dark{  
+  --app__background__color: #1A202C;
+  --app__color: white;
+  --app__table__header__color: #4C4C4C;
+
+
+    .cart__page__table__background{ 
+      background-color: rgba($color: white, $alpha: .3);
+      th{
+        color: white;
+      } 
+    }
+
+    .intro__bg{ 
+      background-color: rgba($color: white, $alpha: .05);
+      color: white;
+    }
+
+    .our__best__feature{ 
+      .signle__best__feature{ 
+          background-color: rgba($color: white, $alpha: .05); 
+      }
+      .signle__best__feature:hover{
+          background-color: rgba($color: white, $alpha: .2);
+      } 
+    }
+
+    // .card__item{ 
+    //     background-color: rgba($color: white, $alpha: .1);  
+    // }
+    // .card__item:hover{
+    //   background-color: rgba($color: white, $alpha: .3); 
+    // }
+
+    .brand__item{   
+      background-color: rgba($color: white, $alpha: .1);  
+    }
+    .brand__item:hover{
+      background-color:  rgba($color: white, $alpha: .3); 
+    } 
+}
+
+.chakra-ui-light{ 
+  --link__hover: rgba($color: #000000, $alpha: .3);
+  --app__background__color: white;
+  --app__color: black;
+  --app__table__header__color: #ececec;
+
+  .cart__page__table__background{ 
+    background-color: rgba($color: black, $alpha: .1);
+    th{
+      color: black;
+    }
+  }
+
+  .intro__bg{ 
+    background-color: rgba($color: black, $alpha: .05);
+    color: black;
+  }
+    
+  .our__best__feature{ 
+      .signle__best__feature{ 
+          background-color: rgba($color: black, $alpha: .05); 
+      }
+      .signle__best__feature:hover{
+          background-color: rgba($color: black, $alpha: .2);
+      } 
+  }
+
+  // .card__item{ 
+  //   background-color: rgba($color: black, $alpha: .1);  
+  // }
+  // .card__item:hover{
+  //   background-color: rgba($color: black, $alpha: .3); 
+  // }
+
+  .brand__item{   
+    background-color: rgba($color: black, $alpha: .05);  
+  }
+  .brand__item:hover{
+    background-color:  rgba($color: black, $alpha: .2); 
+  }
+}
+
+.h1{
+  font-size: 25px !important;
+}
+
+.h2{
+  font-size: 20px !important;
+  margin-bottom: 10px;
+}
+
+.p{
+  font-size: 15px !important;
+  font-weight: 400 !important;
+}
+
+.bg__success{
+  background-color: teal;
+}
+
+.margin__top{
+  margin-top: 30px;
+}

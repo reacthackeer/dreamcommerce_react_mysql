@@ -1,0 +1,268 @@
+.padding__top{
+    padding-top: 30px;
+}
+.padding__bottom{
+    padding-bottom: 30px;
+}
+.padding__intro__top{
+    padding-top: 15px;
+}
+.padding__intro__bottom{
+    padding-bottom: 15px;
+}
+
+.padding__intro__x{
+    padding: 15px 0;
+}
+
+.bg__1{
+    // background-color: rgba($color: hotpink, $alpha: .5) !important;
+    background-color: white !important;
+}
+
+.bg__2{
+    background-color: rgba($color: hotpink, $alpha: .5) !important; 
+}
+
+.brand__category__fill__container{
+    position: relative; 
+    width: 100%;  
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    .single__fill__item__upper__cover{
+        position: relative;
+        width: 100%;
+        padding: 8px;
+        height: fit-content;  
+        .single__fill__item{
+            background-color: rgba($color: black, $alpha: .05);
+            padding: 5px;
+            position: relative;
+            width: 100%; 
+            height: fit-content; 
+            transition: all .3s;
+            overflow: hidden;
+            .single__fill__item__status{
+                position: absolute;
+                background-color: white;
+                width: fit-content;
+                padding: 5px 20px; 
+                transition: all .3s;
+                left: -200%;
+                bottom: 0;
+            }
+            .single__fill__item__status.active{
+                left: 0;
+            }
+
+            img{
+                transition: all .3s;
+                position: relative;
+                width: 100%; 
+                transform: scale(1);
+            }
+        }
+        .single__fill__item:hover{ 
+            img{
+                transform: scale(1.1);
+            }
+            .single__fill__item__status{
+                left: 0;
+                bottom: 0;
+            }
+        }
+    }
+    .view__all{
+        position: relative;
+        width: 100% !important;
+        height: 100% !important; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        .single__fill__item{ 
+            background: none;
+
+            .view__all__fill__link__item:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+
+.our__best__feature__fill__container{
+    position: relative; 
+    width: 100%;
+    display: grid;    
+    grid-template-columns: 100%;  
+    .single__best__feature__upper__fill__container{
+        position: relative;
+        width: 100%;
+        padding: 8px;
+        .single__best__feature{   
+            display: grid;
+            grid-template-columns: 80px auto;
+            align-items: center; 
+            padding: 20px;
+            background-color: rgba($color: #000000, $alpha: .05);
+        }
+        .single__best__feature:hover{ 
+            background-color: rgba($color: #000000, $alpha: .1);
+        }
+        .icon__box{ 
+            height: 100%;
+            display: grid;
+            align-items: center;
+        }
+    } 
+}
+
+@media only screen and (min-width: 750px) {
+    .our__best__feature__fill__container{ 
+        grid-template-columns: 50% 50%; 
+    }
+    
+}
+@media only screen and (min-width: 1078px) {
+    .our__best__feature__fill__container{ 
+        grid-template-columns: 33.33% 33.34% 33.33%; 
+    }
+    
+}
+
+@media only screen and (min-width: 1480px) {
+    .our__best__feature__fill__container{ 
+        grid-template-columns: 25% 25% 25% 25%; 
+    }
+    
+}
+
+
+.offer__fill__container{
+    @extend .brand__category__fill__container;
+    grid-template-columns: 50% 50%;
+}
+
+@media only screen and (min-width: 700px) {
+    .offer__fill__container{ 
+        grid-template-columns: 33.33% 33.34% 33.33%;
+    }
+}
+@media only screen and (min-width: 700px) {
+    .brand__category__fill__container{ 
+        grid-template-columns: 33.33% 33.34% 33.33%;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .offer__fill__container{ 
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+}
+@media only screen and (min-width: 900px) {
+    .brand__category__fill__container{ 
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+}
+@media only screen and (min-width: 1100px) {
+    .offer__fill__container{ 
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+}
+@media only screen and (min-width: 1100px) {
+    .brand__category__fill__container{ 
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+}
+
+@media only screen and (min-width: 1300px) {
+    .offer__fill__container{ 
+        grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
+    }
+}
+@media only screen and (min-width: 1300px) {
+    .brand__category__fill__container{ 
+        grid-template-columns: 14.28% 14.28% 14.28% 14.28% 14.28% 14.28% 14.28%;
+    }
+}
+
+@media only screen and (min-width: 1500px) {
+    .offer__fill__container{ 
+        grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% ;
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .brand__category__fill__container{ 
+        grid-template-columns: 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% 12.5% ;
+    }
+}
+
+.layout__title__upper__container{
+    position: relative;
+    width: 100%;
+    height: fit-content;   
+    padding: 8px;
+    .lay__title__main__container{
+        position: relative;
+        width: 100%;  
+        display: flex;
+        justify-content: space-between; 
+        align-items: center;
+        .intro__font__size{
+            text-transform: capitalize;
+            font-size: 30px;
+            font-weight: 600;
+        }
+        .intro__link__font__size:hover{
+            text-decoration: underline;
+        }
+    }
+}
+
+.top__banner__upper__container{
+    position: relative;
+    width: 100%; 
+
+    .top__banner__container{
+        position: relative;
+        width: 100%;
+        img{
+            position: relative;
+            width: 100%;
+        }
+    }
+}
+
+
+.image__two__grid__home__view{
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: 20px;
+    justify-content: space-between;
+    img{
+        position: relative;
+        width: 100%;
+        cursor: pointer;
+    }
+}
+
+@media only screen and (min-width: 700px) {
+    .image__two__grid__home__view{
+        position: relative;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 48.5% 48.5%;
+        grid-gap: 0;
+        justify-content: space-between;
+        img{
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+        }
+    }
+}

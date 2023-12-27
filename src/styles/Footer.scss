@@ -1,0 +1,90 @@
+.top__two__footer__main__container{
+    position: relative;
+    width: 100%;
+    height: fit-content;  
+
+    .bottom__footer{
+        position: relative;
+        width: 100%;
+        height: fit-content;
+        background-color: rgb(22, 4, 38);
+        border-top: 1px solid rgba($color: white, $alpha: .3);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .bottom__main__container{
+            height: 50px;
+            position: relative;
+            width: 100%; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .footer__small__font{
+                font-size: 12px;
+            }
+        }
+
+        .top__main__container{
+            position: relative;
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto;
+            padding-top: 30px;
+            padding-bottom: 30px;
+
+            .footer__child__item{   
+                position: relative;
+                width: 100%; 
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center; 
+                padding-bottom: 30px;
+                .store__brand__logo{
+                    position: relative;  
+                    display: flex;
+                    justify-content: center;
+                    padding-bottom: 20px;
+                }
+                img{
+                    width: 50%;  
+                }
+            }
+        }
+    }
+}
+
+
+@media only screen and (min-width: 600px){
+    .top__two__footer__main__container{ 
+        .bottom__footer{  
+            .top__main__container{ 
+                grid-template-columns: 50% 50%; 
+            }
+        }
+    }
+}
+
+
+@media only screen and (min-width: 900px){
+    .top__two__footer__main__container{ 
+        .bottom__footer{  
+            .top__main__container{ 
+                grid-template-columns: 33.33% 33.34% 33.33%; 
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 1200px){
+    .top__two__footer__main__container{ 
+        .bottom__footer{  
+            .top__main__container{ 
+                grid-template-columns: 25% 25% 25% 25%; 
+            }
+        }
+    }
+}

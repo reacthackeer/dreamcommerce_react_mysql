@@ -1,0 +1,23 @@
+@import './variables';
+
+.cart__container__wrapper{
+    position: relative;
+    width: 100%;
+    height: fit-content; 
+    overflow-y: hidden;
+    .cart__container{
+        position: relative;
+        min-width: 870px;
+        height: fit-content; 
+    }
+    .wishlist__container{
+        position: relative; 
+        height: fit-content; 
+        width: 600px;
+    }
+}
+
+
+.link__text__wrap{
+    position: relative; 
+}

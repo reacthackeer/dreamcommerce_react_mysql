@@ -1,0 +1,44 @@
+@import './variables';
+.search__modal__upper__container{  
+    z-index: 5; 
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    transition: all .3s;
+    transform: scale(0);   
+    backdrop-filter: blur(5px);
+
+    .main__search__container{
+        background-color: var(--app__background__color);
+        width: calc(100% - 10%);
+        padding: 40px;
+        border-radius: 10px;
+    }
+}
+.search__modal__upper__container.active{
+    transform: scale(1);
+}
+
+.card__modal__upper__container{
+    min-width: 350px;
+    max-width: 393px;
+    height: 100%;
+    position: absolute;
+    @extend .bg__blur; 
+    @extend .ovf__scroll__5;
+    left: -100%; 
+    top: 0;
+    transition: all .3s;
+    z-index: 3;
+    background-color: var(--app__background__color);
+}
+.card__modal__upper__container.active{
+    left: 0;
+}
+
+
