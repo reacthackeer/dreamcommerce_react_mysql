@@ -97,6 +97,22 @@ const getSingleSqlProduct = (sql) => {
     })
 }
 
+const getMultipleSqlProduct = (sql) => {
+    
+    return new Promise((resolve, reject)=>{ 
+        mainDb.query(sql, (error, result)=>{  
+            if(!error){
+                if(result.length){ 
+                    resolve({items: result, status__code: 200});
+                }else{
+                    resolve({item: {}, status__code: 204});
+                }
+            }else{
+                reject(error)
+            }
+        })
+    })
+}
 
 const addSingleSqlProduct = (sql) => {
     
@@ -400,5 +416,6 @@ module.exports = {
     getAllJustSqlProduct2,
     getAllJustSqlProduct3,
     getAllJustSqlProduct4,
-    getSingleSqlProductById
+    getSingleSqlProductById,
+    getMultipleSqlProduct
 }

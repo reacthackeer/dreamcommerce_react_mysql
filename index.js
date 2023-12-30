@@ -74,6 +74,8 @@ app.use('/api/v1/payment', paymentRouter);
 app.use('/api/v1/popular-category', popularCategory);
 app.use('/api/v1/order', orderRouter);
 
+// completed sequelize server below
+
 app.get('/',(req, res)=>{
     res.send(`<h1>Hello world</h1>`)
 })

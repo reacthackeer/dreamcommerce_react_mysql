@@ -14,9 +14,11 @@ const {
 } = require('../Controller/ProductsController');
 
 const productRouter = require('express').Router();
-productRouter.get('/search/:search_string', handleGetAllSearchProduct);
-productRouter.get('/getAllProduct', handleGetAllProduct);
+
 productRouter.post('/', handleAddNewProduct)
+productRouter.get('/search/:search_string', handleGetAllSearchProduct);
+
+productRouter.get('/getAllProduct', handleGetAllProduct);
 productRouter.put('/:ID', handleEditSingleProduct)
 productRouter.get('/p/:parent__father', handleGetSingleFatherProduct); 
 productRouter.get('/brands/:brand', handleGetAllSingleBrandProduct); 

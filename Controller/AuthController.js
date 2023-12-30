@@ -18,6 +18,7 @@ const registerUser = asyncHandler(async(req, res, next)=>{
                         let userPostInfo = {email, password: data.password, phone, name, ID: userCreateResult.result.insertId, user__id};
                         try { 
                             let tokenResult = await generateToken(userPostInfo);
+                            userPostInfo.address = JSON.parse(userInfo.address);
                             delete userPostInfo.password;
                             res.json({...userPostInfo, token: tokenResult, role: 4, designation: 'user'})
                         } catch (error) {
@@ -63,31 +64,7 @@ const loginUser = asyncHandler(async(req, res, next)=>{
                     }
         } catch (error) {
             next(new Error(error.message));
-        }
-        // try {
-        //     let user = await prisma.user.findFirst({
-        //         where: {email, phone}
-        //     });
-        //     try {
-        //         let result = await comparePasswords(password, user.password);
-        //             if(result.status__code === 200){
-        //                 try {
-        //                     let userInfo = user; 
-        //                     let tokenResult = await generateToken(userInfo);
-        //                     delete userInfo.password;
-        //                     res.json({...userInfo, token: tokenResult})
-        //                 } catch (error) {
-        //                     next(new Error(error.message));
-        //                 }
-        //             }else{
-        //                 res.json(result);
-        //             }
-        //     } catch (error) {
-        //         next(new Error(error.message));
-        //     }
-        // } catch (error) {
-        //     next(new Error(error.message));
-        // }
+        } 
     }else{
         next(new Error('Invalid server request!'))
     } 

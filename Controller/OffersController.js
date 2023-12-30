@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler'); 
-const { getAllSearchProduct, getAllMultipleOffers, getSingleSqlProduct, updateSingleSqlProduct} = require('../query/products__query');
+const { getAllSearchProduct, getAllMultipleOffers, getSingleSqlProduct, updateSingleSqlProduct, getMultipleSqlProduct} = require('../query/products__query');
 const { getSqlProductLength } = require('../query/lengthQuery'); 
 const { addSingleSqlProduct } = require('../query/products__query');
 const { deleteGeneralSqlOperation } = require('../query/offer__query');
@@ -127,6 +127,24 @@ const handleGetSingleOffer = asyncHandler(async(req, res, next)=>{
     }
 })
 
+const handleGetAllOffers = asyncHandler(async(req, res, next)=>{
+    console.log('enter');
+    let sql = `SELECT * FROM offers`;
+    try {
+        let result = await getMultipleSqlProduct(sql); 
+        if(result.status__code === 200){
+            res.json(result);
+        }else{
+            let newError = new Error('Invalid server request!');
+            newError.status=204;
+            next(newError);
+        }
+    } catch (error) {
+        let newError = new Error(error.message);
+        newError.status=500;
+        next(error);
+    }
+})
 const handleUpdateSingleOffer = asyncHandler(async(req, res, next)=>{
     let {ID} = req.params;
     let {name, product__id, img__src, active} = req.body;
@@ -184,5 +202,6 @@ module.exports = {
   handleAddSingleOffer,
   handleGetSingleOffer,
   handleUpdateSingleOffer,
-  deleteSingleOffer
+  deleteSingleOffer,
+  handleGetAllOffers
 }
