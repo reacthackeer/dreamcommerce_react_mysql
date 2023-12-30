@@ -1,28 +1,33 @@
 import { Button } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGetSingleUserBrowsingHistoryQuery } from '../../../features/browsingHistory/api';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useGetAllOfferProductsQuery } from '../../../features/product/productApi';
 import { clearFilterProduct } from '../../../features/product/productSlice';
 import { LoadingPage, NotFoundPage } from '../../skleton/Loading';
 import DevelopViewSkeleton from '../developViewSkeleton';
 
-const DevelopBrowsingHistoryView = () => { 
+const DevelopAllOfferView = () => {
+    const {searchText} = useParams();   
+    
     const searchParams = useSearchParams()[0];
     let page = searchParams.get('page') ? Number(searchParams.get('page')) : 1 
     let limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 45
-    let [userId] = useState(localStorage?.getItem('user__id'));
-    let {data, isLoading, isError, isSuccess, error} = useGetSingleUserBrowsingHistoryQuery({user__id : userId, page, limit});
-    console.log(data);
+    
+    let {data, isLoading, isError, isSuccess, error} = useGetAllOfferProductsQuery({page, limit});
+    
     const viewProductIdes = useSelector((state)=> state.productFilter.ides);
     const viewProductPrice = useSelector((state)=> state.productFilter.price);
     const searchString = useSelector((state)=> state.productFilter.searchString);
+    
     // decide what to render
     let content = null;
+    const navigate = useNavigate();
 
+    const dispatch = useDispatch();
     useEffect(()=>{
-        content = null;
-    },[userId, page, limit])
+        dispatch(clearFilterProduct())
+    },[data, isLoading, isError, isSuccess, error, dispatch])
     
     if(isLoading && !isError && !isSuccess){
         content = <LoadingPage/>
@@ -31,11 +36,12 @@ const DevelopBrowsingHistoryView = () => {
         content = <NotFoundPage message={error?.message}/>
     }
 
-    const dispatch = useDispatch();
-    useEffect(()=>{
-        dispatch(clearFilterProduct())
-    },[data, isLoading, isError, isSuccess, error, dispatch])
-
+    
+    let linksArray = [
+        {name: 'HOME', link: '/'},
+        {name: searchText, link: `/search/${searchText}`}
+    ] 
+    
     useEffect(()=>{
         let mainView = document.querySelector('.mobile__view__container');
         if(mainView){
@@ -43,12 +49,7 @@ const DevelopBrowsingHistoryView = () => {
         } 
     },[data, isLoading, isError, isSuccess, error])
     
-    let linksArray = [
-        {name: 'HOME', link: '/'},
-        {name: 'BROWSING HISTORY', link: `/p/browsing-history`}, 
-    ] 
-    
-            
+        
     const handleFilterResetProductByCategory = (products) => {
         if(viewProductIdes.length === 0){
             return products;
@@ -76,18 +77,13 @@ const DevelopBrowsingHistoryView = () => {
         }
     }
 
-
     if(!isLoading && !isError && isSuccess && data?.products?.length > 0){
-
         let resetProduct = handleFilterResetProductByCategory([...data?.products]);
-        resetProduct = handleFilterResetProductByPrice([...resetProduct]);
-        resetProduct = handleSearchProductBySearchString([...resetProduct]);
-
-        content = <DevelopViewSkeleton linksArray={linksArray} lowPrice={data?.lowPrice || 0} highPrice={data?.highPrice || 0} page={page} limit={limit} filterNavbar={data?.filterNavbar} products={resetProduct} totalPage={data?.total__page} totalProducts={data?.total__products} startFrom={data?.current__limit[0]} startTo={data?.current__limit[1]}/>
+            resetProduct = handleFilterResetProductByPrice([...resetProduct]);
+            resetProduct = handleSearchProductBySearchString([...resetProduct]);
+        content = <DevelopViewSkeleton linksArray={linksArray}  lowPrice={data?.lowPrice || 0} highPrice={data?.highPrice || 0} page={page} limit={limit} filterNavbar={data?.filterNavbar} products={resetProduct} totalPage={data?.total__page} totalProducts={data?.total__products} startFrom={data?.current__limit[0]} startTo={data?.current__limit[1]}/>
     }
 
-    const navigate = useNavigate();
-    
     if(!isLoading && !isError && isSuccess && !data){
         content = <React.Fragment>
         <div className='add__product__main__container'>
@@ -105,4 +101,4 @@ const DevelopBrowsingHistoryView = () => {
     return content;
 }
 
-export default DevelopBrowsingHistoryView;
+export default DevelopAllOfferView;

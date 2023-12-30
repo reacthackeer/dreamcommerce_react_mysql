@@ -48,6 +48,7 @@ import ShippingAddress from './Components/ShippingAddress/ShippingAddress.jsx';
 import UploadSingleImage from './Components/Uploads/UploadSingleImage.jsx';
 import DevelopAllBrandView from './Components/pages/BrandView/DevelopAllBrandView';
 import DevelopCategoryAllView from './Components/pages/BrandView/DevelopAllCategoryView';
+import DevelopAllOfferView from './Components/pages/BrandView/DevelopAllOfferProductView.jsx';
 import DevelopSingleBrandView from './Components/pages/BrandView/DevelopBrandView';
 import DevelopBrowsingHistoryView from './Components/pages/BrandView/DevelopBrowsingHistoryView';
 import DevelopCategoryView from './Components/pages/BrandView/DevelopCategoryView';
@@ -411,7 +412,7 @@ const AppComponents = () => {
           <Route path='/offers' element={ 
             <React.Fragment>
               <ColorNavbar/> 
-              <BrandView/>
+              <DevelopAllOfferView/>
             </React.Fragment> 
           }/> 
           <Route path='/collection' element={ 

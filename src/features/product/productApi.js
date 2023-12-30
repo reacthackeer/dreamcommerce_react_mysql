@@ -45,6 +45,9 @@ export const productApi = apiSlice.injectEndpoints({
         }),
         getUserSearchProduct: builder.query({
             query: ({searchString, page, limit}) => `/products/search/${searchString}?page=${page}&&peerPage=${limit}`
+        }),
+        getAllOfferProducts: builder.query({
+            query: ({page, limit}) => `/offers?page=${page}&&peerPage=${limit}`
         })
     })
 })
@@ -58,5 +61,6 @@ export const {
     useUpdateSingleProductMutation,
     useAddSingleProductMutation,
     useGetSingleProductQuery,
-    useGetSingleProductByIdQuery
+    useGetSingleProductByIdQuery,
+    useGetAllOfferProductsQuery
 } = productApi;
