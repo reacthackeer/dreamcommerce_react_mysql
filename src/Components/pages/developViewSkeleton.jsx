@@ -48,7 +48,6 @@ const DevelopViewSkeleton = ({filterNavbar, products, totalPage, totalProducts, 
     const handlePageChange = (page) => {
         setCurrentPage(page);
         setSearchParams({page: page, limit: 45})
-        
     };
 
     

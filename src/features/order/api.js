@@ -18,7 +18,14 @@ export const authApi = apiSlice.injectEndpoints({
                 method: 'GET' 
             }),
             providesTags: () => [{type: 'getAllUserOrderProduct'}]
-        }),
+        }), 
+        getAllAdminOrderProduct: builder.query({
+            query: ({status, page, peerPage}) => ({
+                url: `/order/all?filter=${status}&&page=${page}&peerPage=${peerPage}`,
+                method: 'GET' 
+            }),
+            providesTags: () => [{type: 'getAllUserOrderProduct'}]
+        }), 
         incrementOrder: builder.mutation({
             query: (id) => ({
                 url: `/order/increment/${id}`,
@@ -33,10 +40,19 @@ export const authApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: () => [{type: 'getAllUserOrderProduct'}]
         }),
+        statusUpdate: builder.mutation({
+            query: ({id, status}) => ({
+                url: `/order/status/${id}/${status}`,
+                method: 'PUT',
+            }),
+            invalidatesTags: () => [{type: 'getAllUserOrderProduct'}]
+        }),
     })
 })
 
 export const {    
+    useGetAllAdminOrderProductQuery,
+    useStatusUpdateMutation,
     useApplyCashOnMutation,
     useGetAllUserOrderProductQuery,
     useIncrementOrderMutation,

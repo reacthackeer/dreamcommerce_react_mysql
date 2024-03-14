@@ -14,6 +14,19 @@ const initialState = {
         role: undefined,
         isLoggedIn: true,
         ID: undefined
+    },
+    printUser: {
+        name: undefined,
+        email: undefined,
+        phone: undefined,
+        token: undefined,
+        img__src: undefined,
+        address: undefined,
+        user__id: undefined,
+        designation: undefined,
+        role: undefined,
+        isLoggedIn: true,
+        ID: undefined
     }
 }
 
@@ -25,6 +38,24 @@ const authSlice = createSlice({
             // let { name, email, phone, token, img__src, address, user__id } = action.payload;
             state.auth = action.payload;
             state.auth.isLoggedIn = true;
+        },
+        addPrintUserInfo: (state, action) => {
+            state.printUser = action.payload
+        },
+        resetPrintUserInfo: (state, action) => {
+            state.printUser = {
+                name: undefined,
+                email: undefined,
+                phone: undefined,
+                token: undefined,
+                img__src: undefined,
+                address: undefined,
+                user__id: undefined,
+                designation: undefined,
+                role: undefined,
+                isLoggedIn: true,
+                ID: undefined
+            }
         },
         userLOggedOut: (state) => {
             state.auth = {
@@ -41,5 +72,10 @@ const authSlice = createSlice({
         }
     }
 });
-export const {userLoggedIn, userLOggedOut} = authSlice.actions;
+export const {
+        userLoggedIn, 
+        userLOggedOut,
+        addPrintUserInfo,
+        resetPrintUserInfo
+    } = authSlice.actions;
 export default authSlice.reducer;

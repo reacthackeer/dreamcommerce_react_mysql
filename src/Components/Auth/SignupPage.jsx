@@ -11,11 +11,11 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import numberUid from 'number-uid';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { uid } from 'uid';
 import { useRegisterUserMutation } from '../../features/auth/api';
 import { userLoggedIn } from '../../features/auth/authSlice';
 import useLoginCheck from '../../hooks/loginCheck';
@@ -88,7 +88,7 @@ const SignupPage = () => {
   }; 
   const handleSignup = (e) => {
     e.preventDefault();
-    let user__id = localStorage.getItem('user__id') || uid(12);
+    let user__id =  numberUid(12);
     if(fullName && email && password && confirmPassword && user__id){
         if(password === confirmPassword){
           if(fullName.length > 5){

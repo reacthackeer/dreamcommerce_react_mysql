@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 
 const useLoginCheck = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const {auth} = useSelector((state)=> state.auth);
+    const {auth} = useSelector((state)=> state.auth); 
     useEffect(()=>{
         if(auth && auth?.isLoggedIn && auth?.token && auth?.role && auth?.role < 5){
             setIsLoggedIn(()=> true) 
+        }else{
+            setIsLoggedIn(()=> false)
         }
     },[auth])
     // Your authentication logic can go here

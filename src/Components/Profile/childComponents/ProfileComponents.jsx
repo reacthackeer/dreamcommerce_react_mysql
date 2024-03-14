@@ -1,3 +1,4 @@
+import { Box, Button, ButtonGroup } from '@chakra-ui/react';
 import React, { memo } from 'react';
 import '../../../styles/profile.scss';
 import ProductOrderTable from './ProductTable';
@@ -12,6 +13,30 @@ const ProfileComponents = memo(() => {
                 </div>
                 <div>
                     <ProductOrderTable/>
+                    <Box 
+                        textAlign={'end'}
+                        mt='3'
+                    >
+                        <ButtonGroup 
+                            size='sm' 
+                            isAttached 
+                            variant='outline' 
+                            width={'fit-content'}
+                        >
+                            <Button 
+                                size={'sm'}
+                                isLoading={false}
+                            >Print All</Button>
+                            <Button 
+                                size={'sm'}
+                                isLoading={false}
+                            >Print Pending</Button>
+                            <Button 
+                                size={'sm'}
+                                isLoading={false}
+                            >Print Completed</Button>
+                        </ButtonGroup>
+                    </Box>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ import TableHeader from './TableHeader';
 
     const ProductOrderTable = () => {
     const {products, isFilled} = useSelector(state => state.order);
+
         
     const navigate = useNavigate();
     

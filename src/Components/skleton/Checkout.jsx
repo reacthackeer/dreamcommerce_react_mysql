@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllSingleUserCartProductQuery } from '../../features/cart/api';
 import { useApplyCashOnMutation } from '../../features/order/api';
+import { useAddInitiatePaymentMutation } from '../../features/payment/paymentApi';
 import CalculateTable from '../pages/Checkout/Components/Calculate';
 
 const Checkout = () => {
@@ -14,6 +15,7 @@ const Checkout = () => {
     let {division, district, upazilla, union, street} = address;
     let {data, isSuccess} = useGetAllSingleUserCartProductQuery(localStorage?.getItem('user__id') || ''); 
     const [provideUserId, {data: dataA, isLoading: isLoadingA, isError: isErrorA, isSuccess: isSuccessA, error: errorA}] = useApplyCashOnMutation();
+    const [providePaymentInfos, {isSuccess: paymentIsSuccess, isError: paymentIsError, data: paymentData}]  = useAddInitiatePaymentMutation();
 
     const navigate = useNavigate(); 
      useEffect(()=>{ 
@@ -24,18 +26,18 @@ const Checkout = () => {
     
     const handlePayConfirm = () => { 
         if(isSuccess && data && data?.products?.length > 0){
-            // ID, quantity, price, status, order__id, user__id
-            data?.products?.forEach((info)=>{
-                let {ID, quantity, infos} = info;
-                let {current__price} = infos;
-                let postData = {ID, quantity, price: current__price, status: 'pending', order__id: orderId, pay__type: 'online', user__id};
-                console.log(postData);
-            })
+            providePaymentInfos({user__id, currency: 'BDT'})
+            
         }
     }
 
+    useEffect(()=>{
+        console.log({paymentData, paymentIsError, paymentIsSuccess});
+    },[paymentData, paymentIsError, paymentIsSuccess])
+
     const handleApplyForCashOneDelivery = () => {
-        provideUserId({user__id, order__id: orderId});
+        console.log(phone);
+        provideUserId({user__id, order__id: orderId, phone});
     }
     return (
         <React.Fragment> 

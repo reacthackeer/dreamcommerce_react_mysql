@@ -9,7 +9,7 @@ const Profile = () => {
     const userId = useSelector((state)=> state.auth.auth.user__id);
     const {data, isSuccess} = useGetAllUserOrderProductQuery(userId);
     const dispatch = useDispatch();
-    useEffect(()=>{ 
+    useEffect(()=>{  
         if(isSuccess && data && data?.length){
             dispatch(addMultipleOrderProduct(data));
         }

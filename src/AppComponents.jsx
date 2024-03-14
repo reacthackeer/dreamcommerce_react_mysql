@@ -56,6 +56,8 @@ import DevelopCollectionView from './Components/pages/BrandView/DevelopCollectio
 import { default as BrandView, default as DevelopSearchView } from './Components/pages/BrandView/DevelopSearchView.jsx';
 import DevelopTopCategoryView from './Components/pages/BrandView/DevelopTopCategoryView';
 import SingleOfferView from './Components/pages/BrandView/SingleOfferView';
+import OrderManagement from './Components/pages/OrderManagement/OrderManagement.jsx';
+import OrderPrintPage from './Components/pages/OrderManagement/OrderPrintPage.jsx';
 import Optimize from './Components/pages/optimize/Optimize';
 import ProductDetails from './Components/pages/productDetails/ProductDetails';
 import AuthComponents from './Components/skleton/AuthComponents.jsx';
@@ -163,6 +165,24 @@ const AppComponents = () => {
               <Box>
                   <ColorNavbar/>
                   <Profile/>
+              </Box>  
+              :
+              <Navigate to='/login'/>
+          }/>
+          <Route path='/order-management/print/:user__id' element={  
+              isUserLoggedIn ? 
+              <Box>
+                  <ColorNavbar/> 
+                  <OrderPrintPage/>
+              </Box>  
+              :
+              <Navigate to='/login'/>
+          }/>
+          <Route path='/order-management/:filter' element={  
+              isUserLoggedIn ? 
+              <Box>
+                  <ColorNavbar/>
+                  <OrderManagement/>
               </Box>  
               :
               <Navigate to='/login'/>

@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateUserMutation } from '../../features/auth/api';
-import { userLoggedIn } from '../../features/auth/authSlice';
+import { userLOggedOut, userLoggedIn } from '../../features/auth/authSlice';
 import { useGetAllDistrictQuery, useGetAllDivisionsQuery, useGetAllUnionsQuery, useGetAllUpazillasQuery } from '../../features/geocode/brandApi';
 import HeaderLinkItem from '../pages/developViewSkeletonComponents/HeaderLinkItems';
 
@@ -51,6 +51,9 @@ const ShippingAddress = memo(() => {
     useEffect(()=>{ 
         if(isError && !isLoading && !fIsSuccess){
             toast.error('There was a server side error!',{duration: 3000})
+            dispatch(userLOggedOut());
+            localStorage.removeItem('auth');
+            navigate('/login');
         }
         if(!isError && fIsSuccess && !isLoading){
             if(fData && fData?.status__code === 200){

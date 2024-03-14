@@ -11,6 +11,12 @@ export const authApi = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        printUserInfo: builder.query({
+            query: (user__id) => ({
+                url: `/auth/get-info/${user__id}`,
+                method: 'GET'
+            })
+        }),
         loginUser: builder.mutation({
             query: (data) => ({
                 url: '/auth/login',
@@ -31,5 +37,6 @@ export const authApi = apiSlice.injectEndpoints({
 export const {    
     useRegisterUserMutation,
     useLoginUserMutation,
-    useUpdateUserMutation
+    useUpdateUserMutation,
+    usePrintUserInfoQuery
 } = authApi;
