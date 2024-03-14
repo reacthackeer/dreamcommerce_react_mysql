@@ -7,7 +7,6 @@ const options = {
         bottom: '40px', 
     },
     };
-
 const handlePdfGeneratorMaster = (stringFunction, data, option) => {
     return new Promise((resolve, reject)=>{
         pdf.create(stringFunction(data.products), option).toFile(`____cart_${data.user__id}_${data.date}.pdf`, (err, res) => {

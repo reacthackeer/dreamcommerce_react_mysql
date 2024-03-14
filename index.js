@@ -42,7 +42,16 @@ app.use(bodyParser.urlencoded({
     extended: true,
     limit: '100mb'
 }))
-app.use(cors({origin: '*'}))
+const allowedOrigins = ['http://localhost:3000', 'https://sandbox.sslcommerz.com', 'https://another-domain.com'];
+
+const corsOptions = {
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS,REDIRECT', // Include the 'REDIRECT' method
+    credentials: true,
+    optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 // application config end
 const PORT = process.env.PORT || 10000;
 app.use(express.static('public'))

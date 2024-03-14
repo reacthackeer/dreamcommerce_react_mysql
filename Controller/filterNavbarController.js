@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { getSingleSqlProductWithDataConverter, addSingleSqlProduct, updateSingleSqlProduct } = require('../query/products__query');
+const { getSingleSqlProductWithDataConverter, addSingleSqlProduct, updateSingleSqlProduct, getSingleSqlProductWithDataConverterSecond } = require('../query/products__query');
 const { dataConverterUtils } = require('../utils/dataConverterUtils');
 const { deleteGeneralSqlOperation } = require('../query/offer__query');
 
@@ -19,6 +19,17 @@ const getSingleFilterNavbarByAll = asyncHandler(async(req, res, next)=>{
         let newError = new Error("Invalid server request!");
             newError.status = 204;
             next(newError);
+    }
+});
+const getAllFilterNavbar = asyncHandler(async(req, res, next)=>{
+    try {
+        let sql = `SELECT * FROM filter__navbar`;
+        let result = await getSingleSqlProductWithDataConverterSecond(sql);
+        res.json(result);
+    } catch (error) {
+        let newError = new Error(error.message);
+        newError.status = 500;
+        next(newError);
     }
 });
 
@@ -107,6 +118,7 @@ const handleDeleteSingleFilterNavbar = asyncHandler(async(req, res, next)=>{
     }
 })
 module.exports = { 
+    getAllFilterNavbar,
     getSingleFilterNavbarByAll,
     getSingleFilterNavbarById,
     handleAddSingleFilterNavbar,

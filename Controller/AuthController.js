@@ -17,8 +17,7 @@ const registerUser = asyncHandler(async(req, res, next)=>{
                         let userCreateResult = await addSingleSqlProduct(sql);
                         let userPostInfo = {email, password: data.password, phone, name, ID: userCreateResult.result.insertId, user__id};
                         try { 
-                            let tokenResult = await generateToken(userPostInfo);
-                            userPostInfo.address = JSON.parse(userInfo.address);
+                            let tokenResult = await generateToken(userPostInfo); 
                             delete userPostInfo.password;
                             res.json({...userPostInfo, token: tokenResult, role: 4, designation: 'user'})
                         } catch (error) {
@@ -41,14 +40,15 @@ const loginUser = asyncHandler(async(req, res, next)=>{
     if(email && phone && password){
         let sql = `SELECT * FROM users WHERE email="${email}" AND phone="${phone}"`;
         try {
-            let {item} = await getSingleSqlProduct(sql);
-
+            let {item} = await getSingleSqlProduct(sql); 
                     try {
                         let result = await comparePasswords(password, item.password);
                             if(result.status__code === 200){
                                 try {
                                     let userInfo = item;  
-                                        userInfo.address = controllerUtils.bufferDataConverter(userInfo.address);
+                                        if(userInfo.address){
+                                            userInfo.address = controllerUtils.bufferDataConverter(userInfo.address);
+                                        }
                                     let tokenResult = await generateToken(userInfo);
                                     delete userInfo.password;
 
@@ -70,18 +70,44 @@ const loginUser = asyncHandler(async(req, res, next)=>{
     } 
 })
 
+
+const getPrintUserInfo = asyncHandler(async(req, res, next)=>{
+    let {user__id} = req.params; 
+    if(user__id){
+        let sql = `SELECT * FROM users WHERE user__id="${user__id}"`;
+        try {
+            let {item} = await getSingleSqlProduct(sql);  
+            try {
+                let userInfo = item;  
+                    if(userInfo.address){
+                        userInfo.address = controllerUtils.bufferDataConverter(userInfo.address);
+                    }  
+                    delete userInfo?.password
+                    res.json(userInfo);
+            } catch (error) {
+                next(new Error(error.message));
+            }
+        } catch (error) {
+            next(new Error(error.message));
+        } 
+    }else{
+        next(new Error('Invalid server request!'))
+    } 
+})
+
 const updateUser = asyncHandler(async(req, res, next)=>{
-    let data = req.body;
+    let data = req.body; 
     let {name, email, phone, img__src, address, role, designation, user__id, id}  = data;
-    
-    if(name && email && phone && role && designation && user__id && img__src && id){ 
+    console.log({name, email, phone, role, designation, user__id, id});
+    if(name && email && phone && role && designation && user__id && id){ 
+        
         let newAddress = '';
 
         if(address && address?.division  && address?.district && address?.upazilla && address?.union){
             newAddress = controllerUtils.bufferDataMaker(address);
         }else{
             newAddress = null;
-        }
+        }  
         let sql = `UPDATE users SET name="${name}", email="${email}", phone="${phone}", img__src="${img__src}", address='${newAddress}', role="${role}", designation="${designation}", user__id="${user__id}" WHERE id="${id}"`;
         try {
             let result = await updateSingleSqlProduct(sql);
@@ -129,5 +155,6 @@ module.exports = {
     registerUser,
     loginUser,
     updateUser,
-    getAllNavbarData
+    getAllNavbarData,
+    getPrintUserInfo
 }

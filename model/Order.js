@@ -11,6 +11,7 @@ const Order = sequelize.define('order',{
     product__id:  DataTypes.STRING,
     quantity: DataTypes.INTEGER,
     user__id: DataTypes.STRING,
+    phone: DataTypes.STRING,
     pay__type: DataTypes.STRING,
     order__id: DataTypes.STRING,
     status: DataTypes.STRING,

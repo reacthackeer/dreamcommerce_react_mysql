@@ -314,6 +314,31 @@ const getSingleSqlProductWithDataConverter = (sql) => {
     })
 }
 
+
+const getSingleSqlProductWithDataConverterSecond = (sql) => {
+    return new Promise((resolve, reject)=>{
+        mainDb.query(sql, (err, result)=>{
+            if(!err){ 
+                if(result.length){
+                    let allItems = [];
+                    result.forEach((info)=>{
+                        let newInfo = {...info};
+                            newInfo.data =dataConverterUtils.bufferDataConverter(newInfo.data);
+                            delete newInfo.ID;
+                            
+                            allItems.push(newInfo);
+                    }) 
+                        resolve({items: allItems, status__code: 200});
+                }else{
+                    resolve({message: `Invalid server request!`, status__code: 204});
+                }
+            }else{
+                reject(err.message)
+            }
+        })
+    })
+}
+
 const getAllJustSqlProduct = (sql) => {
     
     return new Promise((resolve, reject)=>{
@@ -417,5 +442,6 @@ module.exports = {
     getAllJustSqlProduct3,
     getAllJustSqlProduct4,
     getSingleSqlProductById,
-    getMultipleSqlProduct
+    getMultipleSqlProduct,
+    getSingleSqlProductWithDataConverterSecond
 }
