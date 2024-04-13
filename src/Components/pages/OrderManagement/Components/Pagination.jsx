@@ -1,9 +1,9 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup } from '@chakra-ui/react';
 import React from 'react';
 
 const OrderPagination = ({handlePageChange, currentPage, totalPages}) => {
     return (
-        <div className='padding__top'>
+        <Box className='padding__top profile__pagination__bottom__area'>
             <ButtonGroup 
                 size='sm' 
                 isAttached 
@@ -20,7 +20,7 @@ const OrderPagination = ({handlePageChange, currentPage, totalPages}) => {
                     isDisabled={currentPage === totalPages}  
                 >Next</Button>  
             </ButtonGroup>  
-        </div>
+        </Box>
     );
 };
 

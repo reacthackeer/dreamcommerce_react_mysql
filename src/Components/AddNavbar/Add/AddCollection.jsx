@@ -210,7 +210,7 @@ const AddCollection = memo(() => {
                 toast.error('Please upload image!',{duration: 3000, position: 'top-right'})
             }else{
                 if(images.length === 1){ 
-                    let items = collectionData.items.filter((info)=> info.name.toLowerCase() === postData.name.toLowerCase());
+                    let items = collectionData?.items?.filter((info)=> info.name.toLowerCase() === postData.name.toLowerCase()) || [];
                         if(items.length > 0){
                             toast.error('This collection already existed!',{duration: 3000, position: 'top-right'})
                         }else{

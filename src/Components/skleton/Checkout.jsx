@@ -31,12 +31,10 @@ const Checkout = () => {
         }
     }
 
-    useEffect(()=>{
-        console.log({paymentData, paymentIsError, paymentIsSuccess});
+    useEffect(()=>{ 
     },[paymentData, paymentIsError, paymentIsSuccess])
 
-    const handleApplyForCashOneDelivery = () => {
-        console.log(phone);
+    const handleApplyForCashOneDelivery = () => { 
         provideUserId({user__id, order__id: orderId, phone});
     }
     return (

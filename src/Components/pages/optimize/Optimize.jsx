@@ -120,8 +120,7 @@ const Optimize = () => {
                 allNewGeneratedProducts.push(newProductInfo);
             })     
             setProducts(()=> allNewGeneratedProducts);
-        }).catch((err)=>{
-            console.log(err.message);
+        }).catch((err)=>{ 
         })
     }
 
@@ -131,8 +130,7 @@ const Optimize = () => {
             document.getElementById('heading__id').innerText = count; 
             let newCount = count+1;
             handlePostAllProducts(newCount)
-        }).catch((err)=>{
-            console.log(err.message);
+        }).catch((err)=>{ 
         })
     }
     return (

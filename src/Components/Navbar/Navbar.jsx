@@ -20,6 +20,7 @@ import { RiShoppingCart2Line } from 'react-icons/ri';
 import { SlClose } from 'react-icons/sl';
 import { Link as RLink, useNavigate } from 'react-router-dom';
 import { toggleItem } from '../cssToggle/CssToggle';
+import AdminAccording from './AdminAccording';
 import AllCategory from './AllCategory';
 import PagesAccording from './PagesAccording';
 import AccordingButtonGroup from './childComponents/AccordingButtonGroup';
@@ -108,6 +109,7 @@ const Navbar = () => {
                     )}
                 </AccordionItem> 
                 <PagesAccording/>
+                <AdminAccording/>
             </Accordion>  
         </Box>
     );

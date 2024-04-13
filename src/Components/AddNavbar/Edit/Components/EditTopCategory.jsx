@@ -68,8 +68,8 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
                 }else{
                     toast.error('There was a server side error!',{duration: 3000})
                 }
-                }).catch(err => {
-                console.log(err.message);
+                }).catch(err => { 
+                    
                 })
             }else{
             toast.error('Invalid Server Request!',{duration: 3000})
@@ -110,8 +110,8 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
             }else{
                 toast.error('There was a server side error!',{duration: 3000})
             }
-            }).catch(err => {
-                console.log(err.message);
+            }).catch(err => { 
+
             })
         }else{
             toast.error('Invalid Server Request!',{duration: 3000})

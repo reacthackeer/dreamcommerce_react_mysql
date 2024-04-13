@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import AllCategoryMainNavbar from '../Navbar/AllCategoryMainNavbar';
 import PagesAccording from '../Navbar/PagesAccording';
 import PopularCategoryAccording from '../Navbar/PopularCategoryAccording';
+import AdminAccording from './AdminAccording';
 
 const ColorNavbar = () => {  
     const navigate = useNavigate();
@@ -58,6 +59,11 @@ const ColorNavbar = () => {
                         <Box className='category__view__pages pages__pages'>
                             <Box className='main__view__container__pages'> 
                                 <PagesAccording/>
+                            </Box>
+                        </Box> 
+                        <Box className='category__view__pages pages__pages'>
+                            <Box className='main__view__container__pages'> 
+                                <AdminAccording/>
                             </Box>
                         </Box>  
                     </Box> 

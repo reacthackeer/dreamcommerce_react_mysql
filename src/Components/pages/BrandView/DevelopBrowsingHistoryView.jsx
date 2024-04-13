@@ -13,7 +13,6 @@ const DevelopBrowsingHistoryView = () => {
     let limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 45
     let [userId] = useState(localStorage?.getItem('user__id'));
     let {data, isLoading, isError, isSuccess, error} = useGetSingleUserBrowsingHistoryQuery({user__id : userId, page, limit});
-    console.log(data);
     const viewProductIdes = useSelector((state)=> state.productFilter.ides);
     const viewProductPrice = useSelector((state)=> state.productFilter.price);
     const searchString = useSelector((state)=> state.productFilter.searchString);
@@ -70,8 +69,7 @@ const DevelopBrowsingHistoryView = () => {
         let {start, end} = viewProductPrice
         if(start === 0 && end === 0){
             return products;
-        }else{
-            console.log(`entered`)
+        }else{ 
             return products.filter((info)=> info.infos?.current__price >= start && info.infos?.current__price <= end)
         }
     }

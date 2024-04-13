@@ -6,8 +6,7 @@ import DynamicHeaderHome from '../DynamicHeaderHome';
 const AddPopularCategory = () => {
     const [formInfo, setFormInfo] = useState({name: '', link: ''})
     const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(formInfo);
+        e.preventDefault(); 
     }
     const handleChange = (e) => {
         let {value, name} = e.target;

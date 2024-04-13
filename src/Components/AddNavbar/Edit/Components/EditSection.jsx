@@ -69,8 +69,8 @@ const EditSectionComponents = memo(({setSelected}) => {
                 }else{
                     toast.error('There was a server side error!',{duration: 3000})
                 }
-                }).catch(err => {
-                console.log(err.message);
+                }).catch(err => { 
+
                 })
             }else{
             toast.error('Invalid Server Request!',{duration: 3000})
@@ -111,8 +111,8 @@ const EditSectionComponents = memo(({setSelected}) => {
             }else{
                 toast.error('There was a server side error!',{duration: 3000})
             }
-            }).catch(err => {
-                console.log(err.message);
+            }).catch(err => { 
+
             })
         }else{
             toast.error('Invalid Server Request!',{duration: 3000})
@@ -131,8 +131,7 @@ const EditSectionComponents = memo(({setSelected}) => {
         if(images && images?.length > 0){
             if(images?.length > 1){
                 toast.error('Only one image acceptable!',{duration: 3000});
-            }else{ 
-                console.log({images, name, ID, uid});
+            }else{  
                 if(name && ID && uid &&  images?.length === 1){
                     let postData = {src: images[0], name, uid, ID};
                     provideParentInfo(postData);

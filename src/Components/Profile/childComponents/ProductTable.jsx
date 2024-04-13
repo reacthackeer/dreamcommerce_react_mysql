@@ -13,7 +13,7 @@ import TableHeader from './TableHeader';
     
     
     return (
-        <Box borderWidth={1} borderRadius="md" p={4}>
+        <Box borderWidth={1} borderRadius="md" p={4} className='product__table__box__width'>
             
         {isFilled ?     
             <Table variant="striped"> 

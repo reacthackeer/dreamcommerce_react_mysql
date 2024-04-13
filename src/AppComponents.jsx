@@ -178,6 +178,7 @@ const AppComponents = () => {
               :
               <Navigate to='/login'/>
           }/>
+
           <Route path='/order-management/:filter' element={  
               isUserLoggedIn ? 
               <Box>
@@ -187,6 +188,7 @@ const AppComponents = () => {
               :
               <Navigate to='/login'/>
           }/>
+
           <Route path='/upload/profile-image' element={
             isUserLoggedIn ? 
             <React.Fragment>
@@ -277,6 +279,7 @@ const AppComponents = () => {
             <EditBrand/>
           </React.Fragment>
           }/>
+
           <Route path='/delete/section' element={  
             <React.Fragment>
             <ColorNavbar/> 
@@ -307,6 +310,7 @@ const AppComponents = () => {
             <DeleteBrand/>
           </React.Fragment>
           }/>
+
           <Route path='/add/popular-category' element={  
             <React.Fragment>
             <ColorNavbar/> 

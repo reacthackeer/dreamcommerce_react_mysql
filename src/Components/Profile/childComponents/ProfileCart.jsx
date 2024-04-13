@@ -8,8 +8,7 @@ import { server__image__host__url } from '../../../app/store';
 import { userLOggedOut } from '../../../features/auth/authSlice';
 const ProfileCart = memo(() => { 
     let authInfo = useSelector((state)=> state?.auth?.auth);
-    let printUserInfo = useSelector((state)=> state.auth.printUser);
-    console.log(printUserInfo);
+    let printUserInfo = useSelector((state)=> state.auth.printUser); 
     const {user__id} = useParams();  
     const [currentViewProfile, setCurrentViewProfile] = useState({});
 
@@ -55,22 +54,22 @@ const ProfileCart = memo(() => {
     }
     return (
         <div>
-            <Box borderWidth={1} borderRadius="md" p={4} maxWidth={300}>
+            <Box borderWidth={1} borderRadius="md" p={4}>
                     <Flex direction="column" alignItems="center" mb={4}>
                         <Image src={currentViewProfile?.img__src ? server__image__host__url+currentViewProfile.img__src : server__image__host__url+'profile.png'} alt="User Profile Image" borderRadius="full" boxSize="150px" />
                         <IconButton onClick={handleUpdateProfileImage} icon={<EditIcon />} aria-label="Edit Profile Image" size="sm" mt={2} />
                     </Flex>
                     <Heading as="h2" fontSize="xl" mb={2}>{currentViewProfile?.name}</Heading>
-                        <Text>Email: {currentViewProfile?.email}</Text>
-                        <Text>Phone: {currentViewProfile?.phone}</Text>
-                        <Text>Role: {currentViewProfile?.designation}</Text> 
+                        <Text><b>Email</b>: {currentViewProfile?.email}</Text>
+                        <Text><b>Phone</b>: {currentViewProfile?.phone}</Text>
+                        <Text><b>Role</b>: {currentViewProfile?.designation}</Text> 
                     <Heading as="h3" fontSize="lg" mt={4} mb={2}>Address</Heading>
                     <Box borderWidth={1} p={4} borderRadius="md">
-                        <Text>Division: {currentViewProfile?.address?.division?.name}</Text>
-                        <Text>District: {currentViewProfile?.address?.district?.name}</Text>
-                        <Text>Upazilla: {currentViewProfile?.address?.upazilla?.name}</Text>
-                        <Text>Union: {currentViewProfile?.address?.union?.name}</Text>
-                        <Text>Street Address: {currentViewProfile?.address?.street?.street}</Text>
+                        <Text><b>Division</b>: {currentViewProfile?.address?.division?.name}</Text>
+                        <Text><b>District</b>: {currentViewProfile?.address?.district?.name}</Text>
+                        <Text><b>Upazilla</b>: {currentViewProfile?.address?.upazilla?.name}</Text>
+                        <Text><b>Union</b>: {currentViewProfile?.address?.union?.name}</Text>
+                        <Text><b>Street Address</b>: {currentViewProfile?.address?.street?.street}</Text>
                     <Flex justifyContent="flex-end" mt={2}>
                         <IconButton onClick={handleUpdateAddress} icon={<EditIcon />} aria-label="Edit Address" size="sm" />
                     </Flex>

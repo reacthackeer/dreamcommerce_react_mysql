@@ -67,8 +67,7 @@ const DevelopCollectionView = () => {
         let {start, end} = viewProductPrice
         if(start === 0 && end === 0){
             return products;
-        }else{
-            console.log(`entered`)
+        }else{ 
             return products.filter((info)=> info.infos?.current__price >= start && info.infos?.current__price <= end)
         }
     }

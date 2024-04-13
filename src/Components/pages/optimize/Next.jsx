@@ -8,8 +8,7 @@ const Next = () => {
     const handleGetAllData = () => {
         axios.get('http://localhost:3000/api/product/getAllProduct').then((res) => {
             setCollection(()=> res.data.collection)
-        }).catch((err)=>{
-            console.log(err.message);
+        }).catch((err)=>{ 
         })
     }
     return (

@@ -13,15 +13,22 @@ export const authApi = apiSlice.injectEndpoints({
             invalidatesTags: () => [{type: 'getAllUserCartProduct'}, {type: 'getAllUserOrderProduct'}]
         }),
         getAllUserOrderProduct: builder.query({
-            query: (userId) => ({
-                url: `/order/${userId}`,
+            query: ({user__id, page, peerPage}) => ({
+                url: `/order/${user__id}?page=${page}&peerPage=${peerPage}`,
                 method: 'GET' 
             }),
             providesTags: () => [{type: 'getAllUserOrderProduct'}]
         }), 
+        printOrderUserProfileInfoAndProduct: builder.mutation({
+            query: ({user__id, status}) => ({
+                url: `/order/print/info-and-product/${user__id}/${status}`,
+                method: 'POST',
+                responseHandler: (response) => response.blob()
+            })
+        }), 
         getAllAdminOrderProduct: builder.query({
-            query: ({status, page, peerPage}) => ({
-                url: `/order/all?filter=${status}&&page=${page}&peerPage=${peerPage}`,
+            query: ({status, page, peerPage, phoneNumber}) => ({
+                url: `/order/all?filter=${status}&&page=${page}&peerPage=${peerPage}&phoneNumber=${phoneNumber}`,
                 method: 'GET' 
             }),
             providesTags: () => [{type: 'getAllUserOrderProduct'}]
@@ -56,5 +63,6 @@ export const {
     useApplyCashOnMutation,
     useGetAllUserOrderProductQuery,
     useIncrementOrderMutation,
-    useDecrementOrderMutation
+    useDecrementOrderMutation,
+    usePrintOrderUserProfileInfoAndProductMutation
 } = authApi;

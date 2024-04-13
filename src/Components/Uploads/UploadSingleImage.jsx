@@ -116,8 +116,7 @@ const UploadSingleImage = memo(() => {
                 toast.error('Only one image acceptable!',{duration: 3000})
             }else{
                 let newAuthInfo = {...authInfo}; 
-                    newAuthInfo.img__src = previewImages[previewImages.length - 1]
-                    console.log(newAuthInfo);
+                    newAuthInfo.img__src = previewImages[previewImages.length - 1] 
                     provideInfo(newAuthInfo);
             }
         }else{
@@ -129,8 +128,7 @@ const UploadSingleImage = memo(() => {
     const dispatch = useDispatch();
     const [updated, setUpdated] = useState(false);
     useEffect(()=>{ 
-        if(isError && !isLoading && !isSuccess){
-            console.log(error);
+        if(isError && !isLoading && !isSuccess){ 
             toast.error('There was a server side error!',{duration: 3000})
         }
         if(!isError && isSuccess && !isLoading){

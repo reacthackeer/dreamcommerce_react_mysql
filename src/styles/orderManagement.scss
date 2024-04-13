@@ -1,0 +1,47 @@
+.order__management__container{
+    position: relative;
+    width: 100%; 
+
+    .order__m_filter__buttons__container{
+        position: relative;
+        width: 100%; 
+        overflow: scroll;
+        overflow-y: hidden; 
+    }
+    .order__m_product__table__container{
+        position: relative;
+        width: 100%;
+        overflow: scroll;
+        overflow-y: hidden;
+        .product__table__box__width{
+            width: fit-content; 
+        }
+    }
+    .profile__pagination__bottom__area{
+        text-align: right;
+    }
+}
+
+@media only screen and (min-width: 660px) {
+    .order__management__container{ 
+        .order__m_filter__buttons__container{
+            position: relative;
+            width: 100%; 
+            overflow: hidden; 
+        } 
+    }
+}
+
+@media only screen and (min-width: 840px) {
+    .order__management__container{ 
+        .order__m_product__table__container{
+            position: relative;
+            width: 100%;
+            overflow: hidden; 
+
+            .product__table__box__width{
+                width: 100%;
+            }
+        }
+    }
+}

@@ -45,8 +45,7 @@ const ProductDetails = memo(() => {
         let mainView = document.querySelector('.mobile__view__container');
         if(mainView){
             mainView.scrollTop = 0;
-        } 
-        console.log(data)
+        }  
     },[data, isLoading, isError, isSuccess, error])
     return (
         <React.Fragment>

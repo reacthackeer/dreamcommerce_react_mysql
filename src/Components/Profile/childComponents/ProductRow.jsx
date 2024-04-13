@@ -11,13 +11,11 @@ const ProductRow = memo(({product}) => {
     const [provideIncrementId, {isLoading: oIL}] = useIncrementOrderMutation();
     const [provideDecrementId, {isLoading: oDL}] = useDecrementOrderMutation();
     const userInfo = useSelector((state)=> state.auth.auth); 
-    const handleSave = (productId) => { 
-        console.log(`Save product ${productId}`);
+    const handleSave = (productId) => {  
     };
 
     const handleCancel = (productId) => {
-        // Perform cancel operation for the product
-        console.log(`Cancel product ${productId}`);
+        // Perform cancel operation for the product 
     };
 
     const handleIncrement = () => {
@@ -40,8 +38,8 @@ const ProductRow = memo(({product}) => {
         }
         return visible;
     }
-    useEffect(()=>{
-        console.log({data, isLoading, isSuccess, isError, error});
+    useEffect(()=>{ 
+
     },[data, isLoading, isSuccess, isError, error])
     return (
         <Tr key={product.id} _hover={{ bg: 'gray.100' }}>

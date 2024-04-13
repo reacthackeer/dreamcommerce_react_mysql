@@ -12,8 +12,7 @@ const OrderPrintPage = () => {
     const {user__id} = useParams(); 
     const {data, isSuccess} = useGetAllUserOrderProductQuery(user__id);
     const {data:printUserInfo, isSuccess: printUserIsSuccess} = usePrintUserInfoQuery(user__id);
-    const dispatch = useDispatch();
-
+    const dispatch = useDispatch(); 
     useEffect(()=>{  
         if(isSuccess && data && data?.length){
             dispatch(addMultipleOrderProduct(data));

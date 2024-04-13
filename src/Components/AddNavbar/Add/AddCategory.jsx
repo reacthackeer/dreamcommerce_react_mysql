@@ -196,7 +196,7 @@ const AddCategory = memo(() => {
                 toast.error('Please upload image!',{duration: 3000, position: 'top-right'})
             }else{
                 if(images.length === 1){ 
-                    let items = categoryData.items.filter((info)=> info.name.toLowerCase() === postData.name.toLowerCase());
+                    let items = categoryData?.items?.filter((info)=> info.name.toLowerCase() === postData.name.toLowerCase()) || [];
                         if(items.length > 0){
                             toast.error('This category already existed!',{duration: 3000, position: 'top-right'})
                         }else{ 

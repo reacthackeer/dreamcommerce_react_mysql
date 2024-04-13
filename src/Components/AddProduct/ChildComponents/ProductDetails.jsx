@@ -49,8 +49,8 @@ const ProductDetailsChild = () => {
       const isValid = validateForm();
       if (isValid) {
         let newDetails = JSON.parse(localStorage.getItem('details')) || [];
-        if(newDetails && newDetails?.length > 0){
-          console.log(details);
+        if(newDetails && newDetails?.length > 0){ 
+          
         }else{
           localStorage.setItem('details',JSON.stringify(details));
           setDetails(details);

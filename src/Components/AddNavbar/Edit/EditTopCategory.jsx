@@ -53,8 +53,7 @@ const DeleteCollection = memo(() => {
                 setSelected(true);
             }else{
                 toast.error('Invalid request',{duration: 3000})
-            }
-            console.log(info);
+            } 
         }
     return (
         <div> 

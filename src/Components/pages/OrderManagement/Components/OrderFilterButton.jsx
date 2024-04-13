@@ -1,16 +1,36 @@
-import { Button, ButtonGroup } from '@chakra-ui/react';
+import { Button, ButtonGroup, Input } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const OrderFilterButton = ({currentState}) => {
+const OrderFilterButton = ({currentState, setPhoneNumber}) => {
     const navigate = useNavigate();
     return (
         <div className='padding__bottom'>
+        <ButtonGroup 
+            size='sm' 
+            isAttached 
+            variant='outline' 
+            width={'fit-content'}
+            display={currentState === 'phone' ? 'inline-flex' : 'none'}
+        >   
+            <Input 
+                size={'sm'}
+                placeholder='Enter phone number'
+                onChange={(e)=> setPhoneNumber(()=> e.target.value)}
+            >
+            
+            </Input>
+            <Button 
+                bg={currentState === 'completed' ? 'gray.400' : 'gray.100'}
+                onClick={()=> navigate('/order-management/all')}
+            >Close</Button>  
+        </ButtonGroup>  
             <ButtonGroup 
                 size='sm' 
                 isAttached 
                 variant='outline' 
                 width={'fit-content'}
+                display={currentState === 'phone' ? 'none' : 'inline-flex'}
             >
                 <Button 
                     bg={currentState === 'all' ? 'gray.400' : 'gray.100'}
@@ -48,6 +68,10 @@ const OrderFilterButton = ({currentState}) => {
                     bg={currentState === 'completed' ? 'gray.400' : 'gray.100'}
                     onClick={()=> navigate('/order-management/completed')}
                 >Completed</Button> 
+                <Button 
+                    bg={currentState === 'phone' ? 'gray.400' : 'gray.100'}
+                    onClick={()=> navigate('/order-management/phone')}
+                >Phone</Button>
             </ButtonGroup>  
         </div>
     );

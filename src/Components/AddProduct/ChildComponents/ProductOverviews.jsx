@@ -30,8 +30,8 @@ const ProductOverviews = () => {
     const handleSubmitOverviews = (event) => {
       event.preventDefault(); 
       let newOverviews = JSON.parse(localStorage.getItem('overviews')) || [];
-      if(newOverviews && newOverviews?.length > 0){
-        console.log(newOverviews);
+      if(newOverviews && newOverviews?.length > 0){ 
+        
       }else{
         localStorage.setItem('overviews', JSON.stringify(overviews));
         setOverviews(overviews);

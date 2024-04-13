@@ -48,8 +48,7 @@ const WishlistKong = () => {
                 setGeneratingPdf(false);
                 }
             }).catch(err => {
-                setGeneratingPdf(false);
-                console.log(err.message)
+                setGeneratingPdf(false); 
             })
         }else{
             navigate('/login');
