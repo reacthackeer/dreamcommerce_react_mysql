@@ -239,9 +239,7 @@ const AddCollection = memo(() => {
                             <Box 
                             >   
                                 <Box
-                                    display={'grid'} 
-                                    gridTemplateColumns={'auto 200px'} 
-                                    gridGap={'10px'}  
+                                    display={'grid'}  
                                 >
                                     <Box>
                                         <FormLabel>Section</FormLabel>
@@ -264,10 +262,7 @@ const AddCollection = memo(() => {
                             <Box 
 
                             >   
-                                <Box
-                                    display={'grid'} 
-                                    gridTemplateColumns={'auto 200px'} 
-                                    gridGap={'10px'}  
+                                <Box 
                                 >
                                     <Box>
                                         <FormLabel>Top Category</FormLabel>
@@ -290,10 +285,7 @@ const AddCollection = memo(() => {
                             <Box 
 
                             >   
-                                <Box
-                                    display={'grid'} 
-                                    gridTemplateColumns={'auto 200px'} 
-                                    gridGap={'10px'}  
+                                <Box 
                                 >
                                     <Box>
                                         <FormLabel>Category</FormLabel>

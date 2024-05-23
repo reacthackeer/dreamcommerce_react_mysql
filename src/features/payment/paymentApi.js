@@ -13,11 +13,18 @@ export const productApi = apiSlice.injectEndpoints({
                     'Content-Type': 'application/json',
                 }
             }) 
+        }),        
+        verifyPayment: builder.query({
+            query: (orderId) => ({
+                url: `/payment/verify/:${orderId}`,
+                method: 'GET', 
+            }) 
         })
     })
 })
 
 
 export const { 
-    useAddInitiatePaymentMutation
+    useAddInitiatePaymentMutation,
+    useVerifyPaymentQuery
 } = productApi;

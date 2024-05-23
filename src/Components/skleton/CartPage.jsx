@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { AiOutlinePrinter } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useGetSingleUserPriceCalculatorQuery } from '../../features/ShippingAndSystem/shippingAndSystemApi';
 import { useGetAllSingleUserCartProductQuery, usePrintPdfMutation } from '../../features/cart/api';
 import useLoginCheck from '../../hooks/loginCheck';
 import TableHead from '../pages/Cart/components/TableHead';
@@ -15,8 +16,10 @@ const CartPage = () => {
     const [provideUserId,{data: pdfData, isError: pdfIsError, isLoading: pdfIsLoading, isSuccess: pdfIsSuccess, error: pdfError}] = usePrintPdfMutation();
     const navigate = useNavigate(); 
     const authInfo = useSelector((state)=> state?.auth?.auth);
+    let {user__id} = authInfo; 
     // let [userId, setUserId] = useState(localStorage?.getItem('user__id'));
     let {data, isLoading, isError, error, isSuccess} = useGetAllSingleUserCartProductQuery(localStorage?.getItem('user__id') || ''); 
+    const {data:PriceData, isSuccess:PriceDataIsSuccess} = useGetSingleUserPriceCalculatorQuery(user__id || '');
     // decide what to render 
     let content = null;
     if(isLoading && !isError && !isSuccess){
@@ -25,7 +28,7 @@ const CartPage = () => {
     if(!isLoading && isError && !isSuccess){
         content = <NotFoundPage message={error?.message}/>
     } 
-    
+
     
     useEffect(()=>{
         if(pdfIsError && !pdfIsSuccess && !pdfIsLoading){
@@ -57,6 +60,8 @@ const CartPage = () => {
             navigate('/login')
         }
     }   
+
+
     
     if(!isLoading && !isError && isSuccess){
         if(data?.status__code === 200){
@@ -103,7 +108,7 @@ const CartPage = () => {
                             {<AiOutlinePrinter/>}
                         </Button> 
                         <Box>
-                            <CalculateTable products={data?.products}/>
+                            {PriceDataIsSuccess && <CalculateTable priceData={PriceData}/>}
                         </Box>
                     </div>
                 </div>
@@ -118,7 +123,7 @@ const CartPage = () => {
                         </Button>  
                         <Button 
                             onClick={()=> navigate('/checkout')}
-                        >Proceed To Checkout</Button>
+                        >Proceed To Checkout</Button> 
                     </div>
                 </div>
             </React.Fragment>

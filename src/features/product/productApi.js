@@ -32,7 +32,7 @@ export const productApi = apiSlice.injectEndpoints({
             providesTags: () => [{type:'get__filter__navbar__all__types'}]
         }),
         getSingleFilterNavbar: builder.query({
-            query: ({child, parent, parent__father}) => `/filter-navbar/get-single-by-property-query?child=${child}&parent=${parent}&parent__father=${parent__father}`,
+            query: ({child, parent, parent__father}) => `/filter-navbar/get-single-by-property-query?child=${child.replace(/&/g,'anndd')}&parent=${parent.replace(/&/g,'anndd')}&parent__father=${parent__father.replace(/&/g,'anndd')}`,
             providesTags: () => [{type: 'get__single__filter__navbar'}]
         }),
         updateSingleFilterNavbar: builder.mutation({

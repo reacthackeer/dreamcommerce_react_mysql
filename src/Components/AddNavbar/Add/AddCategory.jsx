@@ -224,9 +224,7 @@ const AddCategory = memo(() => {
                             <Box 
                             >   
                                 <Box
-                                    display={'grid'} 
-                                    gridTemplateColumns={'auto 200px'} 
-                                    gridGap={'10px'}  
+                                       
                                 >
                                     <Box>
                                         <FormLabel>Section</FormLabel>
@@ -250,9 +248,7 @@ const AddCategory = memo(() => {
 
                             >   
                                 <Box
-                                    display={'grid'} 
-                                    gridTemplateColumns={'auto 200px'} 
-                                    gridGap={'10px'}  
+                                       
                                 >
                                     <Box>
                                         <FormLabel>Top Category</FormLabel>

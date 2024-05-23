@@ -6,7 +6,7 @@ import { apiSlice } from "../api/apiSlice";
 export const offerApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllCategoryProduct: builder.query({
-            query: ({father, parent,  page, limit}) => `/products/p/${father}/${parent}?page=${page}&&peerPage=${limit}`
+            query: ({father, parent,  page, limit}) => `/products/p/${father}/${parent.replace(/&/g,'anndd')}?page=${page}&&peerPage=${limit}`
         }),
         getAllCategory: builder.query({
             query: () => `/parent-navbar`

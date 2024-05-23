@@ -4,28 +4,29 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { uid } from 'uid';
 
 import { Box } from '@chakra-ui/react';
-import AddBanner from './Components/AddHomeNavbar/Add/AddBanner.jsx';
+import ShippingAndPaymentForm from './Components/AddFormComponent/AddSystem.jsx';
 import AddByBrand from './Components/AddHomeNavbar/Add/AddByBrand.jsx';
 import AddByCategory from './Components/AddHomeNavbar/Add/AddByCategory.jsx';
 import AddPopularCategory from './Components/AddHomeNavbar/Add/AddPopularCategory.jsx';
-import DeleteBanner from './Components/AddHomeNavbar/Delete/DeleteBanner.jsx';
 import DeleteByBrand from './Components/AddHomeNavbar/Delete/DeleteByBrand.jsx';
 import DeleteByCategory from './Components/AddHomeNavbar/Delete/DeleteByCategory.jsx';
 import DeletePopularCategory from './Components/AddHomeNavbar/Delete/DeletePopularCategory.jsx';
-import EditBanner from './Components/AddHomeNavbar/Edit/EditBanner.jsx';
 import EditByBrand from './Components/AddHomeNavbar/Edit/EditByBrand.jsx';
 import EditByCategory from './Components/AddHomeNavbar/Edit/EditByCategory.jsx';
 import EditPopularCategory from './Components/AddHomeNavbar/Edit/EditPopularCategory.jsx';
+import AddBanner from './Components/AddNavbar/Add/AddBanner.jsx';
 import AddBrand from './Components/AddNavbar/Add/AddBrand.jsx';
 import AddCategory from './Components/AddNavbar/Add/AddCategory.jsx';
 import AddCollection from './Components/AddNavbar/Add/AddCollection.jsx';
 import AddSection from './Components/AddNavbar/Add/AddSection.jsx';
 import AddTopCategory from './Components/AddNavbar/Add/AddTopCategory.jsx';
+import DeleteBanner from './Components/AddNavbar/DELETEE/DeleteBanner.jsx';
 import DeleteBrand from './Components/AddNavbar/DELETEE/DeleteBrand.jsx';
 import DeleteCategory from './Components/AddNavbar/DELETEE/DeleteCategory.jsx';
 import DeleteCollection from './Components/AddNavbar/DELETEE/DeleteCollection.jsx';
 import DeleteSection from './Components/AddNavbar/DELETEE/DeleteSection.jsx';
 import DeleteTopCategory from './Components/AddNavbar/DELETEE/DeleteTopCategory.jsx';
+import EditBanner from './Components/AddNavbar/Edit/EditBanner.jsx';
 import EditBrand from './Components/AddNavbar/Edit/EditBrand.jsx';
 import EditCategory from './Components/AddNavbar/Edit/EditCategory.jsx';
 import EditCollection from './Components/AddNavbar/Edit/EditCollection.jsx';
@@ -58,6 +59,7 @@ import DevelopTopCategoryView from './Components/pages/BrandView/DevelopTopCateg
 import SingleOfferView from './Components/pages/BrandView/SingleOfferView';
 import OrderManagement from './Components/pages/OrderManagement/OrderManagement.jsx';
 import OrderPrintPage from './Components/pages/OrderManagement/OrderPrintPage.jsx';
+import PaymentSuccessPage from './Components/pages/SuccessPayment.jsx';
 import Optimize from './Components/pages/optimize/Optimize';
 import ProductDetails from './Components/pages/productDetails/ProductDetails';
 import AuthComponents from './Components/skleton/AuthComponents.jsx';
@@ -219,6 +221,19 @@ const AppComponents = () => {
             <AddProductForm/>
           </React.Fragment>
           }/>
+          <Route path='/add/system-and-payment' element={  
+            <React.Fragment>
+            <ColorNavbar/>  
+            <ShippingAndPaymentForm/>
+          </React.Fragment>
+          }/>
+          
+          <Route path='/payment/success/:orderId' element={  
+            <React.Fragment>
+            <ColorNavbar/>  
+            <PaymentSuccessPage/>
+          </React.Fragment>
+          }/>
           <Route path='/add/section' element={  
             <React.Fragment>
             <ColorNavbar/> 
@@ -359,18 +374,18 @@ const AppComponents = () => {
             <AddBanner/>
           </React.Fragment>
           }/>
-          <Route path='/delete/banner' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteBanner/>
-          </React.Fragment>
-          }/>
           <Route path='/edit/banner' element={  
             <React.Fragment>
             <ColorNavbar/> 
             <EditBanner/>
           </React.Fragment>
-          }/>
+          }/>  
+          <Route path='/delete/banner' element={  
+            <React.Fragment>
+            <ColorNavbar/>  
+            <DeleteBanner/>
+          </React.Fragment>
+          }/> 
           <Route path='/delete/by-category' element={  
             <React.Fragment>
             <ColorNavbar/>  

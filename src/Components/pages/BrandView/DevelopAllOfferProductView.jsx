@@ -1,103 +1,58 @@
-import { Button } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useGetAllOfferProductsQuery } from '../../../features/product/productApi';
-import { clearFilterProduct } from '../../../features/product/productSlice';
+import { Image } from '@chakra-ui/react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useGetAllOffersQuery } from '../../../features/brand/brandApi';
 import { LoadingPage, NotFoundPage } from '../../skleton/Loading';
-import DevelopViewSkeleton from '../developViewSkeleton';
+import DevelopAllCategorySingleOfferItemNext from '../Home/Components/DevelopAllCategorySignleOfferItemNext';
+import HeaderLinkItem from '../developViewSkeletonComponents/HeaderLinkItems';
+    
 
-const DevelopAllOfferView = () => {
-    const {searchText} = useParams();   
+const DevelopAllOffersViews = () => {
     
-    const searchParams = useSearchParams()[0];
-    let page = searchParams.get('page') ? Number(searchParams.get('page')) : 1 
-    let limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 45
     
-    let {data, isLoading, isError, isSuccess, error} = useGetAllOfferProductsQuery({page, limit});
-    
-    const viewProductIdes = useSelector((state)=> state.productFilter.ides);
-    const viewProductPrice = useSelector((state)=> state.productFilter.price);
-    const searchString = useSelector((state)=> state.productFilter.searchString);
-    
+    let {data, isLoading, isError, isSuccess, error} = useGetAllOffersQuery(); 
     // decide what to render
     let content = null;
-    const navigate = useNavigate();
-
-    const dispatch = useDispatch();
-    useEffect(()=>{
-        dispatch(clearFilterProduct())
-    },[data, isLoading, isError, isSuccess, error, dispatch])
-    
     if(isLoading && !isError && !isSuccess){
         content = <LoadingPage/>
     }
     if(!isLoading && isError && !isSuccess){
         content = <NotFoundPage message={error?.message}/>
     }
-
-    
     let linksArray = [
         {name: 'HOME', link: '/'},
-        {name: searchText, link: `/search/${searchText}`}
+        {name: 'BRANDS', link: `/brands`}, 
     ] 
     
-    useEffect(()=>{
-        let mainView = document.querySelector('.mobile__view__container');
-        if(mainView){
-            mainView.scrollTop = 0;
-        } 
-    },[data, isLoading, isError, isSuccess, error])
-    
-        
-    const handleFilterResetProductByCategory = (products) => {
-        if(viewProductIdes.length === 0){
-            return products;
-        }else{
-            return products.filter((info)=> viewProductIdes.indexOf(info.product__id) !== -1);
-        }
+
+    if(!isLoading && !isError && isSuccess && data?.length > 0){
+        content =  <React.Fragment>
+            <div className="main__category__product__view__upper__container">
+                <div className='padding__y__25'>
+                    <HeaderLinkItem linksArray={linksArray}/>
+                </div>
+            </div>
+            <div className='main__category__product__view__upper__container bg__1'>  
+                <div className='top__banner__upper__container padding__bottom padding__top'> 
+                    <div className='top__banner__container'>
+                        <Link to='/single-product-details'>
+                            <Image src='/ads.png' alt='banner'/>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <div className='main__category__product__view__upper__container bg__1'> 
+                <div className='brand__category__fill__container padding__intro__top padding__bottom'>
+                    {data?.map((item, index) => {
+                        return <DevelopAllCategorySingleOfferItemNext key={index} item={item}/>
+                    })} 
+                </div> 
+            </div>
+        </React.Fragment>
     }
-
-    const handleSearchProductBySearchString = (products) => {
-        if(!searchString){
-            return products;
-        }else{
-            return products.filter((info)=> info.infos.title.toLowerCase().indexOf(searchString.toLowerCase()) !== -1);
-        }
-    }
-
-    const handleFilterResetProductByPrice = (products) => {
-
-        let {start, end} = viewProductPrice
-        if(start === 0 && end === 0){
-            return products;
-        }else{ 
-            return products.filter((info)=> info.infos?.current__price >= start && info.infos?.current__price <= end)
-        }
-    }
-
-    if(!isLoading && !isError && isSuccess && data?.products?.length > 0){
-        let resetProduct = handleFilterResetProductByCategory([...data?.products]);
-            resetProduct = handleFilterResetProductByPrice([...resetProduct]);
-            resetProduct = handleSearchProductBySearchString([...resetProduct]);
-        content = <DevelopViewSkeleton linksArray={linksArray}  lowPrice={data?.lowPrice || 0} highPrice={data?.highPrice || 0} page={page} limit={limit} filterNavbar={data?.filterNavbar} products={resetProduct} totalPage={data?.total__page} totalProducts={data?.total__products} startFrom={data?.current__limit[0]} startTo={data?.current__limit[1]}/>
-    }
-
-    if(!isLoading && !isError && isSuccess && !data){
-        content = <React.Fragment>
-        <div className='add__product__main__container'>
-            <h1>No product found!</h1>
-            <h1>But you can try different route</h1>
-            <Button
-                onClick={()=> navigate('/')}
-            >
-                Go Back Home
-            </Button>
-        </div>
-    </React.Fragment>
-    }
-
-    return content;
+    return content; 
 }
 
-export default DevelopAllOfferView;
+
+
+export default DevelopAllOffersViews;

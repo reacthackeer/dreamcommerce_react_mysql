@@ -8,6 +8,10 @@ export const offerApi = apiSlice.injectEndpoints({
             query: () => `/brands`,
             providesTags: () => [{type: 'get__all__brands'}]
         }), 
+        getAllOffers: builder.query({
+            query: () => `/offers/offers-page`,
+            providesTags: () => [{type: 'get__all__offers'}]
+        }), 
         getSingleBrand: builder.query({
             query: (uid) => `/brands/${uid}`
         }),
@@ -70,15 +74,15 @@ export const offerApi = apiSlice.injectEndpoints({
             providesTags: () => [{type: 'get__all__up__for__preview'}]
         }), 
         getAllParentFatherNavbar: builder.query({
-            query: (up) => `/parent-father-navbar/by-up?up=${up}`,
+            query: (up) => `/parent-father-navbar/by-up?up=${up.replace(/&/g,'anndd')}`,
             providesTags: () => [{type: 'get__all__parent__father__for__preview'}]
         }), 
         getAllParentNavbar: builder.query({
-            query: ({up, parent__father}) => `/parent-navbar/get-all?up=${up}&parent__father=${parent__father}`,
+            query: ({up, parent__father}) => `/parent-navbar/get-all?up=${up.replace(/&/g,'anndd')}&parent__father=${parent__father.replace(/&/g,'anndd')}`,
             providesTags: () => [{type: 'get__all__parent__for__preview'}]
         }),
         getAllChildNavbar: builder.query({
-            query: ({parent, up}) => `/child-navbar/get-all-parent?parent=${parent}&up=${up}`,
+            query: ({parent, up}) => `/child-navbar/get-all-parent?parent=${parent.replace(/&/g,'anndd')}&up=${up.replace(/&/g,'anndd')}`,
             providesTags: () => [{type: 'get__all__child__for__preview'}]
         }), 
         
@@ -121,6 +125,7 @@ export const {
     useGetAllParentFatherNavbarQuery,
     useGetAllUpNavbarQuery,
     useGetAllBrandQuery,
+    useGetAllOffersQuery,
     useGetSingleBrandProductQuery,
     useGetSingleBrandSimilarProductQuery,
     useAddSingleBrandMutation,

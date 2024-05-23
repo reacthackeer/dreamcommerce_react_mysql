@@ -33,6 +33,15 @@ const AdminAccording = () => {
     }
 
     const pages = [
+        
+        {
+            "name": "Add banner",
+            "link": "/add/banner"
+        },
+        {
+            "name": "Payment & System",
+            "link": "/add/system-and-payment"
+        },
         {
             "name": "Add banner",
             "link": "/add/banner"

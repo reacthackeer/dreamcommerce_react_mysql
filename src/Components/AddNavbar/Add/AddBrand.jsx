@@ -8,7 +8,6 @@ import { server__image__host__url } from '../../../app/store';
 import { useAddSingleBrandMutation, useGetAllBrandQuery } from '../../../features/brand/brandApi';
 import DynamicHeader from '../DynamicHeader';
 import DynamicTab from '../DynamicTab';
-
 const AddBrand = memo(() => {
     const [product, setProduct] = useState({});
 

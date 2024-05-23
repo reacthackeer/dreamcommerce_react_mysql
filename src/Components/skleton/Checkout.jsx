@@ -3,17 +3,20 @@ import numberUid from 'number-uid';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useGetSingleUserPriceCalculatorQuery } from '../../features/ShippingAndSystem/shippingAndSystemApi';
 import { useGetAllSingleUserCartProductQuery } from '../../features/cart/api';
 import { useApplyCashOnMutation } from '../../features/order/api';
 import { useAddInitiatePaymentMutation } from '../../features/payment/paymentApi';
 import CalculateTable from '../pages/Checkout/Components/Calculate';
 
 const Checkout = () => {
+
     const [orderId] = useState(numberUid(10))
     let authInfo = useSelector((state) => state?.auth?.auth);
     let {address, name, email, phone, user__id} = authInfo;
     let {division, district, upazilla, union, street} = address;
-    let {data, isSuccess} = useGetAllSingleUserCartProductQuery(localStorage?.getItem('user__id') || ''); 
+    const {data:PriceData, isSuccess:PriceDataIsSuccess} = useGetSingleUserPriceCalculatorQuery(user__id || '');
+    let {data, isSuccess} = useGetAllSingleUserCartProductQuery(localStorage?.getItem('user__id') || '');  
     const [provideUserId, {data: dataA, isLoading: isLoadingA, isError: isErrorA, isSuccess: isSuccessA, error: errorA}] = useApplyCashOnMutation();
     const [providePaymentInfos, {isSuccess: paymentIsSuccess, isError: paymentIsError, data: paymentData}]  = useAddInitiatePaymentMutation();
 
@@ -32,11 +35,15 @@ const Checkout = () => {
     }
 
     useEffect(()=>{ 
+        if(paymentData && !paymentIsError && paymentIsSuccess){ 
+            window.location.href = paymentData.GatewayPageURL;   
+        }
     },[paymentData, paymentIsError, paymentIsSuccess])
 
     const handleApplyForCashOneDelivery = () => { 
         provideUserId({user__id, order__id: orderId, phone});
     }
+    
     return (
         <React.Fragment> 
                 <div className='main__category__product__view__upper__container' style={{paddingTop:'30px',paddingBottom:'30px'}}>
@@ -164,13 +171,27 @@ const Checkout = () => {
                                 
                             </Box>
                         </div>
-                        <div className='payment__container'>
-                            <CalculateTable/>
-                            <Box mt='3'>  
-                                <Button isDisabled={!data?.products?.length > 0} mt="5" onClick={handlePayConfirm} width={'100%'}>Pay Now</Button>
-                                <Button isLoading={isLoadingA} isDisabled={!data?.products?.length > 0} mt="5" onClick={handleApplyForCashOneDelivery} width={'100%'}>Apply for Cash on Delivery</Button>
-                            </Box>
-                        </div>
+                        {PriceDataIsSuccess && 
+                            <div className='payment__container'>
+                                <CalculateTable priceData={PriceData}/>
+                                <Box mt='3'>  
+                                    <Button 
+                                        isDisabled={!data?.products?.length > 0 || PriceData.system.onlinePayment !== 'true'} 
+                                        mt="5" 
+                                        onClick={handlePayConfirm} 
+                                        width={'100%'}>
+                                            Pay Now
+                                    </Button>
+                                    <Button 
+                                        isLoading={isLoadingA} 
+                                        isDisabled={!data?.products?.length > 0 || PriceData.system.cashOnDelivery !== 'true'}
+                                        mt="5" onClick={handleApplyForCashOneDelivery} 
+                                        width={'100%'}>
+                                            Apply for Cash on Delivery
+                                    </Button>
+                                </Box>
+                            </div>
+                        }
                     </div>
                 </div> 
         </React.Fragment>

@@ -9,14 +9,14 @@ import {
 import React from 'react';
 import { Link as RLink } from 'react-router-dom';
 
-const CalculateTable = () => {
+const CalculateTable = ({priceData}) => {
     return (
         <TableContainer mt='3'>
             <Table variant='simple'> 
                 <Thead>
                     <Tr>
                         <Th fontSize={'medium'}>Total</Th>
-                        <Th textAlign={'end'}  fontSize={'medium'}>1000.00 TK</Th> 
+                        <Th textAlign={'end'}  fontSize={'medium'}>{priceData.allTotal} TK</Th> 
                     </Tr>
                 </Thead>
                 <Tbody>

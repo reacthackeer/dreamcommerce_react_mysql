@@ -2,8 +2,8 @@
     position: relative;
     width: 100%;
     display: grid;  
-    grid-gap: 40px;
-    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+    grid-template-columns: auto; 
 
     .register__button{
         height: 100%;
@@ -13,6 +13,21 @@
         align-items:last baseline;
     }
 }
+
+@media only screen and (min-width: 900px){
+    .form__item__view__main__container{ 
+        grid-gap: 20px;
+        grid-template-columns: calc(50% - 10px) calc(50% - 10px); 
+    }
+}
+
+@media only screen and (min-width: 1300px){
+    .form__item__view__main__container{ 
+        grid-gap: 40px;
+        grid-template-columns: calc(33.33% - 14px) calc(33.33% - 14px) calc(33.33% - 14px); 
+    }
+}
+
 
 .image__preview__main__container{
     position: relative;

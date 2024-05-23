@@ -55,7 +55,7 @@ const DevelopViewSkeleton = ({filterNavbar, products, totalPage, totalProducts, 
     return (
         <React.Fragment>  
             {
-                filterNavbar.length > 0 && <FilterNavbarSideBar  filterNavbar={filterNavbar} lowPrice={lowPrice} highPrice={highPrice}/>
+                filterNavbar?.length > 0 && <FilterNavbarSideBar  filterNavbar={filterNavbar} lowPrice={lowPrice} highPrice={highPrice}/>
             }
             <div className='main__category__product__view__upper__container'> 
                 <div className='main__container'>

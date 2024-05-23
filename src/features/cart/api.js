@@ -10,7 +10,7 @@ export const cartApi = apiSlice.injectEndpoints({
                 method: 'PUT',
                 body: data
             }),
-            invalidatesTags: () => [{type: 'getAllUserCartProduct'}]
+            invalidatesTags: () => [{type: 'getAllUserCartProduct'}, {type: 'calculateSystemSingleUser'}]
         }),
         getAllSingleUserCartProduct: builder.query({
             query: (user__id) => `/cart/get-all/${user__id}`,
@@ -29,18 +29,18 @@ export const cartApi = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: () => [{type: 'getAllUserCartProduct'}]
+            invalidatesTags: () => [{type: 'getAllUserCartProduct'}, {type: 'calculateSystemSingleUser'}]
         }),
         deleteSingleCartProduct: builder.mutation({
             query: (product__id) => ({
                 url: `/cart/${product__id}`,
                 method: 'DELETE'
             }),
-            invalidatesTags: () => [{type: 'getAllUserCartProduct'}]
+            invalidatesTags: () => [{type: 'getAllUserCartProduct'}, {type: 'calculateSystemSingleUser'}]
         }),
         moveToWishlist: builder.mutation({
             query: ({cartId}) => `/cart/transfer-to-wishlist/${cartId}`,
-            invalidatesTags: () => [{type: 'getAllUserWishlistProduct'}, {type: 'getAllUserCartProduct'}] 
+            invalidatesTags: () => [{type: 'getAllUserWishlistProduct'}, {type: 'getAllUserCartProduct'}, {type: 'calculateSystemSingleUser'}] 
         }),
         printPdf: builder.mutation({
             query: (user__id) => ({
