@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const { getAllSearchProduct, getAllMultipleOffers, getSingleSqlProduct, updateSingleSqlProduct, getMultipleSqlProduct} = require('../query/products__query');
 const { getSqlProductLength } = require('../query/lengthQuery'); 
 const { addSingleSqlProduct } = require('../query/products__query');
-const { deleteGeneralSqlOperation } = require('../query/offer__query');
+const { deleteGeneralSqlOperation, getSingleOfferQuery, getSingleOffersQuery } = require('../query/offer__query');
 
 const handleGetAllSingleOfferProduct = asyncHandler(async(req, res, next)=>{
     const name = req.params.offer; 
@@ -40,6 +40,26 @@ const handleGetAllSingleOfferProduct = asyncHandler(async(req, res, next)=>{
     }
 })
 
+const handleGetAllMultipleOffersProductSinglePage = asyncHandler(async(req, res, next)=>{
+    const page = Number(req?.query?.page) || 1;
+    const peerPage = Number(req?.query?.limit) || 500 
+    try {
+        const result = await getSingleOffersQuery(page, peerPage);
+        let newProductArray = [];
+        let uniqueNameArray = [];
+        result.forEach((info)=> {
+            if(uniqueNameArray.indexOf(info.name) === -1){
+                uniqueNameArray.push(info.name);
+                newProductArray.push(info)
+            }
+        })
+        res.json(newProductArray)
+    } catch (error) { 
+        const errorBody = new Error('An error occurred while fetching data');
+        errorBody.status = 500;
+        next(errorBody);
+    }
+});
 const handleGetAllMultipleOffersProduct = asyncHandler(async(req, res, next)=>{
 
     const count = `SELECT COUNT(*) FROM offers WHERE active="true"`;
@@ -203,5 +223,6 @@ module.exports = {
   handleGetSingleOffer,
   handleUpdateSingleOffer,
   deleteSingleOffer,
-  handleGetAllOffers
+  handleGetAllOffers,
+  handleGetAllMultipleOffersProductSinglePage
 }

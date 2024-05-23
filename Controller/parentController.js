@@ -36,6 +36,8 @@ const getAllParentNavbar = asyncHandler(async(req, res, next)=>{
 // })
 const getAllParentNavbarAll = asyncHandler(async(req, res, next)=>{
     let {up, parent__father} = req.query;
+    up = up.replace(/anndd/g,'&');
+    parent__father = parent__father.replace(/anndd/g,'&');
     if(up && parent__father){
         let sql = `SELECT * FROM parent WHERE up="${up}" AND parent__father="${parent__father}"`;
         try {
@@ -55,6 +57,7 @@ const getAllParentNavbarAll = asyncHandler(async(req, res, next)=>{
 
 const getAllParentFatherNavbar = asyncHandler(async(req, res, next)=>{
     let {parent__father} = req.query;
+    parent__father = parent__father.replace(/anndd/g,'&');
     if(parent__father){
         let sql = `SELECT * FROM parent WHERE parent__father="${parent__father}"`;
         try {

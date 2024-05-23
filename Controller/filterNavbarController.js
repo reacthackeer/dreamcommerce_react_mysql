@@ -5,6 +5,10 @@ const { deleteGeneralSqlOperation } = require('../query/offer__query');
 
 const getSingleFilterNavbarByAll = asyncHandler(async(req, res, next)=>{
     let {child, parent, parent__father} = req.query;
+    
+    parent__father = parent__father.replace(/anndd/g,'&');
+    parent = parent.replace(/anndd/g,'&');
+    child = child.replace(/anndd/g,'&');
     if(child && parent && parent__father){
         try {
             let sql = `SELECT * FROM filter__navbar WHERE child="${child}" AND parent="${parent}" AND parent__father="${parent__father}"`;

@@ -1,12 +1,27 @@
 
 const {mainDb} =  require('../config/connectDb');
-const {getAllBrandsSql, get__single__product__sql} = require('../sql/sql')
+const {getAllBrandsSql, get__single__product__sql, getAllOffersSql} = require('../sql/sql')
 
 const getSingleOfferQuery = (page, pageSize) => {
     const offset = (page-1) * pageSize;
     const limit = pageSize;
     return new Promise((resolve, reject)=>{
         const query = getAllBrandsSql;
+        mainDb.query(query, [offset, limit], (error, result)=>{
+            if(!error){
+                resolve(result);
+            }else{
+                reject(error)
+            }
+        })
+    })
+}
+
+const getSingleOffersQuery = (page, pageSize) => {
+    const offset = (page-1) * pageSize;
+    const limit = pageSize;
+    return new Promise((resolve, reject)=>{
+        const query = getAllOffersSql;
         mainDb.query(query, [offset, limit], (error, result)=>{
             if(!error){
                 resolve(result);
@@ -84,6 +99,7 @@ module.exports = {
     generalSqlOperation,
     updateGeneralSqlOperation,
     deleteGeneralSqlOperation,
-    generalSqlOperationRow
+    generalSqlOperationRow,
+    getSingleOffersQuery
 }
 

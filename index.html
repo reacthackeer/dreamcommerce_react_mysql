@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 style="margin: 50px;" id="all__heading">Hello world</h1>
+
+    <script>
+        let allRSDagNo= [40, 126,127,128, 76, 75, 93, 19, 55, 149, 150, 151, 176, 184, 183, 186, 188, 239, 232,261, 238, 346, 572, 582, 586, 699, 697, 694, 693]
+            allRSDagNo = allRSDagNo.sort((a, b)=> a-b).join('  ____  ');
+        document.getElementById('all__heading').innerText = allRSDagNo;
+        
+        
+    </script>
+    <script src="./land.js"></script>
+</body>
+</html>

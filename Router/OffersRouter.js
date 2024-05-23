@@ -5,7 +5,8 @@ const {
     handleGetSingleOffer,
     handleUpdateSingleOffer,
     deleteSingleOffer,
-    handleGetAllOffers
+    handleGetAllOffers,
+    handleGetAllMultipleOffersProductSinglePage
 } = require('../Controller/OffersController'); 
 
 const offerRouter = require('express').Router(); 
@@ -16,6 +17,7 @@ offerRouter.get('/multiple', handleGetAllOffers);
 offerRouter.put('/single/:ID', handleUpdateSingleOffer); 
 offerRouter.delete('/single/:ID', deleteSingleOffer); 
 offerRouter.get('/', handleGetAllMultipleOffersProduct); 
+offerRouter.get('/offers-page', handleGetAllMultipleOffersProductSinglePage); 
 offerRouter.post('/', handleAddSingleOffer);
 offerRouter.get('/:offer', handleGetAllSingleOfferProduct); 
 

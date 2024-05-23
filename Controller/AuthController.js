@@ -135,10 +135,11 @@ const getAllNavbarData = asyncHandler(async(req, res, next)=>{
                 try {
                     let grandFatherResult = await getAllJustSqlProduct3(grandFatherSql);
                     try {
-                        let upResult = await getAllJustSqlProduct4(upSql);
+                        let upResult = await getAllJustSqlProduct4(upSql); 
                         let result = controllerUtils.navbarMaker({child: childResult.items, parent: parentResult.items, parent__father: grandFatherResult.items, up: upResult.items});
-                        res.json(result);
-                    } catch (error) {
+                        res.json(result); 
+                    } catch (error) { 
+                        console.log(error.message);
                         next(new Error(error.message));
                     }
                 } catch (error) {

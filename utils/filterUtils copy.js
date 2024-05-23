@@ -276,33 +276,36 @@ controllerUtils.navbarMaker = (data) => {
         navbarInfos?.push({link__name: upInfo?.name, img__src: upInfo?.src, links: []});
         upJustHeader?.push(upInfo?.name);
     })
-    
+
+    let parentFatherJustHeader = [];
     parent__father?.forEach((info)=>{
         let upIndex = upJustHeader?.indexOf(info?.up);
             navbarInfos[upIndex]?.links?.push({link__name: info?.name, img__src: info?.src, links: []}); 
+            parentFatherJustHeader?.push(`${info?.up}__${info?.name}`);
     });
-
-    
+    let parentJustHeader = []; 
+    let lastParentItemName = parent[parent.length - 1].name;
+    console.log(lastParentItemName)
     parent?.forEach((info, index)=>{
         let upIndex = upJustHeader?.indexOf(info?.up); 
-        let parentIndex = navbarInfos[upIndex].links.findIndex((infoParent)=> infoParent.link__name === info.parent__father);
-        navbarInfos[upIndex].links[parentIndex].links.push({link__name: info?.name, links: [], img__src: info?.src});
-    });  
-    child?.forEach((childInfo)=> { 
-        
-        let upIndex = upJustHeader?.indexOf(childInfo?.up); 
-        let parentFatherIndex = -10;
-        let parentIndex = -10;
+        let parentFatherIndex = parentFatherJustHeader?.indexOf(`${info?.up}__${info?.parent__father}`); 
 
-        navbarInfos[upIndex]?.links?.forEach((parentFatherFinder, index)=> {
-            let parenIndexF = parentFatherFinder?.links?.findIndex((info)=> info.link__name === childInfo.parent);
-            if(parenIndexF !== -1){
-                parentFatherIndex = index;
-                parentIndex = parenIndexF;
+            
+
+            navbarInfos[upIndex]?.links[parentFatherIndex]?.links?.push({link__name: info?.name, links: [], img__src: info?.src});
+            parentJustHeader?.push({upIndex, parentFatherIndex, name: `${info?.name}__${info?.up}`});
+            if(info.name === lastParentItemName){
+                // console.log(navbarInfos[upIndex])
             }
-        }) 
-        navbarInfos[upIndex].links[parentFatherIndex].links[parentIndex].links.push({link__name: childInfo?.name, img__src: childInfo?.src});
-    })     
+    }); 
+
+    child?.forEach((childInfo)=> {
+        let {upIndex, parentFatherIndex} = parentJustHeader?.filter((info)=> info?.name === `${childInfo?.parent}__${childInfo?.up}`)[0];
+            let items = navbarInfos[upIndex]?.links[parentFatherIndex]?.links || [];
+            let parentItem = items?.filter((info)=> info?.link__name === childInfo?.parent)[0] || {};
+            parentItem?.links?.push({link__name: childInfo?.name, img__src: childInfo?.src});
+    })   
+
     return navbarInfos;
 }
 

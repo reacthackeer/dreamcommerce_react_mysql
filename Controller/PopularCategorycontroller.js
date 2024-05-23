@@ -1,16 +1,20 @@
 const asyncHandler = require('express-async-handler');
 const { generalSqlOperation, updateGeneralSqlOperation } = require('../query/offer__query');
 const { getAllJustSqlProduct, getSingleJustSqlProduct, deleteSingleSqlProduct } = require('../query/products__query');
+const PopularCategory = require('../model/popularCategory');
 
 const addSinglePopularCategory = asyncHandler(async(req, res, next)=>{
     let {name, link} = req.body;
     if(name && link){
-        let sql = `INSERT INTO popular__category (name, link) VALUES ("${name}","${link}")`;
         try {
-            let result = await generalSqlOperation(sql);
-                res.json(result);
+            let createResult = await PopularCategory.create({name, link});
+            if(createResult && createResult.dataValues.id){
+                res.json(createResult.dataValues);
+            }else{
+                next(new Error('Internal server error!'));
+            }
         } catch (error) {
-            next(new Error(error.message));
+            next(new Error(error.message))
         }
     }else{
         next(new Error("Invalid post request!"))
@@ -32,12 +36,10 @@ const updateSinglePopularCategory = asyncHandler(async(req, res, next) => {
     }
 })
 const getallPopularCategory = asyncHandler(async(req, res, next)=>{
-    let sql = 'SELECT * FROM popular__category';
     try {
-        let result = await getAllJustSqlProduct(sql);
-            res.json(result)
+        let allCategoryResult = await PopularCategory.findAll({})
     } catch (error) {
-        next(new Error("Invalid get request!"))
+        next(new Error(error.message))
     }
 });
 

@@ -37,6 +37,10 @@ const getAllChildNavbar = asyncHandler(async(req, res, next)=>{
 
 const getAllChildParentNavbar = asyncHandler(async(req, res, next)=>{
     let {parent, up} = req.query;
+        
+    parent = parent.replace(/anndd/g,'&');
+    up = up.replace(/anndd/g,'&');
+    
     if(parent && up){
         let sql = `SELECT * FROM child WHERE parent="${parent}" AND up="${up}"`;
         try {

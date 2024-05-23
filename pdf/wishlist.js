@@ -22,7 +22,23 @@ const handlePdfGeneratorMaster = (stringFunction, data, option) => {
     })
 }
 
+const handlePdfGeneratorMasterOrder = (stringFunction, data, option) => {
+    return new Promise((resolve, reject)=>{
+        pdf.create(stringFunction(data.products, data.userInfo), option).toFile(`____cart_${data.user__id}_${data.date}.pdf`, (err, res) => {
+            if (err) {
+                console.log(err.message);
+                reject({message: 'There was a server side error while generating pdf!', status__code: 500});
+            }else{ 
+                let filePath = res.filename.split('____');
+                let pathAddress = filePath[filePath.length - 1];
+                resolve({message: 'Successfully pdf generated', status__code: 200, path:'____'+pathAddress})
+            }
+            });
+    })
+}
+
 module.exports = {
     options,
-    handlePdfGeneratorMaster
+    handlePdfGeneratorMaster,
+    handlePdfGeneratorMasterOrder
 }
