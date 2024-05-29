@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, Image, Input, Text } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Image, Input } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -10,8 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { useAddSingleBannerMutation } from '../../../features/banner/bannerApi';
 import '../../../styles/addProduct.scss';
-import DynamicHeader from '../DynamicHeader';
-import DynamicTabBanner from '../DynamicTabBanner';
 const AddBanner = memo(() => {
     const [product, setProduct] = useState({});
 
@@ -209,12 +207,9 @@ const AddBanner = memo(() => {
     }
     
     return (
-        <React.Fragment>
-            <DynamicHeader message={'Add Banner'}/> 
-            <DynamicTabBanner/>
+        <React.Fragment> 
             <div className='main__category__product__view__upper__container bg__1'>  
-                <div className='padding__top padding__bottom'>
-                <Text fontSize={'2xl'} paddingBottom={'30px'}>Category Basic Information</Text>
+                <div className='padding__top padding__bottom'> 
                     <form onSubmit={handleSubmit} className='form__item__view__main__container'> 
                         {   
                             bannerType && bannerType.length &&

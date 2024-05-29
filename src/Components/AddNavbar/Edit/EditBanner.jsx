@@ -83,3 +83,28 @@ const EditBanner = memo(() => {
 });
 
 export default EditBanner;
+
+
+// let myNavbarDesign = [
+//     banner,
+//     shopByBrand,
+//     shopByCategory,
+//     paymentAndSystem,
+//     popularCategory,
+
+//     section,
+//     topCategory,
+//     category,
+//     collection,
+
+//     brand,
+//     product,
+//     shippingAddress,
+//     order,
+//     user,
+
+//     division, 
+//     district,
+//     upazilla,
+//     union, 
+// ]

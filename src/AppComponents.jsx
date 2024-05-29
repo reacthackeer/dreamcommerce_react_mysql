@@ -1,49 +1,14 @@
+import { Box } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { uid } from 'uid';
-
-import { Box } from '@chakra-ui/react';
 import ShippingAndPaymentForm from './Components/AddFormComponent/AddSystem.jsx';
-import AddByBrand from './Components/AddHomeNavbar/Add/AddByBrand.jsx';
-import AddByCategory from './Components/AddHomeNavbar/Add/AddByCategory.jsx';
-import AddPopularCategory from './Components/AddHomeNavbar/Add/AddPopularCategory.jsx';
-import DeleteByBrand from './Components/AddHomeNavbar/Delete/DeleteByBrand.jsx';
-import DeleteByCategory from './Components/AddHomeNavbar/Delete/DeleteByCategory.jsx';
-import DeletePopularCategory from './Components/AddHomeNavbar/Delete/DeletePopularCategory.jsx';
-import EditByBrand from './Components/AddHomeNavbar/Edit/EditByBrand.jsx';
-import EditByCategory from './Components/AddHomeNavbar/Edit/EditByCategory.jsx';
-import EditPopularCategory from './Components/AddHomeNavbar/Edit/EditPopularCategory.jsx';
-import AddBanner from './Components/AddNavbar/Add/AddBanner.jsx';
-import AddBrand from './Components/AddNavbar/Add/AddBrand.jsx';
-import AddCategory from './Components/AddNavbar/Add/AddCategory.jsx';
-import AddCollection from './Components/AddNavbar/Add/AddCollection.jsx';
-import AddSection from './Components/AddNavbar/Add/AddSection.jsx';
-import AddTopCategory from './Components/AddNavbar/Add/AddTopCategory.jsx';
-import DeleteBanner from './Components/AddNavbar/DELETEE/DeleteBanner.jsx';
-import DeleteBrand from './Components/AddNavbar/DELETEE/DeleteBrand.jsx';
-import DeleteCategory from './Components/AddNavbar/DELETEE/DeleteCategory.jsx';
-import DeleteCollection from './Components/AddNavbar/DELETEE/DeleteCollection.jsx';
-import DeleteSection from './Components/AddNavbar/DELETEE/DeleteSection.jsx';
-import DeleteTopCategory from './Components/AddNavbar/DELETEE/DeleteTopCategory.jsx';
-import EditBanner from './Components/AddNavbar/Edit/EditBanner.jsx';
-import EditBrand from './Components/AddNavbar/Edit/EditBrand.jsx';
-import EditCategory from './Components/AddNavbar/Edit/EditCategory.jsx';
-import EditCollection from './Components/AddNavbar/Edit/EditCollection.jsx';
-import EditSection from './Components/AddNavbar/Edit/EditSection.jsx';
-import EditTopCategory from './Components/AddNavbar/Edit/EditTopCategory.jsx';
 import AddProductForm from './Components/AddProduct/AddFrom.jsx';
 import LoginPage from './Components/Auth/LoginPage.jsx';
 import SignupPage from './Components/Auth/SignupPage.jsx';
 import EditFilterNavbar from './Components/EditFilterNavbar/EditFilterNavbar.jsx';
 import EditProductForm from './Components/EditProduct/EditProduct.jsx';
-import CardSideBar from './Components/Modal/CardModal';
-import { SearchModal } from './Components/Modal/SearchModal';
 import ColorNavbar from './Components/Navbar/ColorNavbar';
-import Navbar from './Components/Navbar/Navbar';
-import NextVisibleNavbar from './Components/Navbar/NextVisibleNavbar';
-import TopSmallNavbar from './Components/Navbar/TopSmallNavbar';
-import VisibleNavbar from './Components/Navbar/VisibleNavbar';
 import Profile from './Components/Profile/Profile.jsx';
 import ShippingAddress from './Components/ShippingAddress/ShippingAddress.jsx';
 import UploadSingleImage from './Components/Uploads/UploadSingleImage.jsx';
@@ -65,9 +30,39 @@ import ProductDetails from './Components/pages/productDetails/ProductDetails';
 import AuthComponents from './Components/skleton/AuthComponents.jsx';
 import YourCart from './Components/skleton/CartPage';
 import Checkout from './Components/skleton/Checkout';
-import Footer from './Components/skleton/Footer';
-import HomePage from './Components/skleton/HomePage';
 import WishlistKong from './Components/skleton/wishlist';
+
+import AdminHomePages from './FinalComponents/pages/AdminPageDesign/AdminHomePages.jsx';
+import AddBanner from './FinalComponents/pages/BannerPage/AddBanner/AddBanner.jsx';
+import HomePage from './FinalComponents/pages/LandingPage/HomePage.jsx';
+import AddPopularCategory from './FinalComponents/pages/PopularCategoryPage/AddPopularCategory/AddPopularCategory.jsx';
+
+import RootPageUpMaterial from './FinalComponents/RootPageUpMaterial/RootPageUpMaterial.jsx';
+import DeleteBanner from './FinalComponents/pages/BannerPage/DeleteBanner/DeleteBanner.jsx';
+import EditBanner from './FinalComponents/pages/BannerPage/EditBanner/EditBanner.jsx';
+import AddBrand from './FinalComponents/pages/BrandPage/AddBrand/AddBrand.jsx';
+import DeleteBrand from './FinalComponents/pages/BrandPage/DeleteBrand/DeleteBrand.jsx';
+import EditBrand from './FinalComponents/pages/BrandPage/EditBrand/EditBrand.jsx';
+import AddCategory from './FinalComponents/pages/CategoryPage/Add/AddCategory.jsx';
+import DeleteCategory from './FinalComponents/pages/CategoryPage/Delete/DeleteCategory.jsx';
+import EditCategory from './FinalComponents/pages/CategoryPage/Edit/EditCategory.jsx';
+import AddCollection from './FinalComponents/pages/CollectionPage/Add/AddCollection.jsx';
+import DeleteCollection from './FinalComponents/pages/CollectionPage/Delete/DeleteCollection.jsx';
+import EditCollection from './FinalComponents/pages/CollectionPage/Edit/EditCollection.jsx';
+import DeletePopularCategory from './FinalComponents/pages/PopularCategoryPage/DeletePopularCategory/DeletePopularCategory.jsx';
+import EditPopularCategory from './FinalComponents/pages/PopularCategoryPage/EditPopularCategory/EditPopularCategory.jsx';
+import AddSection from './FinalComponents/pages/SectionPage/Add/AddSection.jsx';
+import DeleteSection from './FinalComponents/pages/SectionPage/Delete/DeleteSection.jsx';
+import EditSection from './FinalComponents/pages/SectionPage/Edit/EditSection.jsx';
+import AddShopByBrand from './FinalComponents/pages/ShopByBrandPage/Add/AddShopByBrand.jsx';
+import DeleteShopByBrand from './FinalComponents/pages/ShopByBrandPage/Delete/DeleteByBrand.jsx';
+import EditShopByBrand from './FinalComponents/pages/ShopByBrandPage/Edit/EditShopByBrand.jsx';
+import AddShopByCategory from './FinalComponents/pages/ShopByCategory/Add/AddShopByCategory.jsx';
+import DeleteShopByCategory from './FinalComponents/pages/ShopByCategory/Delete/DeleteByCategory.jsx';
+import EditShopByCategory from './FinalComponents/pages/ShopByCategory/Edit/EditShopByCategory.jsx';
+import AddTopCategory from './FinalComponents/pages/TopCategoryPage/Add/AddTopCategory.jsx';
+import DeleteTopCategory from './FinalComponents/pages/TopCategoryPage/Delete/DeleteTopCategory.jsx';
+import EditTopCategory from './FinalComponents/pages/TopCategoryPage/Edit/EditTopCategory.jsx';
 import SpecificationForm from './SpecificationForm';
 import useLoginCheck from './hooks/loginCheck.jsx';
 const AppComponents = () => {
@@ -121,29 +116,163 @@ const AppComponents = () => {
   return ( 
 
     <div className='upper__container'>
-      <div className='mobile__view__container'> 
-      
-        {/* navbar start */}
-      
-        <Toaster/>
-        <TopSmallNavbar/>   
-        <VisibleNavbar/>
-        <NextVisibleNavbar/>  
-        <Navbar/>
-        <SearchModal/>
-        <CardSideBar/>
-        {/* navbar end */}
-
+      <div className='mobile__view__container'>   
         <Routes> 
           <Route
             path='/'
             element={
-            <React.Fragment>
-              <ColorNavbar/>
+            <React.Fragment> 
+              <RootPageUpMaterial/>
               <HomePage/>
-            </React.Fragment>
+            </React.Fragment>  
             }
           />
+          <Route
+            path='/admin/admin/admin/admin'
+            element={ 
+            <AdminHomePages/>
+            }
+          />
+          <Route path='/admin/add/banner' element={  
+            <React.Fragment> 
+              <AddBanner/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/add/popular-category' element={  
+            <React.Fragment> 
+              <AddPopularCategory/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/add/brand' element={  
+            <React.Fragment> 
+            <AddBrand/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/add/shop-by-brand' element={  
+            <React.Fragment>  
+              <AddShopByBrand/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/add/shop-by-category' element={  
+            <React.Fragment>  
+              <AddShopByCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/add/collection' element={  
+            <React.Fragment> 
+              <AddCollection/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/add/category' element={  
+            <React.Fragment>   
+              <AddCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/add/top-category' element={  
+            <React.Fragment>  
+              <AddTopCategory/>
+          </React.Fragment>
+          }/> 
+          <Route path='/admin/add/section' element={  
+            <React.Fragment>  
+              <AddSection/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/banner' element={  
+            <React.Fragment> 
+              <EditBanner/>
+            </React.Fragment>
+          }/> 
+          <Route path='/admin/edit/popular-category' element={  
+            <React.Fragment>  
+              <EditPopularCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/brand' element={  
+            <React.Fragment>  
+              <EditBrand/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/shop-by-brand' element={  
+            <React.Fragment>   
+              <EditShopByBrand/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/shop-by-category' element={  
+            <React.Fragment> 
+              <EditShopByCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/collection' element={  
+            <React.Fragment> 
+              <EditCollection/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/category' element={  
+            <React.Fragment>  
+              <EditCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/top-category' element={  
+            <React.Fragment> 
+              <EditTopCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/edit/section' element={  
+            <React.Fragment>  
+              <EditSection/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/banner' element={  
+            <React.Fragment>  
+              <DeleteBanner/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/popular-category' element={  
+            <React.Fragment>  
+              <DeletePopularCategory/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/delete/brand' element={  
+            <React.Fragment>  
+              <DeleteBrand/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/shop-by-brand' element={  
+            <React.Fragment> 
+              <DeleteShopByBrand/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/shop-by-category' element={  
+            <React.Fragment>  
+              <DeleteShopByCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/collection' element={  
+            <React.Fragment>  
+              <DeleteCollection/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/category' element={  
+            <React.Fragment>  
+              <DeleteCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/top-category' element={  
+            <React.Fragment>  
+              <DeleteTopCategory/>
+            </React.Fragment>
+          }/>
+          <Route path='/admin/delete/section' element={  
+            <React.Fragment>  
+              <DeleteSection/>
+            </React.Fragment>
+          }/>
+
+
+
+
+
           <Route
             path='/login'
             element={
@@ -234,170 +363,7 @@ const AppComponents = () => {
             <PaymentSuccessPage/>
           </React.Fragment>
           }/>
-          <Route path='/add/section' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddSection/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/top-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddTopCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/collection' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddCollection/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/brand' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddBrand/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/section' element={  
-            <React.Fragment>
-            <ColorNavbar/>  
-            <EditSection/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/top-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditTopCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/collection' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditCollection/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/brand' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditBrand/>
-          </React.Fragment>
-          }/>
 
-          <Route path='/delete/section' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteSection/>
-          </React.Fragment>
-          }/>
-          <Route path='/delete/top-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteTopCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/delete/category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/delete/collection' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteCollection/>
-          </React.Fragment>
-          }/>
-          <Route path='/delete/brand' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteBrand/>
-          </React.Fragment>
-          }/>
-
-          <Route path='/add/popular-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddPopularCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/by-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddByCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/by-brand' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddByBrand/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/popular-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditPopularCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/by-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditByCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/Edit/by-brand' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditByBrand/>
-          </React.Fragment>
-          }/>
-          <Route path='/delete/popular-category' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeletePopularCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/banner' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddBanner/>
-          </React.Fragment>
-          }/>
-          <Route path='/edit/banner' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <EditBanner/>
-          </React.Fragment>
-          }/>  
-          <Route path='/delete/banner' element={  
-            <React.Fragment>
-            <ColorNavbar/>  
-            <DeleteBanner/>
-          </React.Fragment>
-          }/> 
-          <Route path='/delete/by-category' element={  
-            <React.Fragment>
-            <ColorNavbar/>  
-            <DeleteByCategory/>
-          </React.Fragment>
-          }/>
-          <Route path='/delete/by-brand' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <DeleteByBrand/>
-          </React.Fragment>
-          }/>
           <Route path='/edit/product/:ID' element={  
             <React.Fragment>
               <ColorNavbar/> 
@@ -516,7 +482,7 @@ const AppComponents = () => {
             </React.Fragment>  
           }/>
         </Routes>
-        <Footer/>
+        {/*<Footer/>*/}
         </div>
         </div> 
   );
