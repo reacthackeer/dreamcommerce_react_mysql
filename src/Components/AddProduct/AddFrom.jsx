@@ -1,18 +1,14 @@
 import React from 'react';
 // import { server__image__host__url } from '../../app/store';
+import BasicProductInfo from '../../../../Components/AddProduct/ChildComponents/BasicProductInfo';
+import PreviewAndSave from '../../../../Components/AddProduct/ChildComponents/PreviewAndSave';
+import ProductDetailsChild from '../../../../Components/AddProduct/ChildComponents/ProductDetails';
+import ProductOverviews from '../../../../Components/AddProduct/ChildComponents/ProductOverviews';
+import ProductSpecification from '../../../../Components/AddProduct/ChildComponents/ProductSpecification';
+import UploadProductImage from '../../../../Components/AddProduct/ChildComponents/UploadProductImage';
 import '../../styles/addProduct.scss';
-import BasicProductInfo from './ChildComponents/BasicProductInfo';
-import PreviewAndSave from './ChildComponents/PreviewAndSave';
-import ProductDetailsChild from './ChildComponents/ProductDetails';
-import ProductOverviews from './ChildComponents/ProductOverviews';
-import ProductSpecification from './ChildComponents/ProductSpecification';
-import UploadProductImage from './ChildComponents/UploadProductImage';
 const ProductForm = () => {
   
-
-
-  // specification end
-
 
 
   return (

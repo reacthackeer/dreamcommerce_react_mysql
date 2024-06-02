@@ -6,10 +6,11 @@ export const offerApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllCollectionProduct: builder.query({
             query: ({father, parent, child, page, limit}) => `/products/p/${father}/${parent.replace(/&/g,'anndd')}/${child}?page=${page}&&peerPage=${limit}`,
-            providesTags: () => [{type: 'get__all__child__product'}]
+            providesTags: () => [{type: 'get__all__child__product'},{type: 'invalid__for__crud'}]
         }),
         getAllCollectionSimilarProduct: builder.query({
-            query: ({father, parent, child, product__id, page, limit}) => `/products/p/similar__product/${father}/${parent.replace(/&/g,'anndd')}/${child}/${product__id}?page=${page}&&peerPage=${limit}`
+            query: ({father, parent, child, product__id, page, limit}) => `/products/p/similar__product/${father}/${parent.replace(/&/g,'anndd')}/${child}/${product__id}?page=${page}&&peerPage=${limit}`,
+            providesTags: () => [{type: 'invalid__for__crud'}]
         })
     })
 })

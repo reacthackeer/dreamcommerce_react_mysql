@@ -64,10 +64,12 @@ export const offerApi = apiSlice.injectEndpoints({
             invalidatesTags: () => [{type: 'get__all__up__for__preview'}]
         }),
         getSingleBrandProduct: builder.query({
-            query: ({brand, page, limit}) => `/products/brands/${brand}?page=${page}&peerPage=${limit}`
+            query: ({brand, page, limit}) => `/products/brands/${brand}?page=${page}&peerPage=${limit}`,
+            providesTags: () => [{type: 'invalid__for__crud'}]
         }),
         getSingleBrandSimilarProduct: builder.query({
-            query: ({brand, product__id, page, limit}) => `/products/brands/${brand}/${product__id}?page=${page}&peerPage=${limit}`
+            query: ({brand, product__id, page, limit}) => `/products/brands/${brand}/${product__id}?page=${page}&peerPage=${limit}`,
+            providesTags: () => [{type: 'invalid__for__crud'}]
         }),
         getAllUpNavbar: builder.query({
             query: () => `/up-navbar`,

@@ -2,19 +2,10 @@ import { Box } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { uid } from 'uid';
-import ShippingAndPaymentForm from './Components/AddFormComponent/AddSystem.jsx';
-import AddProductForm from './Components/AddProduct/AddFrom.jsx';
-import LoginPage from './Components/Auth/LoginPage.jsx';
-import SignupPage from './Components/Auth/SignupPage.jsx';
 import EditFilterNavbar from './Components/EditFilterNavbar/EditFilterNavbar.jsx';
-import EditProductForm from './Components/EditProduct/EditProduct.jsx';
 import ColorNavbar from './Components/Navbar/ColorNavbar';
-import Profile from './Components/Profile/Profile.jsx';
-import ShippingAddress from './Components/ShippingAddress/ShippingAddress.jsx';
-import UploadSingleImage from './Components/Uploads/UploadSingleImage.jsx';
 import DevelopAllBrandView from './Components/pages/BrandView/DevelopAllBrandView';
 import DevelopCategoryAllView from './Components/pages/BrandView/DevelopAllCategoryView';
-import DevelopAllOfferView from './Components/pages/BrandView/DevelopAllOfferProductView.jsx';
 import DevelopSingleBrandView from './Components/pages/BrandView/DevelopBrandView';
 import DevelopBrowsingHistoryView from './Components/pages/BrandView/DevelopBrowsingHistoryView';
 import DevelopCategoryView from './Components/pages/BrandView/DevelopCategoryView';
@@ -24,46 +15,58 @@ import DevelopTopCategoryView from './Components/pages/BrandView/DevelopTopCateg
 import SingleOfferView from './Components/pages/BrandView/SingleOfferView';
 import OrderManagement from './Components/pages/OrderManagement/OrderManagement.jsx';
 import OrderPrintPage from './Components/pages/OrderManagement/OrderPrintPage.jsx';
-import PaymentSuccessPage from './Components/pages/SuccessPayment.jsx';
 import Optimize from './Components/pages/optimize/Optimize';
 import ProductDetails from './Components/pages/productDetails/ProductDetails';
 import AuthComponents from './Components/skleton/AuthComponents.jsx';
-import YourCart from './Components/skleton/CartPage';
-import Checkout from './Components/skleton/Checkout';
-import WishlistKong from './Components/skleton/wishlist';
+import AddProductForm from './FinalComponents/pages/Products/AddSingleCustomProduct/AddFrom.jsx';
 
 import AdminHomePages from './FinalComponents/pages/AdminPageDesign/AdminHomePages.jsx';
 import AddBanner from './FinalComponents/pages/BannerPage/AddBanner/AddBanner.jsx';
 import HomePage from './FinalComponents/pages/LandingPage/HomePage.jsx';
 import AddPopularCategory from './FinalComponents/pages/PopularCategoryPage/AddPopularCategory/AddPopularCategory.jsx';
 
+import { Toaster } from 'react-hot-toast';
+import Footer from './FinalComponents/PagesComponents/Footer.jsx';
 import RootPageUpMaterial from './FinalComponents/RootPageUpMaterial/RootPageUpMaterial.jsx';
 import DeleteBanner from './FinalComponents/pages/BannerPage/DeleteBanner/DeleteBanner.jsx';
 import EditBanner from './FinalComponents/pages/BannerPage/EditBanner/EditBanner.jsx';
 import AddBrand from './FinalComponents/pages/BrandPage/AddBrand/AddBrand.jsx';
 import DeleteBrand from './FinalComponents/pages/BrandPage/DeleteBrand/DeleteBrand.jsx';
 import EditBrand from './FinalComponents/pages/BrandPage/EditBrand/EditBrand.jsx';
+import CartPage from './FinalComponents/pages/CartPage/CartPage.jsx';
 import AddCategory from './FinalComponents/pages/CategoryPage/Add/AddCategory.jsx';
 import DeleteCategory from './FinalComponents/pages/CategoryPage/Delete/DeleteCategory.jsx';
 import EditCategory from './FinalComponents/pages/CategoryPage/Edit/EditCategory.jsx';
+import Checkout from './FinalComponents/pages/Checkout/Checkout.jsx';
 import AddCollection from './FinalComponents/pages/CollectionPage/Add/AddCollection.jsx';
 import DeleteCollection from './FinalComponents/pages/CollectionPage/Delete/DeleteCollection.jsx';
 import EditCollection from './FinalComponents/pages/CollectionPage/Edit/EditCollection.jsx';
+import LoginPage from './FinalComponents/pages/LoginPage/LoginPage.jsx';
+import EditOfferPage from './FinalComponents/pages/Offer/EditOfferProduct/EditOfferPage.jsx';
 import DeletePopularCategory from './FinalComponents/pages/PopularCategoryPage/DeletePopularCategory/DeletePopularCategory.jsx';
 import EditPopularCategory from './FinalComponents/pages/PopularCategoryPage/EditPopularCategory/EditPopularCategory.jsx';
+import AddMultipleProduct from './FinalComponents/pages/Products/AddMultipleProduct/Add/AddMultipleProduct.jsx';
+import AddSimilarProduct from './FinalComponents/pages/Products/AddSimilarProduct/AddSimilarProduct.jsx';
+import AddSingleObjectProduct from './FinalComponents/pages/Products/AddSingleProduct/Add/AddSingleProduct.jsx';
+import EditProductForm from './FinalComponents/pages/Products/EditProduct/EditProduct.jsx';
+import Profile from './FinalComponents/pages/Profile/Profile.jsx';
 import AddSection from './FinalComponents/pages/SectionPage/Add/AddSection.jsx';
 import DeleteSection from './FinalComponents/pages/SectionPage/Delete/DeleteSection.jsx';
 import EditSection from './FinalComponents/pages/SectionPage/Edit/EditSection.jsx';
+import ShippingAddress from './FinalComponents/pages/ShippingAddress/ShippingAddress.jsx';
+import EditShippingAndPayment from './FinalComponents/pages/ShippingAndPayment/EditShippingAndPayment.jsx';
 import AddShopByBrand from './FinalComponents/pages/ShopByBrandPage/Add/AddShopByBrand.jsx';
 import DeleteShopByBrand from './FinalComponents/pages/ShopByBrandPage/Delete/DeleteByBrand.jsx';
 import EditShopByBrand from './FinalComponents/pages/ShopByBrandPage/Edit/EditShopByBrand.jsx';
 import AddShopByCategory from './FinalComponents/pages/ShopByCategory/Add/AddShopByCategory.jsx';
 import DeleteShopByCategory from './FinalComponents/pages/ShopByCategory/Delete/DeleteByCategory.jsx';
 import EditShopByCategory from './FinalComponents/pages/ShopByCategory/Edit/EditShopByCategory.jsx';
+import SignupPage from './FinalComponents/pages/SignUpPage/SignupPage.jsx';
 import AddTopCategory from './FinalComponents/pages/TopCategoryPage/Add/AddTopCategory.jsx';
 import DeleteTopCategory from './FinalComponents/pages/TopCategoryPage/Delete/DeleteTopCategory.jsx';
 import EditTopCategory from './FinalComponents/pages/TopCategoryPage/Edit/EditTopCategory.jsx';
-import SpecificationForm from './SpecificationForm';
+import UploadSingleImage from './FinalComponents/pages/Uploads/UploadSingleImage.jsx';
+import MyWishlistPage from './FinalComponents/pages/WishlistPage/WishlistPage.jsx';
 import useLoginCheck from './hooks/loginCheck.jsx';
 const AppComponents = () => {
   const location = useLocation();   
@@ -124,6 +127,7 @@ const AppComponents = () => {
             <React.Fragment> 
               <RootPageUpMaterial/>
               <HomePage/>
+              <Footer/>
             </React.Fragment>  
             }
           />
@@ -223,6 +227,18 @@ const AppComponents = () => {
               <EditSection/>
             </React.Fragment>
           }/>
+          <Route path='/admin/edit/shipping-and-payment' element={  
+            <React.Fragment>  
+            <Toaster/>
+            <EditShippingAndPayment/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/edit/shipping-address' element={
+            isUserLoggedIn ? 
+              <ShippingAddress/>
+            :
+            <Navigate to='/login'/>
+          }/>
           <Route path='/admin/delete/banner' element={  
             <React.Fragment>  
               <DeleteBanner/>
@@ -268,38 +284,101 @@ const AppComponents = () => {
               <DeleteSection/>
             </React.Fragment>
           }/>
-
-
-
-
-
+          <Route path='/admin/edit/profile-image' element={
+            isUserLoggedIn ?  
+                <UploadSingleImage/>
+            :
+            <Navigate to='/login'/>
+          }/> 
           <Route
             path='/login'
-            element={
-            <React.Fragment>
-              <ColorNavbar/>
+            element={ 
               <LoginPage/>
-            </React.Fragment>
             }
-          />
+          /> 
           <Route
             path='/signup'
-            element={
-            <React.Fragment>
-              <ColorNavbar/>
+            element={  
               <SignupPage/>
-            </React.Fragment>
             }
           />
           <Route path='/profile' element={  
               isUserLoggedIn ? 
-              <Box>
-                  <ColorNavbar/>
-                  <Profile/>
+              <Box> 
+                  <RootPageUpMaterial/> 
+                    <Profile/>
+                  <Footer/>
               </Box>  
               :
               <Navigate to='/login'/>
           }/>
+          <Route path='/checkout' element={
+            isUserLoggedIn ? 
+            <React.Fragment> 
+            <RootPageUpMaterial/>
+              <AuthComponents> 
+                <Checkout/>
+              </AuthComponents>
+            </React.Fragment> 
+            :
+            <Navigate to='/login'/>
+          }/>
+          <Route path='/cart' element={  
+            <React.Fragment> 
+              <RootPageUpMaterial/> 
+              <CartPage/>
+          </React.Fragment>
+          }/>
+          <Route path='/wishlist' element={  
+            <React.Fragment> 
+            <RootPageUpMaterial/>  
+            <MyWishlistPage/>
+          </React.Fragment>
+          }/> 
+          <Route path='/admin/add/product' element={  
+            <React.Fragment> 
+            <Toaster/>
+            <AddProductForm/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/add/similar-product/:ID' element={  
+            <React.Fragment> 
+            
+            <Toaster/>
+            <AddSimilarProduct/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/edit/product/:ID' element={  
+            <React.Fragment> 
+              <Toaster/>
+              <EditProductForm/>
+            </React.Fragment>
+          }/>   
+          <Route path='/admin/add/array-product' element={  
+            <React.Fragment>  
+              <Toaster/>
+              <AddMultipleProduct/>
+          </React.Fragment>
+          }/>
+          <Route path='/admin/add/object-product' element={  
+            <React.Fragment>  
+              <Toaster/>
+              <AddSingleObjectProduct/>
+          </React.Fragment>
+          }/>  
+          <Route path='/admin/edit/offer/:ID' element={ 
+            <React.Fragment> 
+                <EditOfferPage/>
+            </React.Fragment> 
+          }/> 
+
+
+
+
+          
+
+
+
           <Route path='/order-management/print/:user__id' element={  
               isUserLoggedIn ? 
               <Box>
@@ -318,86 +397,12 @@ const AppComponents = () => {
               </Box>  
               :
               <Navigate to='/login'/>
-          }/>
-
-          <Route path='/upload/profile-image' element={
-            isUserLoggedIn ? 
-            <React.Fragment>
-              <ColorNavbar/>
-              <UploadSingleImage/>
-            </React.Fragment>  
-            :
-            <Navigate to='/login'/>
-          }/>
-          <Route path='/add/address/shipping-address' element={
-            isUserLoggedIn ? 
-            <React.Fragment>
-              <ColorNavbar/>
-              <ShippingAddress/>
-            </React.Fragment> 
-            :
-            <Navigate to='/login'/>
-          }/> 
-          <Route path='/wishlist' element={  
-            <React.Fragment>
-            <ColorNavbar/>
-            <WishlistKong/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/product' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <AddProductForm/>
-          </React.Fragment>
-          }/>
-          <Route path='/add/system-and-payment' element={  
-            <React.Fragment>
-            <ColorNavbar/>  
-            <ShippingAndPaymentForm/>
-          </React.Fragment>
-          }/>
-          
-          <Route path='/payment/success/:orderId' element={  
-            <React.Fragment>
-            <ColorNavbar/>  
-            <PaymentSuccessPage/>
-          </React.Fragment>
-          }/>
-
-          <Route path='/edit/product/:ID' element={  
-            <React.Fragment>
-              <ColorNavbar/> 
-              <EditProductForm/>
-            </React.Fragment>
           }/> 
           <Route path='/edit/filter/:topCategory/:category/:collection' element={  
             <React.Fragment>
               <ColorNavbar/> 
               <EditFilterNavbar/>
             </React.Fragment>
-          }/>
-          <Route path='/add-new-specification' element={  
-            <React.Fragment>
-            <ColorNavbar/> 
-            <SpecificationForm/>
-          </React.Fragment>
-          }/>
-          <Route path='/cart' element={  
-            <React.Fragment>
-            <ColorNavbar/>
-            <YourCart/>     
-          </React.Fragment>
-          }/> 
-          <Route path='/checkout' element={
-            isUserLoggedIn ? 
-            <React.Fragment>
-              <ColorNavbar/>
-              <AuthComponents>
-                <Checkout/>
-              </AuthComponents>
-            </React.Fragment> 
-            :
-            <Navigate to='/login'/>
           }/>
           <Route path='/optimize' element={ 
               <Optimize/>
@@ -414,12 +419,6 @@ const AppComponents = () => {
               <DevelopAllBrandView/>
             </React.Fragment> 
           }/>
-          <Route path='/offers' element={ 
-            <React.Fragment>
-              <ColorNavbar/> 
-              <DevelopAllOfferView/>
-            </React.Fragment> 
-          }/> 
           <Route path='/collection' element={ 
             <React.Fragment>
               <ColorNavbar/> 

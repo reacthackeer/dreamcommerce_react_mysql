@@ -1,5 +1,5 @@
 import { Box, Button, Image } from '@chakra-ui/react';
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { server__image__host__url } from '../../../../app/store';
 import { useDeleteSingleSectionMutation, useGetAllUpNavbarQuery } from '../../../../features/brand/brandApi';
 import AdminPageSkeleton from '../../AdminPageSkeletonComponents/AdminPageSkeleton';
@@ -7,12 +7,6 @@ import AdminPageSkeleton from '../../AdminPageSkeletonComponents/AdminPageSkelet
 const DeleteSection = memo(() => {
     
         let { data : upNavbarData , isSuccess: upNavbarIsSuccess} = useGetAllUpNavbarQuery();
-        const [upNavbar, setUpNavbar] = useState(''); 
-        
-        const handleUpNavbarChange = (value) => {
-            setUpNavbar(value);
-        }
-    
         const [provideId] = useDeleteSingleSectionMutation();
         const handleDeleteSection = (id) => {
             provideId(id);

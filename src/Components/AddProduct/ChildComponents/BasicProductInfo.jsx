@@ -140,6 +140,7 @@ const BasicProductInfo = () => {
         event.preventDefault();  
         let newProduct = {...product, brand, child: collection, parent: category, visible, parent__father: topCategory, up: upNavbar}
             localStorage.setItem('product',JSON.stringify(newProduct));
+            console.log(newProduct);
     };
 
     return (
@@ -205,7 +206,8 @@ const BasicProductInfo = () => {
                     <Input
                     type="text"
                     name="product__id"
-                    value={product.product__id}
+                    placeholder='Enter product id'
+                    value={product.product__id} 
                     onChange={handleChange}
                     />
                 </FormControl>
@@ -215,6 +217,7 @@ const BasicProductInfo = () => {
                     <Input
                     type="text"
                     name="title"
+                    placeholder='Enter product title'
                     value={product.title}
                     onChange={handleChange}
                     />
@@ -225,6 +228,7 @@ const BasicProductInfo = () => {
                     <Input
                     type="number"
                     name="quantity"
+                    placeholder='Enter total avail quantity'
                     value={product.quantity}
                     onChange={handleChange}
                     />
@@ -235,6 +239,7 @@ const BasicProductInfo = () => {
                     <Input
                     type="number"
                     name="total__sell"
+                    placeholder='Enter total sale quantity'
                     value={product.total__sell}
                     onChange={handleChange}
                     />
@@ -245,7 +250,19 @@ const BasicProductInfo = () => {
                     <Input
                     type="number"
                     name="current__price"
+                    placeholder='Enter current price'
                     value={product.current__price}
+                    onChange={handleChange}
+                    />
+                </FormControl>
+
+                <FormControl id="wholesale__price" isRequired>
+                    <FormLabel>Wholesale Price</FormLabel>
+                    <Input
+                    type="number"
+                    name="wholesale__price"
+                    placeholder='Enter wholesale price'
+                    value={product.wholesale__price}
                     onChange={handleChange}
                     />
                 </FormControl>
@@ -255,6 +272,7 @@ const BasicProductInfo = () => {
                     <Input
                     type="number"
                     name="previous__price"
+                    placeholder='Enter previous price'
                     value={product.previous__price}
                     onChange={handleChange}
                     />
@@ -265,6 +283,7 @@ const BasicProductInfo = () => {
                     <Input
                     type="number"
                     name="views"
+                    placeholder='Enter total views'
                     value={product.views}
                     onChange={handleChange}
                     />

@@ -124,6 +124,8 @@ const Optimize = () => {
         })
     }
 
+    console.log(products);
+
     const handlePostAllProducts = (count) => { 
         axios.post('http://localhost:3000/api/v1/products',products[count])
         .then((res)=> { 

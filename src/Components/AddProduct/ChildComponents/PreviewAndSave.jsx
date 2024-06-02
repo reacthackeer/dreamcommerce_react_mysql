@@ -13,15 +13,32 @@ const PreviewAndSave = memo(() => {
         let images = JSON.parse(localStorage.getItem('images'))||[];
         let overviews = JSON.parse(localStorage.getItem('overviews'))||[];
         let details = JSON.parse(localStorage.getItem('details'))||[];
-        let specifications = JSON.parse(localStorage.getItem('specifications'))||[]; 
-        
-        if(product && product && images && images?.length > 0 && overviews && overviews?.length > 0  && details && details?.length > 0  && specifications && specifications?.length > 0  ){  
-            product.title= product.brand+' '+product.title;
-            product.visible__url= product.title.replace(/ /g, '-').toLowerCase();
-            product.visible__url= product.visible__url.replace(/\//g, '-');
-            localStorage.setItem('visible__url', product.visible__url);
-            let productProductInfo = {...product, images, overviews, details, specifications};
-            provideProductInfo(productProductInfo);
+        let specifications = JSON.parse(localStorage.getItem('specifications'))||[];  
+        if(product && product && images && overviews &&  details && specifications){  
+
+            if(images?.length > 0 ){
+                if(overviews?.length > 0 ){
+                    if(details?.length > 0){
+                        if( specifications?.length > 0  ){
+                            product.title= product.brand+' '+product.title;
+                            product.visible__url= product.title.replace(/ /g, '-').toLowerCase();
+                            product.visible__url= product.visible__url.replace(/\//g, '-');
+                            localStorage.setItem('visible__url', product.visible__url);
+                            let productProductInfo = {...product, images, overviews, details, specifications};
+                            provideProductInfo(productProductInfo);
+                            console.log(productProductInfo);
+                        }else{  
+                            toast.error('Details array empty!')
+                        }
+                    }else{  
+                        toast.error('Details array empty!')
+                    }
+                }else{
+                    toast.error('Overviews array empty!')
+                }
+            }else{
+                toast.error('Image array empty!')
+            }
         }
     }
 

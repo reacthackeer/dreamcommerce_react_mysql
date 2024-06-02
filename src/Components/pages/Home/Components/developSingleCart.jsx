@@ -1,10 +1,11 @@
+import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, Icon, Image, Link, Text } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { BsStar } from 'react-icons/bs';
-import { MdClose, MdCompare, MdDelete, MdEdit, MdFavoriteBorder } from 'react-icons/md';
+import { MdCompare, MdFavoriteBorder } from 'react-icons/md';
 import { RiShoppingCart2Line } from 'react-icons/ri';
-import { Link as RLink } from 'react-router-dom';
+import { Link as RLink, useNavigate } from 'react-router-dom';
 import { server__image__host__url } from '../../../../app/store';
 import { useAddSingleCartMutation } from '../../../../features/cart/api';
 import { useAddSingleWishlistMutation } from '../../../../features/wishlist/api';
@@ -17,7 +18,7 @@ const SingleCartItem = ({infos}) => {
         imgSrc = infos?.infos?.images[0];
     }
     
-    const editMode = false;
+    const editMode = true;
     const handleAddToCart = (infos) => {
         let user__id = localStorage.getItem('user__id');
         let product__id = infos?.ID;
@@ -31,6 +32,8 @@ const SingleCartItem = ({infos}) => {
         let quantity = 1; 
         provideWishlistInfo({user__id, product__id, quantity});
     }
+
+    const navigate = useNavigate()
     
     useEffect(()=>{   
         if(!isLoading && !isSuccess && isError){ 
@@ -120,18 +123,21 @@ const SingleCartItem = ({infos}) => {
                 <Button 
                     padding={'0'} 
                     isLoading={isLoading}
-                >
-                    <Icon as={MdClose}/>
+                    onClick={()=> navigate(`/admin/add/similar-product/${infos.ID}`)}
+                > 
+                    <AddIcon/>
                 </Button> 
                 <Button 
                     padding={'0'} 
-                >
-                    <Icon as={MdDelete}/>
+                    onClick={()=> navigate(`/admin/edit/offer/${infos.ID}`)}
+                >   
+                    <DeleteIcon/>
                 </Button> 
                 <Button 
                     padding={'0'} 
-                >
-                    <Icon as={MdEdit}/>
+                    onClick={()=> navigate('/admin/edit/product/'+infos.ID)}
+                > 
+                    <EditIcon/>
                 </Button> 
             </HStack> 
         }

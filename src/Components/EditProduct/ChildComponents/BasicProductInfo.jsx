@@ -256,7 +256,15 @@ const BasicProductInfo = () => {
                     onChange={handleChange}
                     />
                 </FormControl>
-
+                <FormControl id="wholesale__price" isRequired>
+                    <FormLabel>Wholesale Price</FormLabel>
+                    <Input
+                    type="number"
+                    name="wholesale__price"
+                    value={product.wholesale__price}
+                    onChange={handleChange}
+                    />
+                </FormControl> 
                 <FormControl id="previous__price" isRequired>
                     <FormLabel>Previous Price</FormLabel>
                     <Input

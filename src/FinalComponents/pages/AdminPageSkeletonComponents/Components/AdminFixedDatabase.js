@@ -6,6 +6,34 @@ const adminAccountDashboard = [
         url: 'product',
         id: 3,
         nav: 1,
+    },   
+    {
+        name: 'Similar Product',
+        links: ['add'],
+        url: 'similar-product',
+        id: 35,
+        nav: 1,
+    },   
+    {
+        name: 'Edit Offer Product',
+        links: ['edit'],
+        url: 'offer',
+        id: 38,
+        nav: 1,
+    },  
+    {
+        name: 'Array Product',
+        links: ['add'],
+        url: 'array-product',
+        id: 1,
+        nav: 1,
+    },   
+    {
+        name: 'Object Product',
+        links: ['add'],
+        url: 'object-product',
+        id: 1,
+        nav: 1,
     },
     {
         name: 'Collection',
@@ -90,7 +118,7 @@ const adminAccountDashboard = [
     // third nav start
     {
         name: 'Shipping & Payment',
-        links: ['add', 'edit', 'delete'],
+        links: ['edit'],
         url: 'shipping-and-payment',
         id: 12,
         nav: 3
@@ -112,8 +140,15 @@ const adminAccountDashboard = [
     {
         name: 'Shipping Address',
         links: ['edit'],
-        url: 'reset-password',
+        url: 'shipping-address',
         id: 15,
+        nav: 3
+    },
+    {
+        name: 'Profile Image',
+        links: ['edit'],
+        url: 'profile-image',
+        id: 30,
         nav: 3
     },
     {
@@ -260,6 +295,34 @@ const productPortal = [
         url: 'product',
         id: 3,
         nav: 1,
+    },    
+    {
+        name: 'Similar Product',
+        links: ['add'],
+        url: 'similar-product',
+        id: 35,
+        nav: 1,
+    },
+    {
+        name: 'Edit Offer Product',
+        links: ['edit'],
+        url: 'offer',
+        id: 38,
+        nav: 1,
+    },  
+    {
+        name: 'Array Product',
+        links: ['add'],
+        url: 'array-product',
+        id: 33,
+        nav: 1,
+    },   
+    {
+        name: 'Object Product',
+        links: ['add'],
+        url: 'object-product',
+        id: 34,
+        nav: 1,
     },
     {
         name: 'Collection',
@@ -294,7 +357,7 @@ const productPortal = [
 const systemPortal = [
     {
         name: 'Shipping & Payment',
-        links: ['add', 'edit', 'delete'],
+        links: ['edit'],
         url: 'shipping-and-payment',
         id: 12,
         nav: 3
@@ -316,8 +379,15 @@ const systemPortal = [
     {
         name: 'Shipping Address',
         links: ['edit'],
-        url: 'reset-password',
+        url: 'shipping-password',
         id: 15,
+        nav: 3
+    },
+    {
+        name: 'Profile Image',
+        links: ['edit'],
+        url: 'profile-image',
+        id: 30,
         nav: 3
     },
     {

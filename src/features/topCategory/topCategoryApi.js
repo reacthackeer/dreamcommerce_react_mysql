@@ -5,7 +5,8 @@ import { apiSlice } from "../api/apiSlice";
 export const offerApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getAllTopCategoryProduct: builder.query({
-            query: ({father, page, limit}) => `/products/p/${father}?page=${page}&&peerPage=${limit}`
+            query: ({father, page, limit}) => `/products/p/${father}?page=${page}&&peerPage=${limit}`,
+            providesTags: () => [{type: 'invalid__for__crud'}]
         })
     })
 })

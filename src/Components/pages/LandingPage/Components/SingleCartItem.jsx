@@ -2,9 +2,9 @@ import { Box, Button, HStack, Icon, Image, Link, Text } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { BsStar } from 'react-icons/bs';
-import { MdClose, MdCompare, MdDelete, MdEdit, MdFavoriteBorder } from 'react-icons/md';
+import { MdCompare, MdDelete, MdEdit, MdFavoriteBorder } from 'react-icons/md';
 import { RiShoppingCart2Line } from 'react-icons/ri';
-import { Link as RLink } from 'react-router-dom';
+import { Link as RLink, useNavigate } from 'react-router-dom';
 import { server__image__host__url } from '../../../../app/store';
 import { useAddSingleCartMutation } from '../../../../features/cart/api';
 import { useAddSingleWishlistMutation } from '../../../../features/wishlist/api';
@@ -16,8 +16,8 @@ const SingleCartItem = ({infos}) => {
     if(infos?.infos?.images[0] && infos?.infos?.images[0].indexOf('ryan') === -1 ){
         imgSrc = infos?.infos?.images[0];
     }
-    
-    const editMode = false;
+    const navigate = useNavigate();
+    const editMode = true;
     const handleAddToCart = (infos) => {
         let user__id = localStorage.getItem('user__id');
         let product__id = infos?.ID;
@@ -30,6 +30,12 @@ const SingleCartItem = ({infos}) => {
         let product__id = infos?.ID;
         let quantity = 1; 
         provideWishlistInfo({user__id, product__id, quantity});
+    }
+
+    const handleAddToCompareList = () => {
+        if(editMode){
+            navigate(`/edit/product/${infos.ID}`)
+        }
     }
     
     useEffect(()=>{   
@@ -93,7 +99,7 @@ const SingleCartItem = ({infos}) => {
                 <Text fontSize={'small'}>{infos?.infos?.current__price} TK</Text>
             </HStack>
             {
-                !editMode ? 
+                editMode === false ? 
 
             <HStack className='button__section'>
                 <Button 
@@ -111,6 +117,7 @@ const SingleCartItem = ({infos}) => {
                 </Button> 
                 <Button 
                     padding={'0'}  
+                    onClick={handleAddToCompareList}
                 >
                     <Icon as={MdCompare}/>
                 </Button> 
@@ -118,10 +125,8 @@ const SingleCartItem = ({infos}) => {
             : 
             <HStack className='button__section'>
                 <Button 
-                    padding={'0'} 
-                    isLoading={isLoading}
-                >
-                    <Icon as={MdClose}/>
+                    padding={'0'}  
+                >    
                 </Button> 
                 <Button 
                     padding={'0'} 
@@ -130,6 +135,7 @@ const SingleCartItem = ({infos}) => {
                 </Button> 
                 <Button 
                     padding={'0'} 
+                    
                 >
                     <Icon as={MdEdit}/>
                 </Button> 

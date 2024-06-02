@@ -36,7 +36,7 @@ const EditProductForm = () => {
           let {current__price, previous__price, title, images, overviews, specifications, details} = infos;
             title = title.split(' ');
             title = title.slice(1, title.length - 1).join(' '); 
-          let newProductInfo = {ID, brand, up, child, parent, parent__father, product__id, quantity, total__sell, views, visible, current__price, previous__price, title};
+          let newProductInfo = {ID, brand, up, child, parent, parent__father, product__id, quantity, total__sell, views, visible, current__price, previous__price, wholesale__price: infos.wholesale__price || 0, title};
           let savedProductId = Number(sessionStorage.getItem('current__product__id')) || '';
           if(savedProductId !== ID){
             sessionStorage.setItem('current__product__id', ID.toString());

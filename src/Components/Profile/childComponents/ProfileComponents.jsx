@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { usePrintOrderUserProfileInfoAndProductMutation } from '../../../features/order/api';
 import '../../../styles/profile.scss';
-import OrderPagination from '../../pages/OrderManagement/Components/Pagination';
+import OrderPagination from './Pagination';
 import ProductOrderTable from './ProductTable';
 import ProfileCart from './ProfileCart';
 const ProfileComponents = ({currentPage, totalPages, handlePageChange}) => { 
