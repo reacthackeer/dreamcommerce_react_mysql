@@ -8,12 +8,13 @@ const {
     handleTransferToCart,
     handleGetAllSingleUserCartProductAdPdfFormat
 } = require('../Controller/WishlistController');
+const { authenticateTokenUser } = require('../utils/jsonwebtoken');
 
     
 
 const wishlistRouter = require('express').Router();
 wishlistRouter.get('/transfer-to-cart/:wishlist__id', handleTransferToCart)
-wishlistRouter.post('/get-all/product-as-a-pdf-format/:user__id', handleGetAllSingleUserCartProductAdPdfFormat);
+wishlistRouter.post('/get-all/product-as-a-pdf-format/:user__id', authenticateTokenUser, handleGetAllSingleUserCartProductAdPdfFormat);
 wishlistRouter.get('/get-all/:user__id', handleGetAllSingleUserWishlistProduct);
 wishlistRouter.put('/:item__id', handleUpdateSingleWishlistProduct);
 wishlistRouter.get('/:item__id', handleGetSingleWishlistProduct);

@@ -18,14 +18,12 @@ const System = sequelize.define('system',{
         defaultValue: 100
     },
     vatPercent: {
-        type: DataTypes.INTEGER, 
-        allowNull: true,
-        defaultValue: 10
+        type: DataTypes.DECIMAL(20,4), 
+        allowNull: true, 
     },
     taxPercent: {
-        type: DataTypes.INTEGER, 
-        allowNull: true,
-        defaultValue: 10
+        type: DataTypes.DECIMAL(20,4), 
+        allowNull: true, 
     },
     allProductShippingFeeInOn: {
         type: DataTypes.STRING,

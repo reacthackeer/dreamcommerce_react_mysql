@@ -68,8 +68,7 @@ const handleGetAllAdminOrderProduct = asyncHandler(async(req, res, next)=>{
     
     const page = Number(req.query?.page) || 1;
     let status = req.query?.filter || 'all';
-    let phoneNumber = req.query.phoneNumber || ''
-    console.log({status, phoneNumber});
+    let phoneNumber = req.query.phoneNumber || '' 
     let peerPage = Number(req.query?.peerPage) || 8;
         peerPage = peerPage > 40 ? 40 : peerPage
     let count = '';
@@ -84,12 +83,13 @@ const handleGetAllAdminOrderProduct = asyncHandler(async(req, res, next)=>{
                     count = `SELECT COUNT(*) FROM orders`
                 }
             }else{
-                count = `SELECT COUNT(*) FROM orders WHERE status="${status}`;
+                count = `SELECT COUNT(*) FROM orders WHERE status="${status}"`;
             }
-        }  
+        }   
     try{
         const result = await getSqlProductLength(count); 
         if(result[0]['COUNT(*)'] > 0){   
+            console.log(count);
             let total__products = Number(result[0]['COUNT(*)']);
             let total__page = Math.ceil(Number(result[0]['COUNT(*)']) / peerPage);
             const offset = (page - 1) * peerPage;
@@ -110,7 +110,7 @@ const handleGetAllAdminOrderProduct = asyncHandler(async(req, res, next)=>{
             }  
             try {
                 let result = await getAllJustProduct(count1);
-                    if(result.status__code === 200){  
+                    if(result.status__code === 200){   
                         res.json({products: result.products, total__page, current__page: page, total__products, current__limit: [offset, offset+limit]});
                     }else{
                         res.json({status__code: 201, products: []})
@@ -126,6 +126,7 @@ const handleGetAllAdminOrderProduct = asyncHandler(async(req, res, next)=>{
             next(newError);
         }
     } catch (error) {
+        console.log(error.message);
         let newError = new Error(error.message);
             newError.status=500;
             next(error);

@@ -411,6 +411,27 @@ const handleAddNewProduct = asyncHandler(async(req, res, next)=>{
         next(new Error('Invalid Server Request!'))
     }
 });
+const handleAddNewArrayProduct = asyncHandler(async(req, res, next)=>{
+    let {product, resetProducts} = req.body; 
+    let {product__id, brand, child, parent, parent__father, up, visible__url, visible, total__sell, quantity, views} = product;
+    if(product && product?.product__id){
+        let bufferData = controllerUtils.bufferDataMaker(product); 
+        
+        let sql = `INSERT INTO products (product__id, brand, child, parent, parent__father, up, visible__url, visible, total__sell, quantity, views, infos) VALUES ("${product__id}","${brand}","${child}","${parent}","${parent__father}","${up}","${visible__url}","${visible}","${total__sell}","${quantity}","${views}",'${bufferData}')`
+        try {
+            let result = await addSingleSqlProduct(sql);
+            if(result.status__code === 201){
+                res.json({status__code: 201, message: 'Successfully data inserted!', resetProducts});
+            }else{ 
+                next(new Error('Invalid server request!'));
+            }
+        } catch (error) {
+            next(new Error('Invalid Server Request!'))
+        }
+    }else{
+        next(new Error('Invalid Server Request!'))
+    }
+});
 
 const handleEditSingleProduct =  asyncHandler(async(req, res, next)=>{
     let {ID} = req.params;
@@ -508,6 +529,7 @@ const handleGetAllMultipleOffersProduct = asyncHandler(async(req, res, next)=>{
 
 module.exports = {
     handleEditSingleProduct,
+    handleAddNewArrayProduct,
     handleAddNewProduct,
     handleGetAllSearchProduct,
     handleGetAllSingleBrandProduct, 
@@ -520,5 +542,6 @@ module.exports = {
     handleGetSingleChildSimilarProductProduct,
     handleGetAllSingleBrandSimilarProduct,
     handleGetSingleProductByJustId,
+    handleAddNewArrayProduct,
     handleGetAllProduct
 }

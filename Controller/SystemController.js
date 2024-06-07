@@ -64,29 +64,33 @@ const handleCalculatePrice = async (products, system) => {
 }
 const handleGetSinglePriceCalculator = asyncHandler(async(req, res, next)=>{
     let userId = req.params.userId;
-    try {
-        let systemInformation = await System.findOne({where: {id: 1}});
-        if(systemInformation && systemInformation?.dataValues?.id && userId){
-            const count1 = `SELECT p.product__id, p.brand, p.child, p.parent, p.parent__father, p.infos, p.visible__url, p.total__sell, c.quantity, p.ID, c.ID as CID FROM products p LEFT JOIN cart c ON c.product__id=p.ID WHERE c.user__id='${userId}'`;
-            
-            try {
-                let result = await getAllJustProduct(count1);
-                    if(result.status__code === 200){ 
-                        let priceCalculate = await handleCalculatePrice(result.products, systemInformation.dataValues);
-                        res.json(priceCalculate)
-                    }else{
-                        res.json({status__code: 201})
-                    }
-            } catch (error) { 
-                const error1 = new Error(error.message);
-                    error1.status = 500;
-                    next(error1);
-            } 
-        }else{ 
-            next(new Error("Internal server error!"))
+    if(userId){
+        try {
+            let systemInformation = await System.findOne({where: {id: 1}});
+            if(systemInformation && systemInformation?.dataValues?.id && userId){
+                const count1 = `SELECT p.product__id, p.brand, p.child, p.parent, p.parent__father, p.infos, p.visible__url, p.total__sell, c.quantity, p.ID, c.ID as CID FROM products p LEFT JOIN cart c ON c.product__id=p.ID WHERE c.user__id='${userId}'`;
+                
+                try {
+                    let result = await getAllJustProduct(count1);
+                        if(result.status__code === 200){ 
+                            let priceCalculate = await handleCalculatePrice(result.products, systemInformation.dataValues);
+                            res.json(priceCalculate)
+                        }else{
+                            res.json({status__code: 201})
+                        }
+                } catch (error) { 
+                    const error1 = new Error(error.message);
+                        error1.status = 500;
+                        next(error1);
+                } 
+            }else{ 
+                next(new Error("Internal server error!"))
+            }
+        } catch (error) {
+            next(new Error(error.message))
         }
-    } catch (error) {
-        next(new Error(error.message))
+    }else{
+        next(new Error('Invalid get requested!'))
     }
 })
 module.exports = {

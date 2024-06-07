@@ -96,6 +96,22 @@ const getSingleSqlProduct = (sql) => {
         })
     })
 }
+const getSingleOrMultipleSqlProduct = (sql) => {
+    
+    return new Promise((resolve, reject)=>{ 
+        mainDb.query(sql, (error, result)=>{  
+            if(!error){
+                if(result.length){ 
+                    resolve({item: result, status__code: 200});
+                }else{
+                    resolve({item: {}, status__code: 204});
+                }
+            }else{
+                reject(error)
+            }
+        })
+    })
+}
 
 const getMultipleSqlProduct = (sql) => {
     
@@ -425,6 +441,7 @@ const getSingleJustSqlProduct = (sql) => {
 }
 
 module.exports = {
+    getSingleOrMultipleSqlProduct,
     getSingleJustSqlProduct,
     getAllSearchProduct,
     getAllMultipleOffers,

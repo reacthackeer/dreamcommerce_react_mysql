@@ -25,7 +25,10 @@ const sequelize = require('./config/database');
 const { orderRouter } = require('./Router/Order');
 const { systemRouter } = require('./Router/SystemRouter');
 const { calculatePriceRouter } = require('./Router/CalculatePrice');
-const bannerRouter = require('./Router/BannerRouter');
+const bannerRouter = require('./Router/BannerRouter'); 
+const { newProductRouter } = require('./Router/NewProductRouter');
+const { storeInformationRouter } = require('./Router/StoreInformationi');
+const { contactUsRouter } = require('./Router/ContactUs');
 
 
 const handleSyncDatabase = async () => {
@@ -69,12 +72,15 @@ app.use('/api/v1/child-navbar',  childNavbarRouter);
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/geocode', geocode)
 app.use('/api/v1/offers', offerRouter);
-app.use('/api/v1/products', productRouter);
+app.use('/api/v1/products', productRouter); 
+app.use('/api/v1/products', newProductRouter); 
 app.use('/api/v1/offers', offerRouter);
 app.use('/api/v1/brands', brandRouter);
 app.use('/api/v1/banner', bannerRouter);
 app.use('/api/v1/cart',  cartRouter);
 app.use('/api/v1/system',  systemRouter);
+app.use('/api/v1/store-information',  storeInformationRouter);
+app.use('/api/v1/contact-us',  contactUsRouter);
 app.use('/api/v1/wishlist',  wishlistRouter); 
 app.use('/api/v1/filter-navbar',  filterNavbarRouter);
 app.use('/api/v1/parent-navbar',  parentNavbarRouter);

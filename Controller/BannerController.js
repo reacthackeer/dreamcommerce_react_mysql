@@ -79,7 +79,7 @@ const deleteSingleBanner = asyncHandler(async(req, res, next)=>{
     const bannerId = req.params.bannerId;
     if(bannerId){
         try {
-            let bannerDeleteResult = await Banner.destroy({where: {id: bannerId}});
+            let bannerDeleteResult = await Banner.destroy({where: {id: bannerId}}); 
             res.json(bannerDeleteResult);
         } catch (error) {
             next(new Error(error.message))

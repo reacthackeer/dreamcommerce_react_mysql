@@ -16,7 +16,13 @@ const PopularCategory = sequelize.define('popularCategory',{
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
-    }
+    },
+    img__src: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+
 },{
     timestamps: true,
     createdAt: 'created_at',

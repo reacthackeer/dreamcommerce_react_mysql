@@ -10,16 +10,19 @@ const {
     handleGetSingleProductByJustId,
     handleAddNewProduct,
     handleEditSingleProduct,
-    handleGetAllProduct
+    handleGetAllProduct,
+    handleAddNewArrayProduct
 } = require('../Controller/ProductsController');
+const { authenticateTokenModerator } = require('../utils/jsonwebtoken');
 
 const productRouter = require('express').Router();
 
-productRouter.post('/', handleAddNewProduct)
+productRouter.post('/',  authenticateTokenModerator,  handleAddNewProduct)
+productRouter.post('/add-array-product',  authenticateTokenModerator,  handleAddNewArrayProduct)
 productRouter.get('/search/:search_string', handleGetAllSearchProduct);
 
 productRouter.get('/getAllProduct', handleGetAllProduct);
-productRouter.put('/:ID', handleEditSingleProduct)
+productRouter.put('/:ID',  authenticateTokenModerator,  handleEditSingleProduct)
 productRouter.get('/p/:parent__father', handleGetSingleFatherProduct); 
 productRouter.get('/brands/:brand', handleGetAllSingleBrandProduct); 
 productRouter.get('/brands/:brand/:product__id', handleGetAllSingleBrandSimilarProduct); 

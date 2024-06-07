@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler'); 
-const { getAllSearchProduct, getAllMultipleOffers, getSingleSqlProduct, updateSingleSqlProduct, getMultipleSqlProduct} = require('../query/products__query');
+const { getAllSearchProduct, getAllMultipleOffers, getSingleSqlProduct, updateSingleSqlProduct, getMultipleSqlProduct, getSingleOrMultipleSqlProduct} = require('../query/products__query');
 const { getSqlProductLength } = require('../query/lengthQuery'); 
 const { addSingleSqlProduct } = require('../query/products__query');
 const { deleteGeneralSqlOperation, getSingleOfferQuery, getSingleOffersQuery } = require('../query/offer__query');
@@ -125,11 +125,15 @@ const handleAddSingleOffer = asyncHandler(async(req, res, next)=>{
 const handleGetSingleOffer = asyncHandler(async(req, res, next)=>{
     let {ID} = req.params;
     if(ID){
-        let sql = `SELECT * FROM offers WHERE ID="${ID}"`;
+        let sql = `SELECT * FROM offers WHERE product__id="${ID}"`;
         try {
-            let result = await getSingleSqlProduct(sql); 
+            let result = await getSingleOrMultipleSqlProduct(sql); 
             if(result.status__code === 200){
-                res.json(result);
+                let offerArray = [];
+                result.item.forEach((info)=> {
+                    offerArray.push(info.name);
+                });
+                res.json({array: offerArray, item: result.item[0], status__code: 200})
             }else{
                 let newError = new Error('Invalid server request!');
                 newError.status=204;
@@ -192,9 +196,9 @@ const handleUpdateSingleOffer = asyncHandler(async(req, res, next)=>{
 });
 
 const deleteSingleOffer = asyncHandler(async(req, res, next)=>{
-    const ID = req.params?.ID 
-    if(ID){ 
-        const query = `DELETE FROM offers WHERE ID="${ID}"`
+    const {product__id, offer__name} = req.params
+    if(product__id && offer__name){ 
+        const query = `DELETE FROM offers WHERE product__id="${product__id}" AND name="${offer__name}"`
         try {
             const result = await deleteGeneralSqlOperation(query);
             if(result?.status__code === 200){

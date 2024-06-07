@@ -1,18 +1,23 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');   
 
-const ShopByCategory = sequelize.define('shopByCategory',{
+const StoreInformation = sequelize.define('storeInformation',{
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    store__name: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },
-    link: {
+    store__id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    }, 
+    store__email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
@@ -28,4 +33,4 @@ const ShopByCategory = sequelize.define('shopByCategory',{
     updatedAt: 'updated_at'
 });
 
-module.exports = ShopByCategory;
+module.exports = StoreInformation;
