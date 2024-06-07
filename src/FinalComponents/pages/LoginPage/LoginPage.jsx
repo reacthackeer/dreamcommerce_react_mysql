@@ -11,16 +11,17 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLoginUserMutation } from '../../../features/auth/api';
 import { userLoggedIn } from '../../../features/auth/authSlice';
-import useLoginCheck from '../../../hooks/loginCheck';
+import useModeratorCheck from '../../../hooks/moderatorCheck';
 
-const LoginPage = () => {
-  const checkIsLoggedIn = useLoginCheck();
+const LoginPage = () => { 
+  const checkIsLoggedIn = useModeratorCheck({graterThanRole: 10});
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,13 +29,13 @@ const LoginPage = () => {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
-
+  const {auth} = useSelector((state)=> state.auth);
 
   useEffect(()=>{
-    if(checkIsLoggedIn){
+    if(auth && auth?.name && checkIsLoggedIn){ 
       window.history.back()
     }
-  },[checkIsLoggedIn])
+  },[checkIsLoggedIn, auth])
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -59,15 +60,18 @@ const LoginPage = () => {
       let postData = {phone, email, password};
       provideLoginInfo(postData)
     }else{
+      setAddDebounceLoading(()=> false);
       toast.error('Please fill up all the fields',{duration: 3000})
     }
   };
   const [entered, setEntered] = useState(false);
   useEffect(()=>{
     if(!isLoading && isError && !isSuccess){
+        setAddDebounceLoading(()=> false);
         toast.error('There was a server side error!',{duration: 3000});
     }
     if(!isLoading && isSuccess && !isError){
+        setAddDebounceLoading(()=> false);
         if(data && data?.name){ 
           if(!entered){
             let newAuthInfo = {...data};
@@ -81,6 +85,15 @@ const LoginPage = () => {
         }
     }
   },[data, isLoading, isError, isSuccess, error, dispatch, navigate, entered])
+
+  const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+  const handleSubmitDebounceFunction = debounce(handleLogin, 1000);
+
+  const handleStartSubmit = () => { 
+      setAddDebounceLoading(()=> true);
+      handleSubmitDebounceFunction();
+  }
+
   return (
     <Box
       display="flex"
@@ -149,8 +162,8 @@ const LoginPage = () => {
             colorScheme="blue" 
             size="lg"  
             fontSize="md" 
-            onClick={handleLogin}
-            isLoading={isLoading}
+            onClick={handleStartSubmit}
+            isLoading={isLoading || addDebounceLoading}
           >
             Login
           </Button>

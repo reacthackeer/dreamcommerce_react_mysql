@@ -1,4 +1,5 @@
 import { Box, Button, FormControl, FormLabel, Heading, Textarea } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -11,25 +12,31 @@ const AddMultipleProduct = () => {
     const [provideProductInfo,{data, isLoading, isError, isSuccess, error}] = useAddSingleArrayProductMutation();
     const handleSubmit = (e) => {
         e.preventDefault();
-        let multipleProductsArray = JSON.parse(productsArray);
-        if(multipleProductsArray && multipleProductsArray.length && multipleProductsArray.length > 1){
-            let currentProduct = multipleProductsArray[0];
-                currentProduct = {...currentProduct, ...currentProduct.infos}
-            let resetProducts = multipleProductsArray.slice(1, multipleProductsArray.length);
-            provideProductInfo({product: currentProduct, resetProducts})
-            setInsertStarted(()=> true)
-        }else{
-            toast.error('Please paste here multiple products!',{position: 'top-right'})
-        }
+            try {
+                let multipleProductsArray = JSON.parse(productsArray);
+                if(multipleProductsArray && multipleProductsArray.length && multipleProductsArray.length > 1){
+                    let currentProduct = multipleProductsArray[0];
+                        currentProduct = {...currentProduct, ...currentProduct.infos}
+                    let resetProducts = multipleProductsArray.slice(1, multipleProductsArray.length);
+                    provideProductInfo({product: currentProduct, resetProducts})
+                    setInsertStarted(()=> true)
+                }else{
+                    toast.error('Please paste here multiple products!',{position: 'top-right'})
+                    setAddDebounceLoading(()=> false);
+                }
+            } catch (error) {
+                setAddDebounceLoading(()=> false);
+            }
     } 
     const navigate = useNavigate();
     useEffect(()=>{
         if(isError && !isSuccess){
-            toast.error('There was a server side error!',{duration: '3000'})
-            console.log(error);
+            setAddDebounceLoading(()=> false);
+            toast.error('There was a server side error!',{duration: '3000'}) 
         }
 
         if(!isError && isSuccess && data && data?.status__code === 201){
+            setAddDebounceLoading(()=> false);
             let resetProducts = data.resetProducts;
             document.getElementById('insertProductQuantity').innerText = resetProducts.length
             if(data.resetProducts.length){
@@ -44,9 +51,18 @@ const AddMultipleProduct = () => {
     },[data, isLoading, isError, isSuccess, error, navigate, provideProductInfo])
 
 
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handleSubmit, 1000);
+
+    const handleStartSubmit = (e) => {
+        e.preventDefault();
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction(e);
+    }
+
     return (
         <AdminPageSkeleton>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleStartSubmit}>
                 <Box className='data__view__form'>
                     <FormControl>
                         <FormLabel>Paste here products array</FormLabel>
@@ -58,7 +74,10 @@ const AddMultipleProduct = () => {
                     <Heading opacity={insertStarted ? '1' : '0'}>Wait for insert <span id='insertProductQuantity'></span></Heading>
                 </Box>
                 <Box className='data__form__submit__button'>
-                    <Button type='submit'>Validate And Submit</Button>
+                    <Button 
+                        type='submit'
+                        isLoading={isLoading || addDebounceLoading}
+                    >Validate And Submit</Button>
                 </Box>
             </form>
         </AdminPageSkeleton>

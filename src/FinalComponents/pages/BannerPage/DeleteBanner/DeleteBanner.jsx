@@ -1,6 +1,7 @@
 import { Box, Button, Heading, Image, Input, Text } from '@chakra-ui/react';
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 // import { server__image__host__url } from '../../../app/store';
+import { debounce } from 'lodash';
 import { server__image__host__url } from '../../../../app/store';
 import { useDeleteSingleBannerMutation, useGetAllBannerQuery } from '../../../../features/banner/bannerApi';
 import AdminPageSkeleton from '../../AdminPageSkeletonComponents/AdminPageSkeleton';
@@ -15,11 +16,32 @@ const DeleteBanner = memo(() => {
         }
         return allBanners;
     }
-    const [provideBrandId] = useDeleteSingleBannerMutation();
-    const handleDeleteBrand = (id) => {
-        console.log(id);
+    const [provideBrandId, {isLoading: deleteIsLoading, isSuccess: deleteIsSuccess}] = useDeleteSingleBannerMutation();
+    const handleDeleteBrand = (id) => { 
         provideBrandId(id);
+        setDeleteDebounceLoading(()=> false);
     }
+
+    // debounce facility start  {isLoading: deleteIsLoading, isSuccess: deleteIsSuccess}
+
+    const [currentId, setCurrentId] = useState('');
+    const [deleteDebounceLoading, setDeleteDebounceLoading] = useState(false);
+    const deleteDebounceFunction = debounce(handleDeleteBrand, 1000);
+    const handleStartDeleteDebounce = (id) => {
+        setCurrentId(()=> id);
+        setDeleteDebounceLoading(()=> true);
+        deleteDebounceFunction(id);
+    }
+
+    useEffect(()=>{
+        if(deleteIsSuccess){
+            setCurrentId(()=> '');
+            setDeleteDebounceLoading(()=> false);
+        }
+    }, [deleteIsSuccess])
+
+    // debounce facility end
+
     return (
         <AdminPageSkeleton>   
                 <div>
@@ -36,9 +58,20 @@ const DeleteBanner = memo(() => {
                                         {
                                             handleFilterBrandData(info.banners).map((info, index)=> { 
                                                 return <Box key={index}> 
-                                                            <Image src={server__image__host__url+info?.img__src} title={info.title}/> 
-                                                            <Text textAlign='center'>{info.type}</Text>
-                                                            <Button width="100%" variant='solid' colorScheme='red' onClick={()=> handleDeleteBrand(info.id)}>DELETE</Button>
+                                                            <Image 
+                                                                src={server__image__host__url+info?.img__src} 
+                                                                title={info.title}
+                                                            /> 
+                                                            <Text 
+                                                                textAlign='center'
+                                                            >{info.type}</Text>
+                                                            <Button 
+                                                                isLoading={(deleteDebounceLoading || deleteIsLoading) && currentId === info.id} 
+                                                                width="100%" 
+                                                                variant='solid' 
+                                                                colorScheme='red' 
+                                                                onClick={()=> handleStartDeleteDebounce(info.id)}
+                                                            >DELETE</Button>
                                                         </Box>
                                             })
                                         }

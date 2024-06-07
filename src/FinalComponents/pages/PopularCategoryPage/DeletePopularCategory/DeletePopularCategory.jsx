@@ -1,5 +1,6 @@
 import { Box, Button, Image, Input } from '@chakra-ui/react';
-import React, { memo, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { server__image__host__url } from '../../../../app/store';
 import { useDeleteSinglePopularCategoryMutation, useGetAllPopularCategoryQuery } from '../../../../features/popularCategory/popularCategoryApi';
@@ -15,10 +16,32 @@ const DeletePopularCategory = memo(() => {
         }
         return allBrands;
     }
-    const [provideBrandId] = useDeleteSinglePopularCategoryMutation();
+    const [provideBrandId,{isSuccess: deleteIsSuccess, isLoading: deleteIsLoading}] = useDeleteSinglePopularCategoryMutation();
     const handleDeleteBrand = (id) => {
         provideBrandId(id);
     }
+
+    // debounce facility start
+
+    const [currentId, setCurrentId] = useState('');
+    const [deleteDebounceLoading, setDeleteDebounceLoading] = useState(false);
+    const deleteDebounceFunction = debounce(handleDeleteBrand, 1000);
+    const handleStartDeleteDebounce = (id) => {
+        setCurrentId(()=> id);
+        setDeleteDebounceLoading(()=> true);
+        deleteDebounceFunction(id);
+    }
+
+    useEffect(()=>{
+        if(deleteIsSuccess){
+            setCurrentId(()=> '');
+            setDeleteDebounceLoading(()=> false);
+        }
+    }, [deleteIsSuccess])
+
+    // debounce facility end
+
+
     return (
         <AdminPageSkeleton>   
             <div>
@@ -31,11 +54,24 @@ const DeletePopularCategory = memo(() => {
                     {
                         handleFilterBrandData().map((info, index)=> { 
                             return <Box key={index}>
-                                        <Link to={`/${info?.link}`}>
-                                            <Image src={server__image__host__url+info?.img__src}/>
+                                        <Link 
+                                            to={`${info?.link}`}
+                                        >
+                                            <Image 
+                                                src={server__image__host__url+info?.img__src}
+                                            />
                                         </Link>
-                                        <Button width="100%" variant="ghost">{info?.name}</Button>
-                                        <Button width="100%" variant='solid' colorScheme='red' onClick={()=> handleDeleteBrand(info.id)}>DELETE</Button>
+                                        <Button 
+                                            width="100%" 
+                                            variant="ghost"
+                                        >{info?.name}</Button>
+                                        <Button 
+                                            isLoading={(deleteDebounceLoading || deleteIsLoading) && currentId === info.id} 
+                                            width="100%" 
+                                            variant='solid' 
+                                            colorScheme='red' 
+                                            onClick={()=> handleStartDeleteDebounce(info.id)}
+                                        >DELETE</Button>
                                     </Box>
                         })
                     }

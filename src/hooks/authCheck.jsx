@@ -1,25 +1,30 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { userLOggedOut, userLoggedIn } from "../features/auth/authSlice";
+import { setEditMode, userLOggedOut, userLoggedIn } from "../features/auth/authSlice";
 
 const useAuthCheck = () => {
 
     const [authCheck, setAuthCheck] = useState(false);
     const dispatch = useDispatch();
-
+    
     useEffect(()=>{
         let authInfo = JSON.parse(localStorage.getItem('auth')) || {};
+        let localEditMode = JSON.parse(localStorage.getItem('editMode')) || false;
+        
         if(authInfo){
             if(authInfo && authInfo?.token){
                 dispatch(userLoggedIn(authInfo));
                 setAuthCheck(()=> true);
+                dispatch(setEditMode(localEditMode))
             }else{
                 dispatch(userLOggedOut());
                 setAuthCheck(()=> true);
+                dispatch(setEditMode(localEditMode))
             }
         }else{
             dispatch(userLOggedOut());
             setAuthCheck(()=> true);
+            dispatch(setEditMode(localEditMode))
         }
     },[dispatch, setAuthCheck])
 

@@ -1,5 +1,6 @@
 import { Box, Button, Image, Input } from '@chakra-ui/react';
-import React, { memo, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { memo, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { server__image__host__url } from '../../../../app/store';
 import { useGetAllBrandQuery } from '../../../../features/brand/brandApi';
@@ -17,10 +18,31 @@ const DeleteBrand = memo(() => {
         }
         return allBrands;
     }
-    const [provideBrandId] = useDeleteBrandMutation();
+    const [provideBrandId, {isLoading: deleteIsLoading, isSuccess: deleteIsSuccess}] = useDeleteBrandMutation();
     const handleDeleteBrand = (id) => {
         provideBrandId(id);
     }
+
+    // debounce facility start
+
+    const [currentId, setCurrentId] = useState('');
+    const [deleteDebounceLoading, setDeleteDebounceLoading] = useState(false);
+    const deleteDebounceFunction = debounce(handleDeleteBrand, 1000);
+    const handleStartDeleteDebounce = (id) => {
+        setCurrentId(()=> id);
+        setDeleteDebounceLoading(()=> true);
+        deleteDebounceFunction(id);
+    }
+
+    useEffect(()=>{
+        if(deleteIsSuccess){
+            setCurrentId(()=> '');
+            setDeleteDebounceLoading(()=> false);
+        }
+    }, [deleteIsSuccess])
+
+    // debounce facility end
+
     return (
         <AdminPageSkeleton>   
             <div>
@@ -37,7 +59,13 @@ const DeleteBrand = memo(() => {
                                             <Image src={server__image__host__url+info?.src}/>
                                         </Link>
                                         <Button width="100%" variant="ghost">{info?.brand}</Button>
-                                        <Button width="100%" variant='solid' colorScheme='red' onClick={()=> handleDeleteBrand(info.ID)}>DELETE</Button>
+                                        <Button 
+                                            isLoading={(deleteDebounceLoading || deleteIsLoading) && currentId === info.ID} 
+                                            width="100%" 
+                                            variant='solid' 
+                                            colorScheme='red' 
+                                            onClick={()=> handleStartDeleteDebounce(info.ID)}
+                                        >DELETE</Button>
                                     </Box>
                         })
                     }

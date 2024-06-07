@@ -48,7 +48,7 @@ const EditPopularCategory = memo(() => {
                         {
                             handleFilterBrandData().map((info, index)=> { 
                                 return <Box key={index}>
-                                            <Link to={`/${info.link}`}>
+                                            <Link to={`${info.link}`}>
                                                 <Image src={server__image__host__url+info?.img__src}/>
                                             </Link>
                                             <Button width="100%" variant="ghost">{info?.name}</Button>

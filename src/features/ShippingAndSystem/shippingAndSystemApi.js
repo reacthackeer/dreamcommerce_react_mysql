@@ -11,6 +11,14 @@ export const systemAndShippingApi = apiSlice.injectEndpoints({
                 body: product
             })
         }),
+        addSingleStoreInformation: builder.mutation({
+            query: (product)=> ({
+                url: '/store-information',
+                method: "POST",
+                body: product
+            }),
+            invalidatesTags: ()=> [{type: 'get-store-information'}]
+        }), 
         getSingleUserPriceCalculator: builder.query({
             query: (userId) => ({
                 url: `/system/${userId}`
@@ -21,11 +29,35 @@ export const systemAndShippingApi = apiSlice.injectEndpoints({
             query: () => ({
                 url: `/system`
             })
-        })
+        }),
+        getSingleStoreInformation: builder.query({
+            query: () => ({
+                url: `/store-information`
+            }),
+            providesTags: ()=> [{type: 'get-store-information'}]
+        }),
+        getSingleContactUs: builder.query({
+            query: () => ({
+                url: `/contact-us`
+            }),
+            providesTags: ()=> [{type: 'get-contact-us'}]
+        }),
+        addSingleContactUs: builder.mutation({
+            query: (product)=> ({
+                url: '/contact-us',
+                method: "POST",
+                body: product
+            }),
+            invalidatesTags: ()=> [{type: 'get-contact-us'}]
+        }), 
     })
 });
 export const { 
+    useAddSingleStoreInformationMutation,
+    useGetSingleStoreInformationQuery,
     useAddSingleSystemMutation,
     useGetSingleUserPriceCalculatorQuery,
-    useGetSingleSystemInformationQuery
+    useGetSingleSystemInformationQuery,
+    useGetSingleContactUsQuery,
+    useAddSingleContactUsMutation
 } = systemAndShippingApi;

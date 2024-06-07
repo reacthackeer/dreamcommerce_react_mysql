@@ -5,13 +5,14 @@ import { FiLogOut } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { server__image__host__url } from '../../../../app/store';
-import { userLOggedOut } from '../../../../features/auth/authSlice';
+import { setEditMode, userLOggedOut } from '../../../../features/auth/authSlice';
 const ProfileCart = memo(() => { 
     let authInfo = useSelector((state)=> state?.auth?.auth);
+    let editMode = useSelector((state)=> state?.auth?.editMode); 
+    const {role} = authInfo;
     let printUserInfo = useSelector((state)=> state.auth.printUser); 
     const {user__id} = useParams();  
-    const [currentViewProfile, setCurrentViewProfile] = useState({});
-
+    const [currentViewProfile, setCurrentViewProfile] = useState({}); 
     useEffect(()=>{
         if(user__id && printUserInfo?.name){
             setCurrentViewProfile(()=> printUserInfo);
@@ -24,8 +25,12 @@ const ProfileCart = memo(() => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleUpdateProfileImage = () => {
-        let images = [currentViewProfile.img__src];         
-        localStorage.setItem('profile__images', JSON.stringify(images));
+        if(currentViewProfile?.img__src){
+            let images = [currentViewProfile.img__src];         
+            localStorage.setItem('profile__images', JSON.stringify(images));
+        }else{ 
+            localStorage.setItem('profile__images', JSON.stringify([]));
+        }
         navigate('/admin/edit/profile-image');
     }
 
@@ -50,6 +55,14 @@ const ProfileCart = memo(() => {
             navigate('/admin/edit/shipping-address')
         }else{
             navigate('/admin/edit/shipping-address')
+        }
+    }
+
+    const handleToggleEditMode = () => {
+        if(editMode){
+            dispatch(setEditMode(false));
+        }else{ 
+            dispatch(setEditMode(true));
         }
     }
     return (
@@ -81,14 +94,43 @@ const ProfileCart = memo(() => {
                     onClick={onCopy}
                 >
                     {currentViewProfile.user__id}
-                </Button>
+                </Button> 
+                {
+                    authInfo && role && role < 7 &&
+                    <Button
+                        mt='3'
+                        width={'100%'} 
+                        onClick={()=> navigate('/order-management/all')}
+                    >
+                        Manage Order
+                    </Button>
+                }
+                {
+                    authInfo && role && role < 7 && 
+                    <Button
+                        mt='3'
+                        width={'100%'} 
+                        onClick={()=> navigate('/admin/edit/popular-category')}
+                    >
+                        Admin Panel
+                    </Button>
+                }
+                {
+                    authInfo && role && role < 7 && 
+                    <Button
+                        mt='3'
+                        width={'100%'} 
+                        onClick={handleToggleEditMode}
+                    >
+                        Edit Mode :-  {editMode ? 'Enable' : 'Disable'}
+                    </Button>
+                }
                 <Button
                     mt='3'
-                    width={'100%'}
-                    rightIcon={<CopyIcon/>} 
-                    onClick={()=> navigate('/order-management/all')}
+                    width={'100%'} 
+                    onClick={()=> navigate('/admin/edit/change-password')}
                 >
-                    MANAGE ORDER
+                    Change Password
                 </Button>
                 <Button
                     mt='3'

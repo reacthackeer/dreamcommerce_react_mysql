@@ -1,5 +1,6 @@
 import { Box, Button, FormControl, FormLabel, Image, Select } from '@chakra-ui/react';
-import React, { memo, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { memo, useEffect, useState } from 'react';
 import { server__image__host__url } from '../../../../app/store';
 import { useDeleteSingleTopCategoryMutation, useGetAllParentFatherNavbarQuery, useGetAllUpNavbarQuery } from '../../../../features/brand/brandApi';
 import AdminPageSkeleton from '../../AdminPageSkeletonComponents/AdminPageSkeleton';
@@ -17,11 +18,32 @@ const DeleteTopCategory = memo(() => {
         // top category start
         let {data: topCategoryData, isSuccess: topCategoryDataIsSuccess} = useGetAllParentFatherNavbarQuery(upNavbar);
         
-        const [provideId] = useDeleteSingleTopCategoryMutation();
+        const [provideId, {isLoading: deleteIsLoading, isSuccess: deleteIsSuccess}] = useDeleteSingleTopCategoryMutation();
 
         const handleDeleteTopCategory = (id) => {
             provideId(id);
         }
+
+    // debounce facility start
+
+    const [currentId, setCurrentId] = useState('');
+    const [deleteDebounceLoading, setDeleteDebounceLoading] = useState(false);
+    const deleteDebounceFunction = debounce(handleDeleteTopCategory, 1000);
+    const handleStartDeleteDebounce = (id) => {
+        setCurrentId(()=> id);
+        setDeleteDebounceLoading(()=> true);
+        deleteDebounceFunction(id);
+    }
+
+    useEffect(()=>{
+        if(deleteIsSuccess){
+            setCurrentId(()=> '');
+            setDeleteDebounceLoading(()=> false);
+        }
+    }, [deleteIsSuccess])
+
+    // debounce facility end
+
     return (
         <AdminPageSkeleton>   
             <div className='data__view__form'> 
@@ -51,7 +73,13 @@ const DeleteTopCategory = memo(() => {
                             return <Box key={index}> 
                                         <Image src={server__image__host__url+info?.src}/> 
                                         <Button width="100%" variant="ghost">{info?.name}</Button>
-                                        <Button width="100%" variant='solid' colorScheme='red' onClick={()=> handleDeleteTopCategory(info.ID)}>DELETE</Button>
+                                        <Button 
+                                            isLoading={(deleteDebounceLoading || deleteIsLoading) && currentId === info.ID} 
+                                            width="100%" 
+                                            variant='solid' 
+                                            colorScheme='red' 
+                                            onClick={()=> handleStartDeleteDebounce(info.ID)}
+                                        >DELETE</Button>
                                     </Box>
                         })
                     }

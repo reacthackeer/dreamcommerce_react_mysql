@@ -10,6 +10,7 @@ import {
     Box,
     Select
 } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import numberUid from 'number-uid';
 import { useGetAllParentFatherNavbarQuery, useGetAllParentNavbarQuery, useGetAllUpNavbarQuery } from '../../../../features/brand/brandApi';
 import { useAddChildMutation } from '../../../../features/getAll/api';
@@ -70,7 +71,10 @@ const AddCollection = memo(() => {
     const handleDeleteMarkImages = () => {
             let images = selectedImage;
             if(images && images?.length){
+                setDeleteMarkImageIsLoading(()=> true);
                 axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images}}).then((res)=>{
+                    setDeleteMarkImageIsLoading(()=> false);
+                    setDeleteMarkImageDebounceLoading(()=> false);
                 if(res.status === 200 && res.data && res.data?.status__code === 200){
                     toast.success('Successfully image deleted',{duration: 3000})
                     let newImagesSrcInfo = previewImages.filter((info)=> images.indexOf(info) === -1);
@@ -99,7 +103,10 @@ const AddCollection = memo(() => {
         for (let i = 0; i < images.length; i++) {
         formData.append('images', images[i]);
         }
+        setUploadIsLoading(()=> true);
         axios.post('http://localhost:10000/api/v1/file/upload/multiple',formData,{headers: {'Content-Type': 'multipart/form-data'}}).then((res)=>{
+            setUploadIsLoading(()=> false);
+            setUploadImageDebounceLoading(()=> false);
         if(res.status === 200 && res.data && res.data?.status__code === 200){
             toast.success('Successfully all images uploaded!',{duration: 3000})
 
@@ -119,7 +126,10 @@ const AddCollection = memo(() => {
     const handleDeleteUploadedImages = () => {
         let images = JSON.parse(localStorage.getItem('collection__images'))||[];
         if(images && images?.length){
+            setDeleteUploadedIsLoading(()=> true)
             axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images: previewImages}}).then((res)=>{
+                setDeleteUploadedIsLoading(()=> false);
+                setDeleteUploadedImageDebounceLoading(()=> false);
             if(res.status === 200 && res.data && res.data?.status__code === 200){
                 toast.success('Successfully all images deleted!',{duration: 3000})
                 
@@ -178,9 +188,11 @@ const AddCollection = memo(() => {
 
     useEffect(()=>{
         if(!isLoading && !isSuccess && isError){
+            setAddDebounceLoading(()=> false);
             toast.error('There was a server side error!',{duration: 3000, position: 'top-right'})
         }
         if(!isLoading && isSuccess && !isError){
+            setAddDebounceLoading(()=> false);
             if(data && data?.status__code === 201){
                 toast.success(data.message,{duration: 3000, position: 'top-right'});
                 localStorage.removeItem('collection__images');
@@ -212,23 +224,63 @@ const AddCollection = memo(() => {
                 if(images.length === 1){ 
                     let items = collectionData?.items?.filter((info)=> info.name.toLowerCase() === postData.name.toLowerCase()) || [];
                         if(items.length > 0){
+                            setAddDebounceLoading(()=> false);
                             toast.error('This collection already existed!',{duration: 3000, position: 'top-right'})
                         }else{
                             provideChildData(postData);
                         }
                 }else{
+                    setAddDebounceLoading(()=> false);
                     toast.error('Only one image acceptable!',{duration: 3000, position: 'top-right'})
                 }
             }
         }else{
+            setAddDebounceLoading(()=> false);
             toast.error('Please fill up all the fields!',{duration: 3000, position: 'top-right'})
         }
     }
     
+
+    
+    const [uploadImageDebounceLoading, setUploadImageDebounceLoading] = useState(false);
+    const [uploadIsLoading, setUploadIsLoading] = useState(false);
+    const uploadImageDebounceFunction = debounce(handleUploadAllImages, 1000);
+    const handleStartUploadAllImages = () => {
+        setUploadImageDebounceLoading(()=> true);
+        uploadImageDebounceFunction();
+    }
+
+    const [deleteUploadedImageDebounceLoading, setDeleteUploadedImageDebounceLoading] = useState(false);
+    const [deleteUploadedIsLoading, setDeleteUploadedIsLoading] = useState(false);
+    const deleteUploadedImageDebounceFunction = debounce(handleDeleteUploadedImages, 1000);
+    const handleStartDeleteUploadedImages = () => {
+        setDeleteUploadedImageDebounceLoading(()=> true);
+        deleteUploadedImageDebounceFunction();
+    }
+
+    const [deleteMarkImageDebounceLoading, setDeleteMarkImageDebounceLoading] = useState(false);
+    const [deleteMarkImageIsLoading, setDeleteMarkImageIsLoading] = useState(false);
+    const deleteMarkImageDebounceFunction = debounce(handleDeleteMarkImages, 1000);
+    const handleStartDeleteMarkImages = () => {
+        setDeleteMarkImageDebounceLoading(()=> true);
+        deleteMarkImageDebounceFunction();
+    }
+
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handleSubmit, 1000);
+
+    const handleStartSubmit = (e) => {
+        e.preventDefault();
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction(e);
+    }
+
+
+
     return ( 
         <AdminPageSkeleton>
                 <div> 
-                    <form onSubmit={handleSubmit}> 
+                    <form onSubmit={handleStartSubmit}> 
                         <Box className='data__view__form'>
                             {   
                                 upNavbarData && upNavbarData?.status__code === 200 && upNavbarData?.items?.length > 0 &&
@@ -312,7 +364,7 @@ const AddCollection = memo(() => {
                                 variant={'outline'}
                                 type="submit"
                                 size='sm'
-                                isLoading={isLoading}
+                                isLoading={isLoading || addDebounceLoading}
                                 isDisabled={!product?.collection || previewImages?.length === 0 || previewImages?.length > 1}
                             >
                                 Save
@@ -326,9 +378,10 @@ const AddCollection = memo(() => {
                                     selectedImage.length !== 0 && 
                                     <Button 
                                         size='sm' 
-                                        onClick={handleDeleteMarkImages}
+                                        onClick={handleStartDeleteMarkImages}
                                         variant="outline"
                                         colorScheme="orange" 
+                                        isLoading={deleteMarkImageIsLoading || deleteMarkImageDebounceLoading}
                                         mr='20px'
                                         isDisabled={selectedImage.length === 0}
                                     >
@@ -339,9 +392,10 @@ const AddCollection = memo(() => {
                                     newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1 &&
                                     <Button 
                                         size='sm' 
-                                        onClick={handleDeleteUploadedImages}
+                                        onClick={handleStartDeleteUploadedImages}
                                         variant="outline"
                                         colorScheme="orange" 
+                                        isLoading={deleteUploadedImageDebounceLoading || deleteUploadedIsLoading}
                                         mr={'20px'}
                                         isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1}
                                     >
@@ -352,7 +406,8 @@ const AddCollection = memo(() => {
                                     newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1 &&
                                         <Button 
                                             size='sm'  
-                                            onClick={handleUploadAllImages}
+                                            onClick={handleStartUploadAllImages}
+                                            isLoading={uploadImageDebounceLoading || uploadIsLoading}
                                             variant={'outline'}
                                             colorScheme='green'
                                             isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1}

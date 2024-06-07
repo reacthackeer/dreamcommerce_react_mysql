@@ -7,6 +7,7 @@ import {
   Input,
   Text
 } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -25,7 +26,7 @@ const UploadProductImage = () => {
     };
   
 
-  
+    
     let newPreviewImages = [];
     previewImages.forEach((info)=>{
       if(info.indexOf('ryans') === -1){
@@ -58,7 +59,10 @@ const UploadProductImage = () => {
     const handleDeleteMarkImages = () => {
       let images = selectedImage;
       if(images && images?.length){
+          setDeleteMarkImageIsLoading(()=> true);
           axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images}}).then((res)=>{
+              setDeleteMarkImageIsLoading(()=> false);
+              setDeleteMarkImageDebounceLoading(()=> false);
             if(res.status === 200 && res.data && res.data?.status__code === 200){
               toast.success('Successfully all images deleted!',{duration: 3000})
                 let newImagesSrcInfo = previewImages.filter((info)=> images.indexOf(info) === -1);
@@ -87,7 +91,10 @@ const UploadProductImage = () => {
       for (let i = 0; i < images.length; i++) {
         formData.append('images', images[i]);
       }
+      setUploadIsLoading(()=> true);
       axios.post('http://localhost:10000/api/v1/file/upload/multiple',formData,{headers: {'Content-Type': 'multipart/form-data'}}).then((res)=>{
+          setUploadIsLoading(()=> false);
+          setUploadImageDebounceLoading(()=> false);
         if(res.status === 200 && res.data && res.data?.status__code === 200){
           toast.success('Successfully all images uploaded!',{duration: 3000})
 
@@ -107,7 +114,10 @@ const UploadProductImage = () => {
     const handleDeleteUploadedImages = () => {
       let images = JSON.parse(localStorage.getItem('images'))||[];
       if(images && images?.length){
-          axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images: previewImages}}).then((res)=>{
+        setDeleteUploadedIsLoading(()=> true)
+        axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images: previewImages}}).then((res)=>{
+            setDeleteUploadedIsLoading(()=> false);
+            setDeleteUploadedImageDebounceLoading(()=> false);
             if(res.status === 200 && res.data && res.data?.status__code === 200){
               toast.success('Successfully all images deleted!',{duration: 3000})
               
@@ -124,6 +134,30 @@ const UploadProductImage = () => {
       }
     } 
     
+    const [uploadImageDebounceLoading, setUploadImageDebounceLoading] = useState(false);
+    const [uploadIsLoading, setUploadIsLoading] = useState(false);
+    const uploadImageDebounceFunction = debounce(handleUploadAllImages, 1000);
+    const handleStartUploadAllImages = () => {
+        setUploadImageDebounceLoading(()=> true);
+        uploadImageDebounceFunction();
+    }
+
+    const [deleteUploadedImageDebounceLoading, setDeleteUploadedImageDebounceLoading] = useState(false);
+    const [deleteUploadedIsLoading, setDeleteUploadedIsLoading] = useState(false);
+    const deleteUploadedImageDebounceFunction = debounce(handleDeleteUploadedImages, 1000);
+    const handleStartDeleteUploadedImages = () => {
+        setDeleteUploadedImageDebounceLoading(()=> true);
+        deleteUploadedImageDebounceFunction();
+    }
+
+    const [deleteMarkImageDebounceLoading, setDeleteMarkImageDebounceLoading] = useState(false);
+    const [deleteMarkImageIsLoading, setDeleteMarkImageIsLoading] = useState(false);
+    const deleteMarkImageDebounceFunction = debounce(handleDeleteMarkImages, 1000);
+    const handleStartDeleteMarkImages = () => {
+        setDeleteMarkImageDebounceLoading(()=> true);
+        deleteMarkImageDebounceFunction();
+    }
+    
     return (
         <div> 
             <Text fontSize={'2xl'} className='padding__bottom'>Upload product images</Text>
@@ -135,45 +169,51 @@ const UploadProductImage = () => {
                 </FormControl> 
               </Box>
                 {newPreviewImages.length > 0 && (
-                <div className='data__form__submit__button'>
-                  {
-                    selectedImage.length !== 0 && 
-                    <Button 
-                      size='sm' 
-                      onClick={handleDeleteMarkImages}
-                      variant="outline"
-                      colorScheme="orange"
-                      mr='30px'
-                      isDisabled={selectedImage.length === 0}
-                    >
-                      Delete Marked Images
-                    </Button>
-                  }
-                  {
-                      newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1 &&
-                    <Button 
-                      size='sm' 
-                      onClick={handleDeleteUploadedImages}
-                      variant="outline"
-                      colorScheme="orange"
-                      mr='30px'
-                      isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1}
-                    >
-                      Delete Uploaded Images
-                    </Button>
-                  }
-                    { newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1 &&
-                      <Button 
-                        size='sm'  
-                        onClick={handleUploadAllImages}
-                        variant={'outline'}
-                        colorScheme='green'
-                        isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1}
-                      >
-                        Upload Images
-                      </Button>
-                    }
-                </div>
+                    <div className='padding__bottom data__view__image__action__button'>
+                        <Box className='action__button__container'>
+                            {
+                                selectedImage.length !== 0 && 
+                                <Button 
+                                    size='sm' 
+                                    onClick={handleStartDeleteMarkImages}
+                                    variant="outline"
+                                    colorScheme="orange" 
+                                    isLoading={deleteMarkImageIsLoading || deleteMarkImageDebounceLoading}
+                                    mr='20px'
+                                    isDisabled={selectedImage.length === 0}
+                                >
+                                    Delete Marked Images
+                                </Button>
+                            }
+                            {
+                                newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1 &&
+                                <Button 
+                                    size='sm' 
+                                    onClick={handleStartDeleteUploadedImages}
+                                    variant="outline"
+                                    colorScheme="orange" 
+                                    isLoading={deleteUploadedImageDebounceLoading || deleteUploadedIsLoading}
+                                    mr={'20px'}
+                                    isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1}
+                                >
+                                    Delete Uploaded Images
+                                </Button>
+                            }
+                            {   
+                                newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1 &&
+                                    <Button 
+                                        size='sm'  
+                                        onClick={handleStartUploadAllImages}
+                                        isLoading={uploadImageDebounceLoading || uploadIsLoading}
+                                        variant={'outline'}
+                                        colorScheme='green'
+                                        isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1}
+                                    >
+                                        Upload Images
+                                    </Button>
+                            }
+                        </Box>
+                    </div>
                 )}
             </form> 
             <div className='data__view__image__preview'>

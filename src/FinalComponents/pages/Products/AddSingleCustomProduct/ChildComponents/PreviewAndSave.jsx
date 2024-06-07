@@ -1,5 +1,6 @@
 import { Box, Button } from '@chakra-ui/react';
-import React, { memo, useEffect } from 'react';
+import { debounce } from 'lodash';
+import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAddSingleProductMutation } from '../../../../../features/product/productApi';
@@ -28,25 +29,31 @@ const PreviewAndSave = memo(() => {
                             provideProductInfo(productProductInfo); 
                         }else{  
                             toast.error('Details array empty!')
+                            setAddDebounceLoading(()=> false);
                         }
                     }else{  
                         toast.error('Details array empty!')
+                        setAddDebounceLoading(()=> false);
                     }
                 }else{
                     toast.error('Overviews array empty!')
+                    setAddDebounceLoading(()=> false);
                 }
             }else{
                 toast.error('Image array empty!')
+                setAddDebounceLoading(()=> false);
             }
         }
     }
 
     useEffect(()=>{
         if(isError && !isSuccess){
+            setAddDebounceLoading(()=> false);
             toast.error('There was a server side error!',{duration: '3000'})
         }
 
         if(!isError && isSuccess && data && data?.status__code === 201){
+            setAddDebounceLoading(()=> false);
             
                 toast.success('Successfully new product added'); 
                 localStorage.removeItem('product');
@@ -63,6 +70,13 @@ const PreviewAndSave = memo(() => {
         }
     },[data, isLoading, isError, isSuccess, error, navigate])
     
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handlePostProduct, 1000);
+
+    const handleStartSubmit = () => { 
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction();
+    }
     return (
         <div>
             <Box className='data__form__submit__button'>
@@ -78,8 +92,8 @@ const PreviewAndSave = memo(() => {
                     variant={'outline'}
                     type="button"
                     size='sm'
-                    onClick={()=> handlePostProduct()}
-                    isLoading={isLoading}
+                    onClick={handleStartSubmit}
+                    isLoading={isLoading || addDebounceLoading}
                 >Post Product</Button>
             </Box> 
         </div>

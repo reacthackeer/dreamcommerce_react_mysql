@@ -27,7 +27,13 @@ const initialState = {
         role: undefined,
         isLoggedIn: true,
         ID: undefined
-    }
+    },
+    navbar: [],
+    popularCategory: [],
+    banners: [],
+    cartProduct: [],
+    authChecked: false,
+    editMode: false,
 }
 
 const authSlice = createSlice({
@@ -37,10 +43,16 @@ const authSlice = createSlice({
         userLoggedIn: (state, action) => {
             // let { name, email, phone, token, img__src, address, user__id } = action.payload;
             state.auth = action.payload;
-            state.auth.isLoggedIn = true;
+            state.auth.isLoggedIn = true; 
+            state.authChecked = true;
         },
         addPrintUserInfo: (state, action) => {
             state.printUser = action.payload
+        },
+        addAllNav: (state, action) => { 
+            state.navbar = action.payload.navbar;
+            state.banners = action.payload.banners;
+            state.popularCategory = action.payload.popularCategory;
         },
         resetPrintUserInfo: (state, action) => {
             state.printUser = {
@@ -69,13 +81,24 @@ const authSlice = createSlice({
                 designation: undefined,
                 role: undefined
             }
+            state.authChecked = true;
+        }, 
+        setCartProduct: (state, action) => {
+            state.cartProduct = action.payload;
+        }, 
+        setEditMode: (state, action) => {
+            state.editMode = action.payload
         }
     }
 });
 export const {
+        setAuthChecked,
         userLoggedIn, 
         userLOggedOut,
         addPrintUserInfo,
-        resetPrintUserInfo
+        resetPrintUserInfo,
+        addAllNav,
+        setCartProduct,
+        setEditMode
     } = authSlice.actions;
 export default authSlice.reducer;

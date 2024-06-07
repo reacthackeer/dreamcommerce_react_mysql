@@ -7,6 +7,7 @@ import { addMultipleOrderProduct, resetOrderProduct } from '../../../features/or
 import ProfileComponents from './childComponents/ProfileComponents';
 
 const Profile = () => {
+    
     const {user__id} = useSelector((state)=> state.auth.auth);
     const dispatch = useDispatch();   
     const [searchParams] = useSearchParams();

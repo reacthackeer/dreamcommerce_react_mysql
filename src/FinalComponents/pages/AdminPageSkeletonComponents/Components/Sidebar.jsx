@@ -2,7 +2,7 @@ import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Box } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { adminPortal, coverPortal, getCurrentActions, getCurrentNav, productPortal, systemPortal } from './AdminFixedDatabase';
+import { adminPortal, coverPortal, getCurrentActions, getCurrentItem, getCurrentNav, productPortal, systemPortal } from './AdminFixedDatabase';
 
 const Sidebar = () => {
     const [sideBarProperty, setSideBarProperty] = useState({action: 'add', name: 'users'});
@@ -18,18 +18,29 @@ const Sidebar = () => {
     },[]);
     const navigate = useNavigate();
     const handleClickSideBarActionButton = (actionName) => {
-        setSideBarProperty({...sideBarProperty, action: actionName}); 
-        navigate(`/admin/${actionName}/${sideBarProperty.name}`);
+        setSideBarProperty({...sideBarProperty, action: actionName});  
         setCurrentActions(getCurrentActions(sideBarProperty.name))
         setActiveButton(getCurrentNav(sideBarProperty.name))
-        
+        let {links, push} = getCurrentItem(sideBarProperty.name);
+        let linkIndex = links.indexOf(actionName);
+        if(push[linkIndex]){   
+            navigate(`/admin/${actionName}/${sideBarProperty.name}`); 
+        }
+
     }
 
     const handleClickSideBarUrlButton = (urlName) => {
+
         setSideBarProperty({...sideBarProperty, name: urlName});
-        navigate(`/admin/${sideBarProperty.action}/${urlName}`);
         setCurrentActions(getCurrentActions(urlName))
         setActiveButton(getCurrentNav(urlName))
+
+        let {links, push} = getCurrentItem(urlName);
+        let linkIndex = links.indexOf(sideBarProperty.action);
+        if(push[linkIndex]){   
+            navigate(`/admin/${sideBarProperty.action}/${urlName}`);
+        }
+
     } 
     return (
         <Box className='side__bar'>
@@ -41,22 +52,22 @@ const Sidebar = () => {
             </Box>
             <Box className='link__group' style={{display: activeButton !== 4 && 'none'}}> 
                 {
-                    adminPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
+                    adminPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1 || info.push[info.links.indexOf(sideBarProperty.action)] === false} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
                 } 
             </Box>
             <Box className='link__group' style={{display: activeButton !== 1 && 'none'}}> 
                 {
-                    productPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
+                    productPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1 || info.push[info.links.indexOf(sideBarProperty.action)] === false} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
                 } 
             </Box>
             <Box className='link__group' style={{display: activeButton !== 2 && 'none'}}> 
                 {
-                    coverPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
+                    coverPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1 || info.push[info.links.indexOf(sideBarProperty.action)] === false} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
                 } 
             </Box>
             <Box className='link__group' style={{display: activeButton !== 3 && 'none'}}> 
                 {
-                    systemPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
+                    systemPortal.map((info, index) => <button disabled={info.links.indexOf(sideBarProperty.action) === -1 || info.push[info.links.indexOf(sideBarProperty.action)] === false} key={index} className={`link__item ${sideBarProperty.name === info.url ? 'active' : ''}`} onClick={()=> handleClickSideBarUrlButton(info.url)}>{info.name}</button>)
                 } 
             </Box>
             <Box className='action__group'>

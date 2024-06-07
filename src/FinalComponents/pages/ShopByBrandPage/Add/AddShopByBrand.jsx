@@ -4,6 +4,7 @@ import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { server__image__host__url } from '../../../../app/store';
 
+import { debounce } from 'lodash';
 import { useAddSingleShopByBrandMutation, useGetAllShopByBrandQuery } from '../../../../features/shopByBrand/shopByBrandApi';
 import AdminPageSkeleton from '../../AdminPageSkeletonComponents/AdminPageSkeleton';
 const AddShopByBrand = memo(() => {
@@ -61,7 +62,10 @@ const AddShopByBrand = memo(() => {
     const handleDeleteMarkImages = () => {
             let images = selectedImage;
             if(images && images?.length){
+                setDeleteMarkImageIsLoading(()=> true);
                 axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images}}).then((res)=>{
+                    setDeleteMarkImageIsLoading(()=> false);
+                    setDeleteMarkImageDebounceLoading(()=> false);
                 if(res.status === 200 && res.data && res.data?.status__code === 200){
                     toast.success('Successfully image deleted',{duration: 3000})
                     let newImagesSrcInfo = previewImages.filter((info)=> images.indexOf(info) === -1);
@@ -90,7 +94,10 @@ const AddShopByBrand = memo(() => {
         for (let i = 0; i < images.length; i++) {
         formData.append('images', images[i]);
         }
+        setUploadIsLoading(()=> true);
         axios.post('http://localhost:10000/api/v1/file/upload/multiple',formData,{headers: {'Content-Type': 'multipart/form-data'}}).then((res)=>{
+            setUploadIsLoading(()=> false);
+            setUploadImageDebounceLoading(()=> false);
         if(res.status === 200 && res.data && res.data?.status__code === 200){
             toast.success('Successfully all images uploaded!',{duration: 3000})
 
@@ -110,7 +117,10 @@ const AddShopByBrand = memo(() => {
     const handleDeleteUploadedImages = () => {
         let images = JSON.parse(localStorage.getItem('by__brand__images'))||[];
         if(images && images?.length){
+            setDeleteUploadedIsLoading(()=> true)
             axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images: previewImages}}).then((res)=>{
+                setDeleteUploadedIsLoading(()=> false);
+                setDeleteUploadedImageDebounceLoading(()=> false);
             if(res.status === 200 && res.data && res.data?.status__code === 200){
                 toast.success('Successfully all images deleted!',{duration: 3000})
                 
@@ -144,25 +154,30 @@ const AddShopByBrand = memo(() => {
                     if(currentItem.length === 0){
                         provideBrandInfo(brandInfo);
                     }else{
+                        setAddDebounceLoading(()=> false);
                         toast.error('This popular category already existed!',{duration: 3000})
                     }
                 }else{ 
+                    setAddDebounceLoading(()=> false);
                     toast.error('There was a server side error!',{duration: 3000})
                 }
             }else{
+                setAddDebounceLoading(()=> false);
                 toast.error('Only one image acceptable',{duration: 3000})
             }
         }else{
+            setAddDebounceLoading(()=> false);
             toast.error('Please upload an image!',{duration: 3000})
         }
     } 
 
     useEffect(()=>{
-        if(!isLoading && isError && !isSuccess){
-            console.log(error);
+        if(!isLoading && isError && !isSuccess){ 
+            setAddDebounceLoading(()=> false);
             toast.error(error?.data?.error?.message ? error?.data?.error?.message : 'There was a server side error!',{duration: 3000, position: 'top-right'})
         }
         if(!isError && !isLoading && isSuccess){
+            setAddDebounceLoading(()=> false);
             if(data?.status__code === 200){
                 document.querySelectorAll('input').forEach((info)=>{
                     info.value=''
@@ -175,11 +190,44 @@ const AddShopByBrand = memo(() => {
             }
         }
     },[data, isLoading, isError, isSuccess, error])
+    
+    const [uploadImageDebounceLoading, setUploadImageDebounceLoading] = useState(false);
+    const [uploadIsLoading, setUploadIsLoading] = useState(false);
+    const uploadImageDebounceFunction = debounce(handleUploadAllImages, 1000);
+    const handleStartUploadAllImages = () => {
+        setUploadImageDebounceLoading(()=> true);
+        uploadImageDebounceFunction();
+    }
+
+    const [deleteUploadedImageDebounceLoading, setDeleteUploadedImageDebounceLoading] = useState(false);
+    const [deleteUploadedIsLoading, setDeleteUploadedIsLoading] = useState(false);
+    const deleteUploadedImageDebounceFunction = debounce(handleDeleteUploadedImages, 1000);
+    const handleStartDeleteUploadedImages = () => {
+        setDeleteUploadedImageDebounceLoading(()=> true);
+        deleteUploadedImageDebounceFunction();
+    }
+
+    const [deleteMarkImageDebounceLoading, setDeleteMarkImageDebounceLoading] = useState(false);
+    const [deleteMarkImageIsLoading, setDeleteMarkImageIsLoading] = useState(false);
+    const deleteMarkImageDebounceFunction = debounce(handleDeleteMarkImages, 1000);
+    const handleStartDeleteMarkImages = () => {
+        setDeleteMarkImageDebounceLoading(()=> true);
+        deleteMarkImageDebounceFunction();
+    }
+
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handleSubmit, 1000);
+
+    const handleStartSubmit = (e) => {
+        e.preventDefault();
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction(e);
+    }
 
     return ( 
         <AdminPageSkeleton> 
             <div> 
-                <form onSubmit={handleSubmit}> 
+                <form onSubmit={handleStartSubmit}> 
                     <Box className='data__view__form'>
                         <FormControl id="brand" isRequired>
                             <FormLabel>Name</FormLabel>
@@ -220,7 +268,7 @@ const AddShopByBrand = memo(() => {
                         variant={'outline'}
                         type="submit"
                         size='sm'
-                        isLoading={isLoading}
+                        isLoading={isLoading || addDebounceLoading}
                         >
                             Save
                         </Button>  
@@ -233,9 +281,10 @@ const AddShopByBrand = memo(() => {
                                 selectedImage.length !== 0 && 
                                 <Button 
                                     size='sm' 
-                                    onClick={handleDeleteMarkImages}
+                                    onClick={handleStartDeleteMarkImages}
                                     variant="outline"
                                     colorScheme="orange" 
+                                    isLoading={deleteMarkImageIsLoading || deleteMarkImageDebounceLoading}
                                     mr='20px'
                                     isDisabled={selectedImage.length === 0}
                                 >
@@ -246,9 +295,10 @@ const AddShopByBrand = memo(() => {
                                 newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1 &&
                                 <Button 
                                     size='sm' 
-                                    onClick={handleDeleteUploadedImages}
+                                    onClick={handleStartDeleteUploadedImages}
                                     variant="outline"
                                     colorScheme="orange" 
+                                    isLoading={deleteUploadedImageDebounceLoading || deleteUploadedIsLoading}
                                     mr={'20px'}
                                     isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1}
                                 >
@@ -259,7 +309,8 @@ const AddShopByBrand = memo(() => {
                                 newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1 &&
                                     <Button 
                                         size='sm'  
-                                        onClick={handleUploadAllImages}
+                                        onClick={handleStartUploadAllImages}
+                                        isLoading={uploadImageDebounceLoading || uploadIsLoading}
                                         variant={'outline'}
                                         colorScheme='green'
                                         isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1}

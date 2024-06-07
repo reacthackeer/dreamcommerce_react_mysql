@@ -14,7 +14,7 @@ export const getAllNavbarData = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: data
             }),
-            invalidatesTags: () => [{type: 'get__all__navbar__data'}]
+            invalidatesTags: () => [{type: 'get__all__navbar__data'},{type: 'get__all__child__for__preview'}]
         }),
         addParent: builder.mutation({
             query: (data) => ({

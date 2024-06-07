@@ -1,10 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import AppComponents from './AppComponents';
-import { CheckAuth } from './Components/skleton/Loading';
+import { LoadingPage } from './FinalComponents/pages/LandingPage/Components/Loading';
 import useAuthCheck from './hooks/authCheck';
 
 const App = () => {
   const authCheck = useAuthCheck();
+  const {authChecked} = useSelector((state)=> state.auth);
   
   // decide what to render;
   let content = null;
@@ -12,13 +14,13 @@ const App = () => {
     content = (
       <div className='upper__container'>
         <div className='mobile__view__container'> 
-          <CheckAuth/>
+          <LoadingPage/>
         </div>
       </div>
     )
   }
 
-  if(authCheck){
+  if(authCheck && authChecked){
     content = <AppComponents/>
   }
   

@@ -1,13 +1,26 @@
 import { Box, Button, HStack, Text, VStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useGetSingleUserPriceCalculatorQuery } from '../../../../features/ShippingAndSystem/shippingAndSystemApi';
+import { setCartProduct } from '../../../../features/auth/authSlice';
+import { useGetAllSingleUserCartProductQuery } from '../../../../features/cart/api';
 import { toggleItem } from '../Navbar/cssToggle/CssToggle';
 import SingleCartProduct from './childComponents/SingleCartProductItem';
 const CartSideBar = () => {
-    const navigate = useNavigate();
 
-    
+    const {cartProduct} = useSelector((state)=> state.auth);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    let {data, isLoading, isError, error, isSuccess} = useGetAllSingleUserCartProductQuery(localStorage?.getItem('user__id') || ''); 
+    const {data:PriceData, isSuccess:PriceDataIsSuccess} = useGetSingleUserPriceCalculatorQuery(localStorage?.getItem('user__id') || '');
+
+    useEffect(()=>{
+        if(!isError && !isLoading && isSuccess && data && data?.products?.length){ 
+            dispatch(setCartProduct(data.products))
+        }
+    },[data, isLoading, isError, error, isSuccess, dispatch])
     
     return (
         <Box className='card__modal__upper__container' p={3}> 
@@ -44,26 +57,14 @@ const CartSideBar = () => {
                 </HStack>
 
             </VStack>
+            {
+                cartProduct && cartProduct.length &&
             <VStack> 
-                <SingleCartProduct/>
-                <SingleCartProduct/>
-                <SingleCartProduct/>
-                <SingleCartProduct/>
-                <SingleCartProduct/>
-                <SingleCartProduct/>
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/> 
-                <SingleCartProduct/>   
+                {
+                    cartProduct.map((info, index) => <SingleCartProduct key={index} infos={info}/>)
+                }
             </VStack>
+        }
             <VStack 
                 position={'sticky'} 
                 width={'100%'} 
@@ -74,10 +75,13 @@ const CartSideBar = () => {
                 bottom={'-12px'}
                 display={'grid'}
             >
+            {
+                PriceData && PriceDataIsSuccess &&
                 <HStack justify={'space-between'}>
-                    <Text fontSize={'xl'}>Subtotal:</Text>
-                    <Text fontSize={'xl'}>1200.00 TK</Text>
+                    <Text fontSize={'xl'}>Total:</Text>
+                    <Text fontSize={'xl'}>{PriceData.allTotal} TK</Text>
                 </HStack>
+            }
                 <HStack justify={'space-between'} mt='4'>  
                     <Button 
                         variant={'outline'}

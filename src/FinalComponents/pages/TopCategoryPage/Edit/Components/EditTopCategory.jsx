@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
  
+import { debounce } from 'lodash';
 import { server__image__host__url } from '../../../../../app/store';
 import { useUpdateSingleParentFatherMutation } from '../../../../../features/brand/brandApi';
 
@@ -49,7 +50,10 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
     const handleDeleteMarkImages = () => {
             let images = selectedImage;
             if(images && images?.length){
+                setDeleteMarkImageIsLoading(()=> true);
                 axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images}}).then((res)=>{
+                    setDeleteMarkImageIsLoading(()=> false);
+                    setDeleteMarkImageDebounceLoading(()=> false);
                 if(res.status === 200 && res.data && res.data?.status__code === 200){
                     toast.success('Successfully image deleted',{duration: 3000})
                     let newImagesSrcInfo = previewImages.filter((info)=> images.indexOf(info) === -1);
@@ -78,7 +82,10 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
         for (let i = 0; i < images.length; i++) {
         formData.append('images', images[i]);
         }
+        setUploadIsLoading(()=> true);
         axios.post('http://localhost:10000/api/v1/file/upload/multiple',formData,{headers: {'Content-Type': 'multipart/form-data'}}).then((res)=>{
+            setUploadIsLoading(()=> false);
+            setUploadImageDebounceLoading(()=> false);
         if(res.status === 200 && res.data && res.data?.status__code === 200){
             toast.success('Successfully all images uploaded!',{duration: 3000})
 
@@ -98,7 +105,10 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
     const handleDeleteUploadedImages = () => {
         let images = JSON.parse(localStorage.getItem('edit__top__category__images'))||[];
         if(images && images?.length){
+            setDeleteUploadedIsLoading(()=> true)
             axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images: previewImages}}).then((res)=>{
+                setDeleteUploadedIsLoading(()=> false);
+                setDeleteUploadedImageDebounceLoading(()=> false);
             if(res.status === 200 && res.data && res.data?.status__code === 200){
                 toast.success('Successfully all images deleted!',{duration: 3000})
                 
@@ -128,25 +138,30 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
         let up = localStorage.getItem('edit__top__category__up'); 
         if(images && images?.length > 0){
             if(images?.length > 1){
+                setAddDebounceLoading(()=> false);
                 toast.error('Only one image acceptable!',{duration: 3000});
             }else{
                 if(name && ID && uid && up &&  images?.length === 1){
                     let postData = {src: images[0], name, uid, ID, up};
                     provideParentInfo(postData);
                 }else{
+                    setAddDebounceLoading(()=> false);
                     toast.error('Invalid request!',{duration: 3000});
                 }
             }
         }else{
+            setAddDebounceLoading(()=> false);
             toast.error('Please upload an image!',{duration: 3000});
         }
     }
     
     useEffect(()=>{
         if(isError && !isLoading && !isSuccess){
+            setAddDebounceLoading(()=> false);
             toast.error('There was a server side error!',{duration: 3000})
         }
         if(!isError && isSuccess && !isLoading){
+            setAddDebounceLoading(()=> false);
             setTopCategoryName('');
             setImages([]);
             setPreviewImages([]); 
@@ -172,11 +187,45 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
     }
 
 
+    
+    const [uploadImageDebounceLoading, setUploadImageDebounceLoading] = useState(false);
+    const [uploadIsLoading, setUploadIsLoading] = useState(false);
+    const uploadImageDebounceFunction = debounce(handleUploadAllImages, 1000);
+    const handleStartUploadAllImages = () => {
+        setUploadImageDebounceLoading(()=> true);
+        uploadImageDebounceFunction();
+    }
+
+    const [deleteUploadedImageDebounceLoading, setDeleteUploadedImageDebounceLoading] = useState(false);
+    const [deleteUploadedIsLoading, setDeleteUploadedIsLoading] = useState(false);
+    const deleteUploadedImageDebounceFunction = debounce(handleDeleteUploadedImages, 1000);
+    const handleStartDeleteUploadedImages = () => {
+        setDeleteUploadedImageDebounceLoading(()=> true);
+        deleteUploadedImageDebounceFunction();
+    }
+
+    const [deleteMarkImageDebounceLoading, setDeleteMarkImageDebounceLoading] = useState(false);
+    const [deleteMarkImageIsLoading, setDeleteMarkImageIsLoading] = useState(false);
+    const deleteMarkImageDebounceFunction = debounce(handleDeleteMarkImages, 1000);
+    const handleStartDeleteMarkImages = () => {
+        setDeleteMarkImageDebounceLoading(()=> true);
+        deleteMarkImageDebounceFunction();
+    }
+
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handleSubmit, 1000);
+
+    const handleStartSubmit = (e) => {
+        e.preventDefault();
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction(e);
+    }
+
 
 
     return (
         <Box>  
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleStartSubmit}>
                 <Box className='data__view__form'>
                     <FormControl id="image">
                         <FormLabel>Top Category Name</FormLabel>
@@ -203,8 +252,7 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
                         colorScheme="red" 
                         variant={'outline'}
                         type="button"
-                        size='sm'
-                        isLoading={isLoading}
+                        size='sm' 
                         onClick={handleCancelUpdate}
                         mr='10'
                         >
@@ -215,7 +263,7 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
                         variant={'outline'}
                         type="submit"
                         size='sm'
-                        isLoading={isLoading}
+                        isLoading={isLoading || addDebounceLoading}
                         isDisabled={previewImages?.length === 0 || previewImages?.length > 1}
                     >
                         Save
@@ -229,9 +277,10 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
                             selectedImage.length !== 0 && 
                             <Button 
                                 size='sm' 
-                                onClick={handleDeleteMarkImages}
+                                onClick={handleStartDeleteMarkImages}
                                 variant="outline"
                                 colorScheme="orange" 
+                                isLoading={deleteMarkImageIsLoading || deleteMarkImageDebounceLoading}
                                 mr='20px'
                                 isDisabled={selectedImage.length === 0}
                             >
@@ -242,9 +291,10 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
                             newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1 &&
                             <Button 
                                 size='sm' 
-                                onClick={handleDeleteUploadedImages}
+                                onClick={handleStartDeleteUploadedImages}
                                 variant="outline"
                                 colorScheme="orange" 
+                                isLoading={deleteUploadedImageDebounceLoading || deleteUploadedIsLoading}
                                 mr={'20px'}
                                 isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1}
                             >
@@ -255,7 +305,8 @@ const EditTopCategoryComponents = memo(({setSelected}) => {
                             newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1 &&
                                 <Button 
                                     size='sm'  
-                                    onClick={handleUploadAllImages}
+                                    onClick={handleStartUploadAllImages}
+                                    isLoading={uploadImageDebounceLoading || uploadIsLoading}
                                     variant={'outline'}
                                     colorScheme='green'
                                     isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1}

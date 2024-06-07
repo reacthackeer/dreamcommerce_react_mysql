@@ -1,5 +1,6 @@
 import { Button, Image, Text } from '@chakra-ui/react';
-import React from 'react';
+import { debounce } from 'lodash';
+import React, { useState } from 'react';
 import { IoIosRemove } from 'react-icons/io';
 import { MdFavoriteBorder } from 'react-icons/md';
 import { RiAddFill, RiDeleteBin6Line } from 'react-icons/ri';
@@ -14,7 +15,7 @@ const SingleCartProductItem = ({infos, no}) => {
     if(infos?.infos?.images[0] && infos?.infos?.images[0].indexOf('ryan') === -1 ){
         imgSrc = infos?.infos?.images[0];
     }
-    
+    // enter cart Item
     const handleIncreaseQuantity = () => {
         let {ID, quantity} = infos;
         let user__id = localStorage?.getItem('user__id');
@@ -22,6 +23,7 @@ const SingleCartProductItem = ({infos, no}) => {
         if(productInfo && productInfo.product__id && productInfo.quantity && productInfo.user__id){
             provideUpdateInfo(productInfo);
         }
+        setIncreaseQuantityDebounceLoading(()=> false);
     } 
     
     const handleDecreaseQuantity = () => {
@@ -31,6 +33,7 @@ const SingleCartProductItem = ({infos, no}) => {
         if(productInfo && productInfo.product__id && productInfo.quantity && productInfo.user__id && productInfo.quantity > 0){
             provideUpdateInfo(productInfo);
         }
+        setDecreaseQuantityDebounceLoading(()=> true);
     } 
 
     const handleDeleteSingleProduct = () => {
@@ -38,13 +41,41 @@ const SingleCartProductItem = ({infos, no}) => {
         if(CID){
             provideDeletedProductID(CID);
         }
+        setDeleteDebounceLoading(()=> false);
     }
 
     const handleTransferToCart = () => {
         let {CID} = infos;
         provideCartId({cartId: CID})
+        setTransferDebounceLoading(()=> false);
     }
     
+    const deleteCartItemDebounceFunction = debounce(handleDeleteSingleProduct, 1000);
+    const [deleteDebounceLoading, setDeleteDebounceLoading] = useState(false);
+    const handleStartDeleteSingleProduct = () => {
+        setDeleteDebounceLoading(()=> true);
+        deleteCartItemDebounceFunction();
+    }
+    const transferCartItemDebounceFunction = debounce(handleTransferToCart, 1000);
+    const [transferDebounceLoading, setTransferDebounceLoading] = useState(false);
+    const handleStartTransferToCart = () => {
+        setTransferDebounceLoading(()=> true);
+        transferCartItemDebounceFunction();
+    }
+
+    const handleIQDebounceFunction = debounce(handleIncreaseQuantity, 1000);
+    const [increaseQuantityDebounceLoading, setIncreaseQuantityDebounceLoading] = useState(false);
+    const handleStartIncreaseQuantity = () => {
+        setIncreaseQuantityDebounceLoading(()=> true);
+        handleIQDebounceFunction();
+    }
+    
+    const handleDQDebounceFunction = debounce(handleDecreaseQuantity, 1000);
+    const [decreaseQuantityDebounceLoading, setDecreaseQuantityDebounceLoading] = useState(false);
+    const handleStartDecreaseQuantity = () => {
+        setDecreaseQuantityDebounceLoading(()=> true);
+        handleDQDebounceFunction();
+    }
     return (  
         <div className='cart__padding__wrapper'>
             <div className='single__final__cart__item'>
@@ -69,7 +100,8 @@ const SingleCartProductItem = ({infos, no}) => {
                             borderRadius={'none'}
                             padding={'0'}
                             isDisabled={infos?.quantity - 1 === 0}
-                            onClick={handleDecreaseQuantity}
+                            isLoading={decreaseQuantityDebounceLoading || isLoading}
+                            onClick={handleStartDecreaseQuantity}
                         > 
                             {<IoIosRemove/>}
                         </Button>
@@ -79,8 +111,8 @@ const SingleCartProductItem = ({infos, no}) => {
                             border={'none'}
                             borderRadius={'none'}
                             padding={'0'}
-                            onClick={handleIncreaseQuantity}
-                            isLoading={isLoading}
+                            onClick={handleStartIncreaseQuantity}
+                            isLoading={isLoading || increaseQuantityDebounceLoading}
                         > 
                             <RiAddFill/>
                         </Button>
@@ -97,8 +129,8 @@ const SingleCartProductItem = ({infos, no}) => {
                             border={'none'}
                             borderRadius={'none'}
                             padding={'0'}
-                            isLoading={dL}
-                            onClick={handleDeleteSingleProduct}
+                            isLoading={dL || deleteDebounceLoading}
+                            onClick={handleStartDeleteSingleProduct}
                         > 
                             <RiDeleteBin6Line/>
                         </Button> 
@@ -107,8 +139,8 @@ const SingleCartProductItem = ({infos, no}) => {
                             border={'none'}
                             borderRadius={'none'}
                             padding={'0'}
-                            onClick={handleTransferToCart}
-                            isLoading={mIsLoading}
+                            onClick={handleStartTransferToCart}
+                            isLoading={mIsLoading || transferDebounceLoading}
                         > 
                             <MdFavoriteBorder/>
                         </Button>

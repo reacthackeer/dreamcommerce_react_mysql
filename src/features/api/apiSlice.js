@@ -20,7 +20,9 @@ export const apiSlice = createApi({
     baseQuery: async (args, api, extraOptions) => {
         
         let result = await baseQuery(args, api, extraOptions);
+
         if(result?.error?.status === 401){
+            console.log('enter');
             api.dispatch(userLOggedOut());
             localStorage.removeItem('auth');
             window.location.assign('/login')

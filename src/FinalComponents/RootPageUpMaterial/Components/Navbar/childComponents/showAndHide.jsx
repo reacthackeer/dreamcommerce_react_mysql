@@ -1,5 +1,4 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { Button } from '@chakra-ui/react';
 import React from 'react';
 import { MdExpandLess, MdExpandMore } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
@@ -11,17 +10,11 @@ const ShowAndHide = ({isExpanded, showLinkIcon, showLinkUrl}) => {
     }
     return ( 
         <React.Fragment>
-            {showLinkIcon && 
-            <Button
-                className='second__nav__link__button'
-                variant={'link'}
-                onClick={handleLinkClick} 
-                ml='4'
-            >
+            {showLinkIcon &&  
                 <ExternalLinkIcon 
+                    onClick={handleLinkClick}
                     fontSize={'15px'}
-                />
-            </Button>}
+                /> }
             {isExpanded ? (
                 <MdExpandLess fontSize='20px' />
                 ) : (

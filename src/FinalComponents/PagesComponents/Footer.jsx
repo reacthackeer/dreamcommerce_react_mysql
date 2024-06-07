@@ -54,12 +54,12 @@ const Footer = () => {
                 </div>
                 <div className='main__category__product__view__upper__container bottom__footer'>
                     <div className='bottom__main__container'>
-                        <p className='footer__small__font'>Copyright@ 2023 all right reserved</p>
+                        <p className='footer__small__font'>Copyright @ {new Date().getFullYear()} all right reserved</p>
                         <Link 
                             className='footer__small__font'
                             to='https://nextfriday.netlify.app'
                         >
-                            DEVELOP BY nextfriday
+                            DEVELOP BY reactHacker.com
                         </Link>
                     </div>
                 </div>

@@ -6,22 +6,21 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useGetSingleUserPriceCalculatorQuery } from '../../../features/ShippingAndSystem/shippingAndSystemApi';
 import { useGetAllSingleUserCartProductQuery, usePrintPdfMutation } from '../../../features/cart/api';
-import useLoginCheck from '../../../hooks/loginCheck';
+import useModeratorCheck from '../../../hooks/moderatorCheck';
 import { LoadingPage, NotFoundPage } from '../LandingPage/Components/Loading';
 import CalculateTable from './components/CalculateTable';
 import TableHead from './components/TableHead';
 import ProductTable from './components/productTable';
 
 
-const CartPage = () => {
-    const checkIsLoggedIn = useLoginCheck(); 
+const CartPage = () => { 
+    const checkIsLoggedIn = useModeratorCheck({graterThanRole: 10});; 
     const [provideUserId,{data: pdfData, isError: pdfIsError, isLoading: pdfIsLoading, isSuccess: pdfIsSuccess, error: pdfError}] = usePrintPdfMutation();
     const navigate = useNavigate(); 
-    const authInfo = useSelector((state)=> state?.auth?.auth);
-    let {user__id} = authInfo; 
+    const authInfo = useSelector((state)=> state?.auth?.auth); 
     // let [userId, setUserId] = useState(localStorage?.getItem('user__id'));
     let {data, isLoading, isError, error, isSuccess} = useGetAllSingleUserCartProductQuery(localStorage?.getItem('user__id') || ''); 
-    const {data:PriceData, isSuccess:PriceDataIsSuccess} = useGetSingleUserPriceCalculatorQuery(user__id || '');
+    const {data:PriceData, isSuccess:PriceDataIsSuccess} = useGetSingleUserPriceCalculatorQuery(localStorage?.getItem('user__id') || '');
     // decide what to render 
     let content = null;
     if(isLoading && !isError && !isSuccess){

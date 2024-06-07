@@ -1,5 +1,6 @@
 import { Box, Button, FormControl, FormLabel, Image, Input } from '@chakra-ui/react';
 import axios from 'axios';
+import { debounce } from 'lodash';
 import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,7 +36,10 @@ const UploadSingleImage = memo(() => {
     const handleDeleteMarkImages = () => {
             let images = selectedImage;
             if(images && images?.length){
+                setDeleteMarkImageIsLoading(()=> true);
                 axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images}}).then((res)=>{
+                    setDeleteMarkImageIsLoading(()=> false);
+                    setDeleteMarkImageDebounceLoading(()=> false);
                 if(res.status === 200 && res.data && res.data?.status__code === 200){
                     toast.success('Successfully image deleted',{duration: 3000})
                     let newImagesSrcInfo = previewImages.filter((info)=> images.indexOf(info) === -1);
@@ -64,12 +68,15 @@ const UploadSingleImage = memo(() => {
         for (let i = 0; i < images.length; i++) {
         formData.append('images', images[i]);
         }
+        setUploadIsLoading(()=> true);
         axios.post('http://localhost:10000/api/v1/file/upload/multiple',formData,{headers: {'Content-Type': 'multipart/form-data'}}).then((res)=>{
+            setUploadIsLoading(()=> false);
+            setUploadImageDebounceLoading(()=> false);
         if(res.status === 200 && res.data && res.data?.status__code === 200){
             toast.success('Successfully all images uploaded!',{duration: 3000})
 
             let images = res.data.images;
-            let resetPreviewImages = previewImages.filter((info)=> info.indexOf('/images') !== -1);
+            let resetPreviewImages = previewImages.filter((info)=> info?.indexOf('/images') !== -1);
             setImages([])
             localStorage.setItem('profile__images',JSON.stringify([...resetPreviewImages, ...images]));
             setPreviewImages([...resetPreviewImages, ...images]);
@@ -84,7 +91,10 @@ const UploadSingleImage = memo(() => {
     const handleDeleteUploadedImages = () => {
         let images = JSON.parse(localStorage.getItem('profile__images'))||[];
         if(images && images?.length){
+            setDeleteUploadedIsLoading(()=> true)
             axios.delete('http://localhost:10000/api/v1/file/upload/multiple', {headers: {images: previewImages}}).then((res)=>{
+                setDeleteUploadedIsLoading(()=> false);
+                setDeleteUploadedImageDebounceLoading(()=> false);
             if(res.status === 200 && res.data && res.data?.status__code === 200){
                 toast.success('Successfully all images deleted!',{duration: 3000})
                 
@@ -107,6 +117,7 @@ const UploadSingleImage = memo(() => {
         e.preventDefault();    
         if( previewImages && previewImages[previewImages.length - 1] && previewImages[previewImages.length - 1].indexOf('/images/check') !== -1){
             if(previewImages.length > 1){
+                setAddDebounceLoading(()=> false);
                 toast.error('Only one image acceptable!',{duration: 3000})
             }else{
                 let newAuthInfo = {...authInfo}; 
@@ -114,6 +125,7 @@ const UploadSingleImage = memo(() => {
                     provideInfo(newAuthInfo);
             }
         }else{
+            setAddDebounceLoading(()=> false);
             toast.error('Please upload then save!',{duration: 3000})
         }
     }
@@ -123,9 +135,11 @@ const UploadSingleImage = memo(() => {
     const [updated, setUpdated] = useState(false);
     useEffect(()=>{ 
         if(isError && !isLoading && !isSuccess){ 
+            setAddDebounceLoading(()=> false);
             toast.error('There was a server side error!',{duration: 3000})
         }
         if(!isError && isSuccess && !isLoading){
+            setAddDebounceLoading(()=> false);
             if(data && data?.status__code === 200){
                 if(!updated){
                     toast.success('Successfully profile Image Updated',{duration: 500});
@@ -157,17 +171,55 @@ const UploadSingleImage = memo(() => {
         setPreviewImages([...previewImages, ...previewURLs]);
     };
 
-    let newPreviewImages = [];
+    let newPreviewImages = []; 
     previewImages.forEach((info)=>{
-        if(info.indexOf('ryans') === -1){
-            newPreviewImages.push(info)
+        if(info){
+            if(info?.indexOf('ryans') === -1){
+                newPreviewImages.push(info)
+            }
         }
     })
     
+
+    
+    const [uploadImageDebounceLoading, setUploadImageDebounceLoading] = useState(false);
+    const [uploadIsLoading, setUploadIsLoading] = useState(false);
+    const uploadImageDebounceFunction = debounce(handleUploadAllImages, 1000);
+    const handleStartUploadAllImages = () => {
+        setUploadImageDebounceLoading(()=> true);
+        uploadImageDebounceFunction();
+    }
+
+    const [deleteUploadedImageDebounceLoading, setDeleteUploadedImageDebounceLoading] = useState(false);
+    const [deleteUploadedIsLoading, setDeleteUploadedIsLoading] = useState(false);
+    const deleteUploadedImageDebounceFunction = debounce(handleDeleteUploadedImages, 1000);
+    const handleStartDeleteUploadedImages = () => {
+        setDeleteUploadedImageDebounceLoading(()=> true);
+        deleteUploadedImageDebounceFunction();
+    }
+
+    const [deleteMarkImageDebounceLoading, setDeleteMarkImageDebounceLoading] = useState(false);
+    const [deleteMarkImageIsLoading, setDeleteMarkImageIsLoading] = useState(false);
+    const deleteMarkImageDebounceFunction = debounce(handleDeleteMarkImages, 1000);
+    const handleStartDeleteMarkImages = () => {
+        setDeleteMarkImageDebounceLoading(()=> true);
+        deleteMarkImageDebounceFunction();
+    }
+
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handleSubmit, 1000);
+
+    const handleStartSubmit = (e) => {
+        e.preventDefault();
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction(e);
+    }
+
+
     return (
         <AdminPageSkeleton>  
             <div> 
-                <form onSubmit={handleSubmit}> 
+                <form onSubmit={handleStartSubmit}> 
                     <Box className='data__view__form'>
                         <FormControl id="image">
                             <FormLabel>Upload Profile Image</FormLabel>
@@ -185,7 +237,7 @@ const UploadSingleImage = memo(() => {
                         variant={'outline'}
                         type="submit"
                         size='sm' 
-                        isLoading={isLoading}
+                        isLoading={isLoading || addDebounceLoading}
                         >
                             Save
                         </Button>      
@@ -198,9 +250,10 @@ const UploadSingleImage = memo(() => {
                                 selectedImage.length !== 0 && 
                                 <Button 
                                     size='sm' 
-                                    onClick={handleDeleteMarkImages}
+                                    onClick={handleStartDeleteMarkImages}
                                     variant="outline"
                                     colorScheme="orange" 
+                                    isLoading={deleteMarkImageIsLoading || deleteMarkImageDebounceLoading}
                                     mr='20px'
                                     isDisabled={selectedImage.length === 0}
                                 >
@@ -211,9 +264,10 @@ const UploadSingleImage = memo(() => {
                                 newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1 &&
                                 <Button 
                                     size='sm' 
-                                    onClick={handleDeleteUploadedImages}
+                                    onClick={handleStartDeleteUploadedImages}
                                     variant="outline"
                                     colorScheme="orange" 
+                                    isLoading={deleteUploadedImageDebounceLoading || deleteUploadedIsLoading}
                                     mr={'20px'}
                                     isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1}
                                 >
@@ -224,7 +278,8 @@ const UploadSingleImage = memo(() => {
                                 newPreviewImages[newPreviewImages.length-1].indexOf('/images') === -1 &&
                                     <Button 
                                         size='sm'  
-                                        onClick={handleUploadAllImages}
+                                        onClick={handleStartUploadAllImages}
+                                        isLoading={uploadImageDebounceLoading || uploadIsLoading}
                                         variant={'outline'}
                                         colorScheme='green'
                                         isDisabled={newPreviewImages[newPreviewImages.length-1].indexOf('/images') !== -1}

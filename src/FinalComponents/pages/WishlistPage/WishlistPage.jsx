@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { AiOutlinePrinter } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllSingleUserWishlistProductQuery } from '../../../features/wishlist/api';
-import useLoginCheck from '../../../hooks/loginCheck';
+import useModeratorCheck from '../../../hooks/moderatorCheck';
 import { LoadingPage, NotFoundPage } from '../LandingPage/Components/Loading';
 import TableHead from './components/TableHead';
 import ProductTable from './components/productTable';
 const MyWishlistPage = () => {
-    const checkIsLogin = useLoginCheck();
+    const checkIsLogin = useModeratorCheck({graterThanRole: 10});
     const navigate = useNavigate();
     const [generatingPdf, setGeneratingPdf] = useState(false);
     let [userId] = useState(localStorage?.getItem('user__id'));

@@ -11,23 +11,25 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import numberUid from 'number-uid';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useRegisterUserMutation } from '../../../features/auth/api';
 import { userLoggedIn } from '../../../features/auth/authSlice';
-import useLoginCheck from '../../../hooks/loginCheck';
+import useModeratorCheck from '../../../hooks/moderatorCheck';
 
 const SignupPage = () => {
 
-  const checkIsLoggedIn = useLoginCheck();
+  const checkIsLoggedIn = useModeratorCheck({graterThanRole: 10});
+  const {auth} = useSelector((state)=> state.auth);
   useEffect(()=>{
-    if(checkIsLoggedIn){
+    if(auth && auth?.name && checkIsLoggedIn){
       window.history.back();
     }
-  },[checkIsLoggedIn])
+  },[checkIsLoggedIn, auth])
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [fullName, setFullName] = useState('');
@@ -52,6 +54,7 @@ const SignupPage = () => {
 
   useEffect(()=>{ 
     if(!isLoading && isError && !isSuccess){
+      setAddDebounceLoading(()=> false);
         if(error.status === 500){
           toast.error(error.data.error.message,{duration: 3000, position: 'top-center'});
         }else{
@@ -59,6 +62,7 @@ const SignupPage = () => {
         }
     }
     if(!isLoading && !isError && isSuccess){ 
+      setAddDebounceLoading(()=> false);
         if(data && data?.name){ 
           let {name, email, phone, user__id, role, designation, token, ID} = data;
           dispatch(userLoggedIn({name, ID, email, phone, user__id, role, designation, token, img__src: undefined, address: undefined}));
@@ -95,15 +99,29 @@ const SignupPage = () => {
             let postInfo = {name: fullName, email, password, phone, user__id};
             provideData(postInfo);
           }else{
+            setAddDebounceLoading(()=> false);
             toast.error('Your name must be at least 6 characters.',{duration: 3000, position: 'top-right'});
           }
         }else{
+          setAddDebounceLoading(()=> false);
           toast.error('Please ensure your passwords are the same.',{duration: 3000, position: 'top-right'});
         }
     }else{
+      setAddDebounceLoading(()=> false);
       toast.error('Please fill up all the fields!',{duration: 3000, position: 'top-right'});
     }
   };
+
+
+  const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+  const handleSubmitDebounceFunction = debounce(handleSignup, 1000);
+
+  const handleStartSubmit = (e) => {
+      e.preventDefault();
+      setAddDebounceLoading(()=> true);
+      handleSubmitDebounceFunction(e);
+  }
+
 
   return (
     <Box
@@ -120,7 +138,7 @@ const SignupPage = () => {
         width="100%"
       >
         <Heading mb={6}>Signup</Heading>
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleStartSubmit}>
           <Stack spacing={4}>
 
             <FormControl id="fullName" isRequired>
@@ -210,7 +228,7 @@ const SignupPage = () => {
               type='submit' 
               colorScheme="blue" 
               size="lg" fontSize="md"
-              isLoading={isLoading}
+              isLoading={isLoading || addDebounceLoading}
             >
               Signup
             </Button>

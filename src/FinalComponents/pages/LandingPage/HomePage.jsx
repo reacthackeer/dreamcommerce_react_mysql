@@ -1,14 +1,14 @@
-import { Box, Icon, Image, Text } from '@chakra-ui/react';
+import { Box, Icon, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useGetMultipleOfferQuery } from '../../../features/offer/offerApi';
 import { useGetAllShopByBrandQuery } from '../../../features/shopByBrand/shopByBrandApi';
 import { useGetAllShopByCategoryQuery } from '../../../features/shopByCategory/shopByCategoryApi';
+import { HomeAdsBannerLeft, HomeAdsBannerRight, LandingPageHeadSlider } from '../Carousel/LandingPageHeadCarousel';
 import { services } from './Components/Homepage';
 import { LoadingPage, NotFoundPage } from './Components/Loading';
 import SingleBrandItem from './Components/SingleBrandItem';
 import { SingleCartItem as SingleCart } from './Components/SingleCartItem';
-
 const HomePage = () => { 
 
     let {data, isError, isSuccess, error, isLoading} = useGetMultipleOfferQuery({page: 1, peerPage: 8});
@@ -39,9 +39,7 @@ const HomePage = () => {
             <div className='main__category__product__view__upper__container bg__1'>  
                 <div className='top__banner__upper__container padding__bottom padding__top'> 
                     <div className='top__banner__container'>
-                        <Link to='/single-product-details'>
-                            <Image src='/ads.png' alt='banner'/>
-                        </Link>
+                        <LandingPageHeadSlider/>
                     </div>
                 </div>
             </div>
@@ -219,13 +217,8 @@ const HomePage = () => {
             
             <div className='main__category__product__view__upper__container bg__white'>
                 <div className='image__two__grid__home__view padding__top'>
-                    <Link to='/:single-details-product'>
-                        <Image src='/homead.png' alt='home one ad'/>
-                    </Link>
-                    <Link to='/:single-details-product'>
-                        <Image src='/homead2.png' alt='home one ad'/>
-                    </Link>
-                    
+                    <HomeAdsBannerLeft/> 
+                    <HomeAdsBannerRight/>
                 </div>
             </div>
 

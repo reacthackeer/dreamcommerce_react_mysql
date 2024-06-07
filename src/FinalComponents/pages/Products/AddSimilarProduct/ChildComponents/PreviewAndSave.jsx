@@ -1,5 +1,6 @@
 import { Box, Button } from '@chakra-ui/react';
-import React, { memo, useEffect } from 'react';
+import { debounce } from 'lodash';
+import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAddSingleProductMutation } from '../../../../../features/product/productApi';
@@ -7,6 +8,7 @@ import { useAddSingleProductMutation } from '../../../../../features/product/pro
 const PreviewAndSave = memo(() => {
     const navigate = useNavigate();
     const [provideProductInfo, {data, isLoading, isError, isSuccess, error}] = useAddSingleProductMutation();
+
     const handlePostProduct = () => { 
         let product = JSON.parse(sessionStorage.getItem('product'))||{};
         let images = JSON.parse(sessionStorage.getItem('images'))||[];
@@ -23,6 +25,8 @@ const PreviewAndSave = memo(() => {
             let productProductInfo = {...product, images, overviews, details, specifications};  
             localStorage.setItem('visible__url', product.visible__url);
             provideProductInfo(productProductInfo); 
+        }else{
+            setAddDebounceLoading(()=> false);
         }
     }
 
@@ -30,10 +34,12 @@ const PreviewAndSave = memo(() => {
 
     useEffect(()=>{
         if(isError && !isSuccess){
+            setAddDebounceLoading(()=> false);
             toast.error('There was a server side error!',{duration: '3000'})
         }
 
         if(!isError && isSuccess && data && data?.status__code === 201){
+            setAddDebounceLoading(()=> false);
             
                 toast.success('Successfully new product added'); 
                 localStorage.removeItem('product');
@@ -50,22 +56,24 @@ const PreviewAndSave = memo(() => {
         }
     },[data, isLoading, isError, isSuccess, error, navigate])
 
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handlePostProduct, 1000);
+
+    const handleStartSubmit = () => { 
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction();
+    }
+
     return (
         <div>
-            <Box className='data__form__submit__button'>
-                <Button
-                    colorScheme="green" 
-                    variant={'outline'}
-                    type="submit"
-                    size='sm'
-                    mr='5px'
-                >Preview Product</Button>
+            <Box className='data__form__submit__button'> 
                 <Button
                     colorScheme="green" 
                     variant={'outline'}
                     type="button"
                     size='sm'
-                    onClick={()=> handlePostProduct()}
+                    isLoading={isLoading || addDebounceLoading}
+                    onClick={()=> handleStartSubmit()}
                 >Post Product</Button>
             </Box> 
         </div>

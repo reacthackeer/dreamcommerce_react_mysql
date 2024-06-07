@@ -1,5 +1,6 @@
 import { Box, Button, FormControl, FormLabel, Image, Select } from '@chakra-ui/react';
-import React, { memo, useState } from 'react';
+import { debounce } from 'lodash';
+import React, { memo, useEffect, useState } from 'react';
 import { server__image__host__url } from '../../../../app/store';
 import { useDeleteSingleCollectionMutation, useGetAllChildNavbarQuery, useGetAllParentFatherNavbarQuery, useGetAllParentNavbarQuery, useGetAllUpNavbarQuery } from '../../../../features/brand/brandApi';
 import AdminPageSkeleton from '../../AdminPageSkeletonComponents/AdminPageSkeleton';
@@ -39,10 +40,31 @@ const DeleteCollection = memo(() => {
         // category end
     
         let {data: collectionData, isSuccess: CollectionIsSuccess} = useGetAllChildNavbarQuery({parent: category, up: upNavbar}); 
-        const [provideChildId] = useDeleteSingleCollectionMutation();
+        const [provideChildId, {isLoading: deleteIsLoading, isSuccess: deleteIsSuccess}] = useDeleteSingleCollectionMutation();
         const handleDeleteImage = (id) => {
             provideChildId(id);
         }
+
+    // debounce facility start  
+
+    const [currentId, setCurrentId] = useState('');
+    const [deleteDebounceLoading, setDeleteDebounceLoading] = useState(false);
+    const deleteDebounceFunction = debounce(handleDeleteImage, 1000);
+    const handleStartDeleteDebounce = (id) => {
+        setCurrentId(()=> id);
+        setDeleteDebounceLoading(()=> true);
+        deleteDebounceFunction(id);
+    }
+
+    useEffect(()=>{
+        if(deleteIsSuccess){
+            setCurrentId(()=> '');
+            setDeleteDebounceLoading(()=> false);
+        }
+    }, [deleteIsSuccess])
+
+    // debounce facility end
+
     return (
         <AdminPageSkeleton>  
             <Box>
@@ -108,7 +130,13 @@ const DeleteCollection = memo(() => {
                                 return <Box key={index}> 
                                             <Image src={server__image__host__url+info?.src}/> 
                                             <Button width="100%" variant="ghost">{info?.name}</Button>
-                                            <Button width="100%" variant='solid' colorScheme='red' onClick={()=> handleDeleteImage(info.ID)}>DELETE</Button>
+                                            <Button 
+                                                isLoading={(deleteDebounceLoading || deleteIsLoading) && currentId === info.ID} 
+                                                width="100%" 
+                                                variant='solid' 
+                                                colorScheme='red' 
+                                                onClick={()=> handleStartDeleteDebounce(info.ID)}
+                                            >DELETE</Button>
                                         </Box>
                             })
                         }

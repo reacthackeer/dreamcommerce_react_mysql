@@ -24,11 +24,11 @@ const CalculateTable = ({priceData}) => {
                         <Td textAlign={'end'}>{totalShippingFee} TK</Td> 
                     </Tr> 
                     <Tr> 
-                        <Td>Vat ({system.vatPercent}%)</Td> 
+                        <Td>Vat ({system?.vatPercent}%)</Td> 
                         <Td textAlign={'end'}>{totalVat} TK</Td> 
                     </Tr>
                     <Tr> 
-                        <Td>Tax ({system.taxPercent}%)</Td> 
+                        <Td>Tax ({system?.taxPercent}%)</Td> 
                         <Td textAlign={'end'}>{totalTax} TK</Td> 
                     </Tr>
                 </Tbody> 

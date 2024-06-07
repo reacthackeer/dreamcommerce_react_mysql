@@ -1,4 +1,5 @@
 import { Box, Button, FormControl, FormLabel, Input, Select } from '@chakra-ui/react';
+import { debounce } from 'lodash';
 import numberUid from 'number-uid';
 import React, { memo, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -45,12 +46,14 @@ const ShippingAddress = memo(() => {
     
     useEffect(()=>{ 
         if(isError && !isLoading && !fIsSuccess){
+            setAddDebounceLoading(()=> false);
             toast.error('There was a server side error!',{duration: 3000})
             dispatch(userLOggedOut());
             localStorage.removeItem('auth');
             navigate('/login');
         }
         if(!isError && fIsSuccess && !isLoading){
+            setAddDebounceLoading(()=> false);
             if(fData && fData?.status__code === 200){
                 if(!updated){
                     let nowNewAuthInfo = JSON.parse(localStorage.getItem('profile__address'));
@@ -63,12 +66,26 @@ const ShippingAddress = memo(() => {
                         navigate('/profile');
                     }, 3000);
                 }
-            }
+            } 
+        }else{
+            setAddDebounceLoading(()=> false);
         }
     },[fData, isLoading, isError, error, fIsSuccess, navigate, dispatch, updated])
+
+
+    const [addDebounceLoading, setAddDebounceLoading] = useState(false);
+    const handleSubmitDebounceFunction = debounce(handleSubmit, 1000);
+
+    const handleStartSubmit = (e) => {
+        e.preventDefault();
+        setAddDebounceLoading(()=> true);
+        handleSubmitDebounceFunction(e);
+    }
+
+
     return (
         <AdminPageSkeleton>  
-            <form onSubmit={handleSubmit}> 
+            <form onSubmit={handleStartSubmit}> 
                 <Box className='data__view__form'>
                     {isSuccess && data?.items && data?.items?.length > 0 &&
                         <FormControl id="image" isRequired>
@@ -167,6 +184,7 @@ const ShippingAddress = memo(() => {
                     colorScheme="green" 
                     variant={'outline'}
                     type="submit"
+                    isLoading={isLoading || addDebounceLoading}
                     size='sm'  
                     >
                         Save
