@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question and Answer Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="number"]:focus {
+            border-color: #66afe9;
+            box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .question-details {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <label for="startNumber">Start Number:</label>
+        <input type="number" id="startNumber" name="startNumber">
+        <label for="endNumber">End Number:</label>
+        <input type="number" id="endNumber" name="endNumber">
+        <button onclick="getQuestion()">Get Question</button>
+    </div>
+
+    <div class="question">
+        <h2>Question: <span id="questionText"></span></h2>
+        <button id="detailsButton" class="hidden" onclick="showDetails()">Show Details</button>
+    </div>
+
+    <div id="questionDetails" class="question-details hidden">
+        <h3>Answer:</h3>
+        <p id="answerText"></p>
+    </div>
+
+    <script>
+        const questions = [
+  {
+    "serial": 1,
+    "question": "What is Google Ads?",
+    "answer": "Google Ads is an online advertising platform developed by Google, where advertisers bid to display brief advertisements, service offerings, product listings, or videos to web users.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 2,
+    "question": "How does Google Ads work?",
+    "answer": "Advertisers bid on keywords, and the winners of the bid are chosen based on their Ad Rank, which is a combination of bid amount, ad quality, and other factors.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 3,
+    "question": "What is Ad Rank?",
+    "answer": "Ad Rank determines the position of your ad and is calculated using your bid amount, ad quality, and the expected impact of ad extensions and other ad formats.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 4,
+    "question": "What is a Quality Score?",
+    "answer": "Quality Score is a metric that Google uses to determine the relevance and quality of your keywords and PPC ads. It affects your Ad Rank and cost per click (CPC).",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 5,
+    "question": "How can I improve my Quality Score?",
+    "answer": "Improve your Quality Score by making your ads more relevant to your keywords, improving your landing page experience, and increasing your click-through rate (CTR).",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 6,
+    "question": "What are keywords in Google Ads?",
+    "answer": "Keywords are the words or phrases that users type into the search engine to find what they're looking for. Advertisers bid on keywords to display their ads.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 7,
+    "question": "What is CPC (Cost Per Click)?",
+    "answer": "CPC is the amount you pay for each click on your ad.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 8,
+    "question": "What is PPC (Pay Per Click)?",
+    "answer": "PPC is an online advertising model where advertisers pay each time a user clicks on one of their online ads.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 9,
+    "question": "What is a campaign in Google Ads?",
+    "answer": "A campaign is a set of ad groups (ads, keywords, and bids) that share a budget, location targeting, and other settings.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 10,
+    "question": "What are ad groups?",
+    "answer": "Ad groups contain one or more ads and a set of related keywords. They're used to organize your ads and keywords into groups that share a common theme.",
+    "heading": "General Questions"
+  },
+  {
+    "serial": 11,
+    "question": "How much does Google Ads cost?",
+    "answer": "The cost of Google Ads depends on several factors, including your budget, bid, industry, and competition. There is no minimum spend requirement.",
+    "heading": "Budget and Bidding"
+  },
+  {
+    "serial": 12,
+    "question": "How do I set a budget in Google Ads?",
+    "answer": "You set a daily budget for each campaign based on how much you are willing to spend per day.",
+    "heading": "Budget and Bidding"
+  },
+  {
+    "serial": 13,
+    "question": "What is the difference between daily budget and shared budget?",
+    "answer": "A daily budget is the amount you set for each campaign, while a shared budget is a single budget shared across multiple campaigns.",
+    "heading": "Budget and Bidding"
+  },
+  {
+    "serial": 14,
+    "question": "What is bid strategy?",
+    "answer": "Bid strategy is the approach you take to bidding in Google Ads, such as manual CPC, automated bidding, or enhanced CPC.",
+    "heading": "Budget and Bidding"
+  },
+  {
+    "serial": 15,
+    "question": "What is automated bidding?",
+    "answer": "Automated bidding uses Google's machine learning to automatically adjust your bids to maximize results based on your goals.",
+    "heading": "Budget and Bidding"
+  },
+  {
+    "serial": 16,
+    "question": "What is manual CPC bidding?",
+    "answer": "Manual CPC bidding allows you to set your own maximum CPC for your ads.",
+    "heading": "Bidding and Ad Formats"
+  },
+  {
+    "serial": 17,
+    "question": "What is enhanced CPC?",
+    "answer": "Enhanced CPC is a bidding feature that raises your bids for clicks that seem more likely to lead to a conversion and lowers your bids for clicks that seem less likely.",
+    "heading": "Bidding and Ad Formats"
+  },
+  {
+    "serial": 18,
+    "question": "What are the different types of Google Ads?",
+    "answer": "The main types include search ads, display ads, video ads, shopping ads, and app promotion ads.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 19,
+    "question": "What are search ads?",
+    "answer": "Search ads appear next to Google search results when users search for keywords related to your ad.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 20,
+    "question": "What are display ads?",
+    "answer": "Display ads appear on websites that are part of the Google Display Network and can be text, image, or video-based.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 21,
+    "question": "What are video ads?",
+    "answer": "Video ads appear on YouTube and across the Google Display Network.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 22,
+    "question": "What are shopping ads?",
+    "answer": "Shopping ads showcase your products with a photo, title, price, store name, and more.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 23,
+    "question": "What are ad extensions?",
+    "answer": "Ad extensions provide additional information with your ad, such as a phone number, site links, or customer reviews.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 24,
+    "question": "How do I add ad extensions?",
+    "answer": "You can add ad extensions in the Google Ads interface under the 'Ad Extensions' tab.",
+    "heading": "Ad Formats and Extensions"
+  },
+  {
+    "serial": 25,
+    "question": "What is audience targeting in Google Ads?",
+    "answer": "Audience targeting allows you to show your ads to specific groups of people based on their interests, demographics, and behaviors.",
+    "heading": "Targeting and Audience"
+  },
+  {
+    "serial": 26,
+    "question": "What is location targeting?",
+    "answer": "Location targeting allows you to show your ads to people in specific geographic locations.",
+    "heading": "Targeting and Audience"
+  },
+  {
+    "serial": 27,
+    "question": "What is device targeting?",
+    "answer": "Device targeting allows you to show your ads on specific devices, such as desktops, tablets, or mobile phones.",
+    "heading": "Targeting and Audience"
+  },
+  {
+    "serial": 28,
+    "question": "What is remarketing?",
+    "answer": "Remarketing allows you to show ads to people who have previously visited your website or used your app.",
+    "heading": "Targeting and Audience"
+  },
+  {
+    "serial": 29,
+    "question": "How do I set up remarketing?",
+    "answer": "You set up remarketing by adding a remarketing tag to your website or app and creating remarketing lists in Google Ads.",
+    "heading": "Targeting and Audience"
+  },
+  {
+    "serial": 30,
+    "question": "What are demographics targeting?",
+    "answer": "Demographics targeting allows you to show your ads to people based on their age, gender, parental status, or household income.",
+    "heading": "Targeting and Audience"
+  },
+  {
+    "serial": 31,
+    "question": "How do I measure the performance of my Google Ads?",
+    "answer": "You can measure the performance of your ads using metrics like CTR, CPC, conversion rate, and ROI in the Google Ads interface.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 32,
+    "question": "What is CTR (Click-Through Rate)?",
+    "answer": "CTR is the ratio of clicks to impressions, indicating how often people who see your ad click on it.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 33,
+    "question": "How can I improve my CTR?",
+    "answer": "Improve your CTR by creating more relevant ads, using strong call-to-action phrases, and targeting the right keywords.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 34,
+    "question": "What is conversion tracking?",
+    "answer": "Conversion tracking measures the actions users take after clicking on your ad, such as purchases, sign-ups, or downloads.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 35,
+    "question": "How do I set up conversion tracking?",
+    "answer": "You set up conversion tracking by adding a conversion tracking tag to your website or app and configuring conversions in Google Ads.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 36,
+    "question": "What is ROI (Return on Investment)?",
+    "answer": "ROI measures the profitability of your advertising efforts by comparing the cost of your ads to the revenue generated from those ads.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 37,
+    "question": "How do I optimize my Google Ads campaigns?",
+    "answer": "Optimize your campaigns by adjusting your bids, refining your keywords, improving your ad copy, and enhancing your landing pages.",
+    "heading": "Performance and Optimization"
+  },
+  {
+    "serial": 38,
+    "question": "What are Google Ads policies?",
+    "answer": "Google Ads policies are rules and guidelines that advertisers must follow to ensure a safe and positive experience for users.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 39,
+    "question": "What happens if I violate Google Ads policies?",
+    "answer": "Violating policies can result in your ads being disapproved, your account being suspended, or your account being permanently banned.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 40,
+    "question": "How do I get my ads approved?",
+    "answer": "Ensure your ads comply with Google's policies, provide accurate and relevant information, and avoid prohibited content.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 41,
+    "question": "What is the Google Display Network (GDN)?",
+    "answer": "The GDN is a collection of websites, apps, and videos where your ads can appear.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 42,
+    "question": "What is Google AdSense?",
+    "answer": "Google AdSense is a program that allows website owners to display Google ads on their sites and earn revenue when users click on the ads.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 43,
+    "question": "How do I link Google Analytics to Google Ads?",
+    "answer": "You link Google Analytics to Google Ads in the Google Ads interface under 'Linked accounts.'",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 44,
+    "question": "What is a landing page?",
+    "answer": "A landing page is the webpage users are taken to after clicking on your ad. It should be relevant to the ad and encourage conversions.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 45,
+    "question": "What is a negative keyword?",
+    "answer": "Negative keywords prevent your ads from showing for specific search terms that are not relevant to your business.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 46,
+    "question": "How do I add negative keywords?",
+    "answer": "You add negative keywords in the Google Ads interface under the 'Keywords' tab.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 47,
+    "question": "What are dynamic search ads?",
+    "answer": "Dynamic search ads automatically generate headlines and landing pages based on the content of your website.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 48,
+    "question": "What is an ad schedule?",
+    "answer": "An ad schedule allows you to specify the days and times when your ads should appear.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 49,
+    "question": "What is geotargeting?",
+    "answer": "Geotargeting allows you to show your ads to users in specific geographic locations.",
+    "heading": "Technical and Policy Questions"
+  },
+  {
+    "serial": 50,
+    "question": "What is a call-only ad?",
+    "answer": "Call-only ads are designed to encourage phone calls by displaying your phone number and a click-to-call button.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 51,
+    "question": "What is a broad match keyword?",
+    "answer": "Broad match keywords trigger your ads for searches that include variations of your keywords, including synonyms and related searches.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 52,
+    "question": "What is a phrase match keyword?",
+    "answer": "Phrase match keywords trigger your ads for searches that include your exact keyword phrase or close variations.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 53,
+    "question": "What is an exact match keyword?",
+    "answer": "Exact match keywords trigger your ads for searches that include your exact keyword phrase or very close variations.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 54,
+    "question": "How do I create a Google Ads account?",
+    "answer": "Create a Google Ads account by visiting the Google Ads website and following the sign-up instructions.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 55,
+    "question": "How do I set up billing in Google Ads?",
+    "answer": "Set up billing by entering your payment information in the 'Billing' section of your Google Ads account.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 56,
+    "question": "How do I access Google Ads support?",
+    "answer": "Access Google Ads support through the 'Help' section in your Google Ads account or by contacting Google Ads support directly.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 57,
+    "question": "How do I pause or delete a campaign?",
+    "answer": "Pause or delete a campaign in the Google Ads interface under the 'Campaigns' tab.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 58,
+    "question": "How do I find my Google Ads account ID?",
+    "answer": "Find your account ID in the top right corner of your Google Ads interface.",
+    "heading": "Account Management"
+  },
+  {
+    "serial": 59,
+    "question": "What is Google Ads Editor?",
+    "answer": "Google Ads Editor is a downloadable application that allows you to manage your Google Ads campaigns offline and make bulk changes quickly.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 60,
+    "question": "What are custom audiences?",
+    "answer": "Custom audiences allow you to target specific groups of people based on a combination of demographics, interests, and behaviors.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 61,
+    "question": "What is a smart campaign?",
+    "answer": "Smart campaigns are automated campaigns that use Google's machine learning to optimize your ads based on your business goals.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 62,
+    "question": "What is a responsive search ad?",
+    "answer": "Responsive search ads automatically test different combinations of headlines and descriptions to find the best-performing ads.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 63,
+    "question": "What are app campaigns?",
+    "answer": "App campaigns promote your mobile app across Google Search, YouTube, Google Play, and other platforms.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 64,
+    "question": "What is a discovery campaign?",
+    "answer": "Discovery campaigns use Google's machine learning to deliver highly visual, personalized ads across Google’s feeds.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 65,
+    "question": "What is a performance max campaign?",
+    "answer": "Performance Max campaigns aim to drive performance across all Google Ads inventory using machine learning to optimize bids and placements.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 66,
+    "question": "What is an attribution model?",
+    "answer": "An attribution model is a rule, or set of rules, that determines how credit for conversions is assigned to touchpoints in conversion paths.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 67,
+    "question": "What is cross-device conversion tracking?",
+    "answer": "Cross-device conversion tracking measures conversions that start on one device and finish on another.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 68,
+    "question": "What is Google Tag Manager?",
+    "answer": "Google Tag Manager is a tag management system that allows you to update measurement codes and related code fragments on your website or mobile app from a web-based user interface.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 69,
+    "question": "What is a lookalike audience?",
+    "answer": "A lookalike audience is a group of users who share similar characteristics with your existing customers or audience.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 70,
+    "question": "How do I use scripts in Google Ads?",
+    "answer": "Google Ads scripts are JavaScript code snippets that can automate common tasks and complex changes in your Google Ads account.",
+    "heading": "Advanced Features"
+  },
+  {
+    "serial": 71,
+    "question": "What are Google Ads reports?",
+    "answer": "Google Ads reports provide detailed information about your campaign performance, including clicks, impressions, CTR, CPC, and conversions.",
+    "heading": "Reporting and Analytics"
+  },
+  {
+    "serial": 72,
+    "question": "How do I create a custom report in Google Ads?",
+    "answer": "Create custom reports in the 'Reports' tab by selecting the metrics and dimensions you want to analyze.",
+    "heading": "Reporting and Analytics"
+  },
+  {
+    "serial": 73,
+    "question": "What is the Google Ads API?",
+    "answer": "The Google Ads API allows developers to build applications that interact directly with the Google Ads platform.",
+    "heading": "Reporting and Analytics"
+  },
+  {
+    "serial": 74,
+    "question": "How do I track phone call conversions?",
+    "answer": "Track phone call conversions by setting up call extensions and call-only ads, and using a Google forwarding number to track calls.",
+    "heading": "Reporting and Analytics"
+  },
+  {
+    "serial": 75,
+    "question": "What is a search term report?",
+    "answer": "A search term report shows the actual search terms that triggered your ads, helping you identify new keywords and negative keywords.",
+    "heading": "Reporting and Analytics"
+  },
+  {
+    "serial": 76,
+    "question": "How do I analyze competitor performance?",
+    "answer": "Use the Auction Insights report to compare your performance with other advertisers participating in the same auctions.",
+    "heading": "Reporting and Analytics"
+  },
+  {
+    "serial": 77,
+    "question": "Why are my ads not showing?",
+    "answer": "Ads might not show due to low Ad Rank, budget constraints, disapproved ads, or targeting settings.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 78,
+    "question": "How do I fix disapproved ads?",
+    "answer": "Fix disapproved ads by addressing the specific policy violation and resubmitting the ads for review.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 79,
+    "question": "Why is my CPC increasing?",
+    "answer": "CPC can increase due to higher competition, changes in Quality Score, or changes in your bid strategy.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 80,
+    "question": "How do I reduce my CPC?",
+    "answer": "Reduce CPC by improving Quality Score, refining keyword targeting, and optimizing ad copy and landing pages.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 81,
+    "question": "Why is my conversion rate low?",
+    "answer": "A low conversion rate can result from poor landing page experience, irrelevant ad copy, or targeting the wrong audience.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 82,
+    "question": "How do I improve my conversion rate?",
+    "answer": "Improve conversion rates by optimizing your landing pages, ensuring ad relevance, and using strong calls to action.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 83,
+    "question": "What should I do if my account is suspended?",
+    "answer": "Address the reason for suspension, correct any policy violations, and contact Google Ads support for guidance.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 84,
+    "question": "How do I recover a compromised Google Ads account?",
+    "answer": "Secure your account by changing passwords, reviewing user access, and contacting Google Ads support for assistance.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 85,
+    "question": "How do I handle click fraud?",
+    "answer": "Monitor your campaigns for suspicious activity, use Google's click fraud protection features, and report incidents to Google Ads support.",
+    "heading": "Troubleshooting"
+  },
+  {
+    "serial": 86,
+    "question": "How do I integrate Google Ads with CRM systems?",
+    "answer": "Integrate Google Ads with CRM systems using tools like Zapier or custom API connections.",
+    "heading": "Integrations and Automation"
+  },
+  {
+    "serial": 87,
+    "question": "What is automated rules in Google Ads?",
+    "answer": "Automated rules allow you to create conditions that automatically change your bids, budgets, or statuses of your campaigns, ads, and keywords.",
+    "heading": "Integrations and Automation"
+  },
+  {
+    "serial": 88,
+    "question": "How do I set up automated rules?",
+    "answer": "Set up automated rules in the Google Ads interface under the 'Bulk actions' menu.",
+    "heading": "Integrations and Automation"
+  },
+  {
+    "serial": 89,
+    "question": "What is a data feed in Google Ads?",
+    "answer": "A data feed is a file that contains information about your products, which is used in Shopping campaigns and dynamic ads.",
+    "heading": "Integrations and Automation"
+  },
+  {
+    "serial": 90,
+    "question": "How do I set up a data feed for Shopping ads?",
+    "answer": "Set up a data feed by creating a product feed in Google Merchant Center and linking it to your Google Ads account.",
+    "heading": "Integrations and Automation"
+  },
+  {
+    "serial": 91,
+    "question": "What is keyword match type?",
+    "answer": "Keyword match type determines how closely the keyword needs to match a user's search query for your ad to be considered.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 92,
+    "question": "How do I use ad scheduling effectively?",
+    "answer": "Use ad scheduling to show your ads during times when your target audience is most likely to convert.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 93,
+    "question": "What are in-market audiences?",
+    "answer": "In-market audiences are groups of users who are actively researching or comparing products and services in a given category.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 94,
+    "question": "What are affinity audiences?",
+    "answer": "Affinity audiences are groups of users with a strong interest in specific topics, making them likely to engage with related ads.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 95,
+    "question": "How do I use bid adjustments?",
+    "answer": "Use bid adjustments to increase or decrease your bids based on factors like device, location, time of day, and audience.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 96,
+    "question": "What is ad rotation?",
+    "answer": "Ad rotation is the method by which Google determines which ads to show in your ad group.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 97,
+    "question": "How do I optimize ad rotation?",
+    "answer": "Optimize ad rotation by selecting the setting that best aligns with your goals, such as 'Optimize for clicks' or 'Optimize for conversions.'",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 98,
+    "question": "What are smart bidding strategies?",
+    "answer": "Smart bidding strategies use machine learning to optimize your bids for conversions or conversion value.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 99,
+    "question": "What is Target CPA (Cost Per Acquisition)?",
+    "answer": "Target CPA is a bidding strategy where you set the average amount you'd like to pay for a conversion.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 100,
+    "question": "What is Target ROAS (Return on Ad Spend)?",
+    "answer": "Target ROAS is a bidding strategy where you set the desired return on ad spend for your campaigns.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 101,
+    "question": "How do I use A/B testing in Google Ads?",
+    "answer": "Use A/B testing by creating different versions of your ads or landing pages and comparing their performance to find the most effective option.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 102,
+    "question": "What is a customer match?",
+    "answer": "Customer match allows you to use your customer data to reach and re-engage with your customers across Google Search, Shopping, Gmail, and YouTube.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 103,
+    "question": "What is a conversion window?",
+    "answer": "A conversion window is the period during which a conversion can be recorded after a user interacts with your ad.",
+    "heading": "Specific Strategies"
+  },
+  {
+    "serial": 104,
+    "question": "What is Google Optimize?",
+    "answer": "Google Optimize is a tool that allows you to test and personalize your website to improve the user experience and conversion rates.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 105,
+    "question": "What is a shared library in Google Ads?",
+    "answer": "A shared library is a feature that allows you to manage and share negative keyword lists, placement exclusions, and bid strategies across multiple campaigns.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 106,
+    "question": "What is the difference between search and display campaigns?",
+    "answer": "Search campaigns show text ads on search results pages, while display campaigns show visual ads on websites across the Google Display Network.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 107,
+    "question": "What is an attribution report?",
+    "answer": "An attribution report shows how different ads and keywords contribute to conversions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 108,
+    "question": "What are ad customizers?",
+    "answer": "Ad customizers dynamically update your ad text based on attributes like location, device, and time of day.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 109,
+    "question": "How do I use dynamic remarketing?",
+    "answer": "Use dynamic remarketing by adding a dynamic remarketing tag to your website and creating dynamic ads that display personalized content to users.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 110,
+    "question": "What is the Google Ads performance planner?",
+    "answer": "The performance planner helps you forecast the potential impact of changes to your campaigns and optimize your budgets.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 111,
+    "question": "How do I manage multiple Google Ads accounts?",
+    "answer": "Manage multiple accounts using a manager account (MCC), which allows you to view and manage all your Google Ads accounts in one place.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 112,
+    "question": "What is auction-time bidding?",
+    "answer": "Auction-time bidding uses machine learning to adjust bids in real-time for each individual auction, based on the likelihood of a conversion.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 113,
+    "question": "How do I use video campaigns effectively?",
+    "answer": "Use video campaigns to promote your brand, products, or services with engaging video content on YouTube and the Google Display Network.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 114,
+    "question": "What is the difference between CPM and CPC?",
+    "answer": "CPM (Cost Per Thousand Impressions) is the cost for every thousand times your ad is shown, while CPC (Cost Per Click) is the cost for each click on your ad.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 115,
+    "question": "What is contextual targeting?",
+    "answer": "Contextual targeting matches your ads to relevant content on websites in the Google Display Network based on keywords or topics.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 116,
+    "question": "How do I handle seasonal trends in Google Ads?",
+    "answer": "Adjust your bids, budget, and ad copy to align with seasonal trends and customer behavior changes.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 117,
+    "question": "What are automated insights?",
+    "answer": "Automated insights in Google Ads are AI-driven recommendations that help optimize campaigns by identifying performance trends, anomalies, opportunities, competitive comparisons, and audience behaviors. These insights use machine learning to provide actionable suggestions for improving ad strategies.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 118,
+    "question": "What is a callout extension?",
+    "answer": "A callout extension is an ad extension that allows you to include additional text to highlight specific information about your products or services, such as 'Free Shipping' or '24/7 Support.'",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 119,
+    "question": "What are structured snippet extensions?",
+    "answer": "Structured snippet extensions provide additional details about your products and services in the form of a predefined header and list, such as 'Destinations' or 'Brands.'",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 120,
+    "question": "What is a price extension?",
+    "answer": "Price extensions allow you to showcase your products or services along with their prices, helping users compare options before clicking on your ad.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 121,
+    "question": "What is the Google Display Planner?",
+    "answer": "The Google Display Planner is a tool that helps you plan your display network campaigns by providing ideas for targeting and estimates for reach and costs.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 122,
+    "question": "How do I use Google Ads for local advertising?",
+    "answer": "Use location extensions, local search ads, and target users near your business location to attract local customers.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 123,
+    "question": "What is a promotion extension?",
+    "answer": "Promotion extensions highlight sales and promotions in your ads, showing special offers directly in your ad text.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 124,
+    "question": "What is the Google Ads Keyword Planner?",
+    "answer": "The Keyword Planner is a tool that helps you research and select keywords for your campaigns, providing insights on search volume, competition, and bid estimates.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 125,
+    "question": "What are bid simulators?",
+    "answer": "Bid simulators show how different bid amounts could impact your ad's performance, helping you make informed bidding decisions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 126,
+    "question": "What is a shared budget?",
+    "answer": "A shared budget allows multiple campaigns to draw from a single budget, making it easier to manage your overall ad spend.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 127,
+    "question": "What are customer exclusions?",
+    "answer": "Customer exclusions prevent your ads from showing to specific groups of users, such as existing customers, to avoid unnecessary spend.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 128,
+    "question": "What is a product feed optimization?",
+    "answer": "Product feed optimization involves refining the data in your product feed to improve the performance of your Shopping ads.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 129,
+    "question": "What is a campaign experiment?",
+    "answer": "Campaign experiments allow you to test changes to your campaigns by splitting your traffic into a control group and an experimental group.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 130,
+    "question": "What are RSAs (Responsive Search Ads)?",
+    "answer": "RSAs allow you to create ads that adapt to show more relevant messages to users by mixing and matching multiple headlines and descriptions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 131,
+    "question": "What is a geo-targeted bid adjustment?",
+    "answer": "Geo-targeted bid adjustments let you increase or decrease your bids based on the performance of your ads in specific geographic locations.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 132,
+    "question": "How do I manage seasonal ad campaigns?",
+    "answer": "Plan ahead by creating specific campaigns for peak seasons, adjusting budgets and bids, and using seasonal ad copy and extensions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 133,
+    "question": "What is the difference between the Google Search Network and the Google Display Network?",
+    "answer": "The Google Search Network includes Google search results pages, while the Google Display Network includes a collection of websites, apps, and videos where display ads can appear.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 134,
+    "question": "What is click-through conversion?",
+    "answer": "Click-through conversion measures the number of times users click on an ad and then complete a conversion action on your site.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 135,
+    "question": "What is view-through conversion?",
+    "answer": "View-through conversion measures the number of times users see an ad but do not click on it, then later complete a conversion action on your site.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 136,
+    "question": "What is Google Merchant Center?",
+    "answer": "Google Merchant Center is a tool that helps you upload your product listings to Google and make them available for Google Shopping ads.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 137,
+    "question": "What are app engagement campaigns?",
+    "answer": "App engagement campaigns are designed to re-engage users who have already installed your app and encourage them to take specific in-app actions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 138,
+    "question": "What is dynamic keyword insertion?",
+    "answer": "Dynamic keyword insertion automatically updates your ad text to include the keyword that matches a user's search query, making your ads more relevant.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 139,
+    "question": "What are impression share metrics?",
+    "answer": "Impression share metrics indicate the percentage of impressions your ads receive compared to the total available impressions for your keywords.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 140,
+    "question": "How do I use portfolio bid strategies?",
+    "answer": "Portfolio bid strategies allow you to manage and optimize bids across multiple campaigns to achieve specific business goals.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 141,
+    "question": "What is an ad position?",
+    "answer": "Ad position refers to the order in which your ad appears on the search results page, typically ranging from position 1 (top) to lower positions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 142,
+    "question": "What is auction insights?",
+    "answer": "Auction insights provide data on how your ads perform compared to other advertisers participating in the same auctions.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 143,
+    "question": "What is a destination requirement policy?",
+    "answer": "Destination requirement policies ensure that the destination URL of your ads meets certain standards, such as being functional and relevant to the ad content.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 144,
+    "question": "What is a proximity targeting?",
+    "answer": "Proximity targeting allows you to target users based on their distance from a specific location, such as your business or a point of interest.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 145,
+    "question": "How do I use labels in Google Ads?",
+    "answer": "Labels help you organize and manage your campaigns, ad groups, ads, and keywords by tagging them with custom labels.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 146,
+    "question": "What is a device-specific ad copy?",
+    "answer": "Device-specific ad copy allows you to create different versions of your ads tailored to different devices, such as mobile, tablet, and desktop.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 147,
+    "question": "What is a mobile bid adjustment?",
+    "answer": "Mobile bid adjustments allow you to increase or decrease your bids for mobile devices to better control your ad spend and performance on mobile.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 148,
+    "question": "What is the conversion rate optimization (CRO)?",
+    "answer": "CRO is the process of optimizing your website and ads to increase the percentage of visitors who complete desired actions, such as making a purchase or filling out a form.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 149,
+    "question": "What is an ad relevance score?",
+    "answer": "Ad relevance score is a metric that measures how closely your ad matches the intent of a user's search query, impacting your Quality Score and ad performance.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 150,
+    "question": "How do I handle low search volume keywords?",
+    "answer": "For low search volume keywords, consider broadening your keyword match types or finding related keywords with higher search volumes.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 151,
+    "question": "What is a campaign goal in Google Ads?",
+    "answer": "A campaign goal is the primary objective you want to achieve with your campaign, such as increasing website traffic, generating leads, or boosting sales.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 152,
+    "question": "What is a performance benchmark?",
+    "answer": "Performance benchmarks provide industry-specific metrics that help you understand how your ads are performing compared to competitors.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 153,
+    "question": "How do I use ad customizers?",
+    "answer": "Ad customizers dynamically insert information into your ad text based on attributes like user location, time of day, or product inventory levels.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 154,
+    "question": "What is the Google Ads conversion optimizer?",
+    "answer": "The conversion optimizer is a tool that uses historical conversion data to automatically adjust your bids to maximize conversions within your target CPA.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 155,
+    "question": "What is a maximum conversion value bid strategy?",
+    "answer": "This bid strategy aims to maximize the total conversion value (such as revenue) generated by your ads while staying within your budget.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 156,
+    "question": "What is a video action campaign?",
+    "answer": "Video action campaigns are designed to drive specific actions, such as clicks to a website or app installs, using video ads.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 157,
+    "question": "How do I use Google Ads for e-commerce?",
+    "answer": "Use Shopping ads, dynamic remarketing, and promotion extensions to showcase your products, attract potential buyers, and increase sales.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 158,
+    "question": "What is Google Ads data exclusion?",
+    "answer": "Data exclusion lets you exclude specific periods of data from your bid strategies and performance reports, such as during website outages or tracking issues.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 159,
+    "question": "How do I set up campaign-level conversion goals?",
+    "answer": "Set up campaign-level conversion goals by selecting specific conversion actions that align with the goals of each campaign.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 160,
+    "question": "What is a value-based bidding strategy?",
+    "answer": "Value-based bidding strategies optimize for the total value of conversions, rather than just the number of conversions, by considering the revenue or profit from each conversion.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 161,
+    "question": "What is a local inventory ad?",
+    "answer": "Local inventory ads show users when your products are available at nearby physical stores, encouraging in-store visits and purchases.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 162,
+    "question": "How do I track offline conversions?",
+    "answer": "Track offline conversions by uploading offline transaction data to Google Ads, linking it to your online ads to measure their impact on in-store sales.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 163,
+    "question": "What is a conversion funnel?",
+    "answer": "A conversion funnel is the path users take from initial interaction with your ad to completing a desired action, such as a purchase or sign-up.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 164,
+    "question": "How do I use Google Ads for lead generation?",
+    "answer": "Use lead form extensions, targeted search and display ads, and conversion tracking to capture and manage leads effectively.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 165,
+    "question": "What is a dynamic search ad report?",
+    "answer": "A dynamic search ad report provides insights into the performance of your dynamic search ads, including which search terms triggered your ads and which landing pages were used.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 166,
+    "question": "How do I use custom columns in Google Ads?",
+    "answer": "Use custom columns to create personalized metrics and calculations that help you analyze performance based on your specific business needs.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 167,
+    "question": "What is a store visit conversion?",
+    "answer": "Store visit conversions measure the number of people who visit your physical store after clicking on your online ad.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 168,
+    "question": "How do I use geographic performance reports?",
+    "answer": "Geographic performance reports show how your ads perform in different locations, helping you refine your location targeting and bid adjustments.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 169,
+    "question": "What is a product partition in Shopping ads?",
+    "answer": "Product partitions allow you to divide your product inventory into different groups, enabling more granular bidding and reporting.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 170,
+    "question": "What is a YouTube masthead ad?",
+    "answer": "A YouTube masthead ad is a high-visibility ad format that appears at the top of the YouTube homepage for 24 hours, offering massive reach and brand exposure.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 171,
+    "question": "What are bumper ads?",
+    "answer": "Bumper ads are short, non-skippable video ads up to 6 seconds long, designed to increase brand awareness.",
+    "heading": "Advanced Google Ads Questions"
+  },
+  {
+    "serial": 172,
+    "question": "How do you stay updated with Google Ads changes and industry trends?",
+    "answer": "I stay updated with Google Ads changes and industry trends by regularly reading industry blogs, such as Search Engine Land and Marketing Land, following Google Ads' official blog and YouTube channel, participating in webinars and online courses, and engaging with digital marketing communities on platforms like LinkedIn and Reddit. I also subscribe to newsletters from authoritative sources and regularly check for updates in Google Skillshop.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 173,
+    "question": "Can you describe a time when you successfully improved a campaign's performance?",
+    "answer": "In one campaign, I noticed that our conversion rate was lower than expected. After analyzing the data, I identified that certain keywords had a high CTR but low conversions. I refined the keyword list, adjusted the ad copy to better match user intent, and improved the landing page experience by simplifying the form and adding clear calls to action. These changes led to a 25% increase in conversion rate and a 20% decrease in cost per acquisition over three months.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 174,
+    "question": "How do you handle budget constraints in a Google Ads campaign?",
+    "answer": "When dealing with budget constraints, I prioritize campaigns and ad groups based on performance metrics such as ROI and conversion rates. I focus on high-performing keywords and pause or reduce bids on underperforming ones. I also use bid adjustments to allocate budget more efficiently across devices, locations, and times of day. Additionally, I experiment with different ad formats and extensions to maximize the impact of the budget.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 175,
+    "question": "What tools or software do you use to manage and optimize Google Ads campaigns?",
+    "answer": "Besides Google Ads itself, I use Google Analytics for tracking and analyzing performance, Google Tag Manager for managing tags, and Google Data Studio for creating custom reports. I also utilize tools like SEMrush and Ahrefs for keyword research and competitive analysis, and Excel or Google Sheets for data analysis and reporting. Additionally, I use Google Ads Editor for making bulk changes quickly.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 176,
+    "question": "How do you approach keyword research and selection?",
+    "answer": "I start by brainstorming a list of potential keywords relevant to the business and its products or services. I then use the Google Ads Keyword Planner to expand this list and get insights into search volume, competition, and bid estimates. I analyze competitors’ keywords using tools like SEMrush or Ahrefs and look for long-tail keywords that may have lower competition but high relevance. I also continuously monitor and refine the keyword list based on campaign performance and search term reports.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 177,
+    "question": "Can you explain a time when you had to troubleshoot a significant issue in a campaign?",
+    "answer": "There was an instance where a client's campaign experienced a sudden drop in performance. I conducted a thorough audit and found that recent changes to the website caused tracking issues, leading to inaccurate conversion data. I quickly fixed the tracking setup in Google Tag Manager and updated the conversion actions in Google Ads. Additionally, I reviewed and adjusted bids and budgets to stabilize performance. These actions helped restore the campaign’s performance within a week.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 178,
+    "question": "How do you measure the success of a Google Ads campaign?",
+    "answer": "I measure the success of a Google Ads campaign by tracking key performance indicators (KPIs) aligned with the campaign goals. These KPIs typically include CTR, conversion rate, cost per conversion, ROI, and overall return on ad spend (ROAS). I also monitor metrics like quality score, ad relevance, and impression share to ensure the campaign is optimized for performance. Regular reporting and analysis help in making data-driven decisions to achieve the desired outcomes.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 179,
+    "question": "What strategies do you use for remarketing?",
+    "answer": "For remarketing, I create segmented audiences based on user behavior, such as website visitors, cart abandoners, and past customers. I tailor ad creatives and messages to each segment, emphasizing different value propositions and offers. Dynamic remarketing is particularly effective for showing personalized ads with products users have viewed. I also set frequency caps to avoid overexposure and use different ad formats and platforms, like Google Display Network and YouTube, to reach users effectively.",
+    "heading": "Interview Questions and Answers"
+  },
+  {
+    "serial": 180,
+    "question": "How do you ensure that your ads comply with Google's advertising policies?",
+    "answer": "To ensure compliance with Google's advertising policies, I review the policies regularly and ensure all ads adhere to the guidelines. I use Google's policy compliance tools within the Ads interface to check for disapproved ads and address any issues promptly. Additionally, I stay informed about policy updates and educate my team on compliance best practices to avoid violations.",
+    "heading": "Interview Questions and Answers"
+  }
+]
+
+        function getQuestion() {
+            const startNumber = parseInt(document.getElementById('startNumber').value);
+            const endNumber = parseInt(document.getElementById('endNumber').value);
+            const randomNumber = Math.floor(Math.random() * (endNumber - startNumber + 1)) + startNumber;
+            const question = questions.find(q => q.serial === randomNumber);
+
+            if (question) {
+                document.getElementById('questionText').innerText = question.question;
+                document.getElementById('detailsButton').classList.remove('hidden');
+                document.getElementById('questionDetails').classList.add('hidden');
+                // Save the selected question for details function
+                window.selectedQuestion = question;
+            } else {
+                alert('No question found for the selected range.');
+            }
+        }
+
+        function showDetails() {
+            if (window.selectedQuestion) {
+                document.getElementById('answerText').innerText = window.selectedQuestion.answer;
+                document.getElementById('questionDetails').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
