@@ -34,6 +34,7 @@ const SingleBrowsingHistoryView = () => {
     },[data, isLoading, isError, isSuccess, error, dispatch])
 
     useEffect(()=>{
+        document.title='Your browsing history products';
         let mainView = document.querySelector('.mobile__view__container');
         if(mainView){
             mainView.scrollTop = 0;

@@ -3,10 +3,13 @@ import React from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { RiShoppingCart2Line } from 'react-icons/ri';
 import { SlMenu } from 'react-icons/sl';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { server__image__host__url } from '../../../app/store';
 
 const VisibleNavbar = () => {
 
+    const {storeInfos} = useSelector((state)=> state.auth);
     const toggleItem =  (itemSelector) => {
         const homePage = document.querySelector('.mobile__view__container');
         if(homePage){
@@ -37,7 +40,7 @@ const VisibleNavbar = () => {
                 <Link to='/'>
                     <Image 
                         h='45px' 
-                        src='/logo.png' 
+                        src={server__image__host__url+storeInfos?.img__src}
                         alt='logo'
                     />
                 </Link>

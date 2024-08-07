@@ -5,14 +5,12 @@ import ColorNavbar from './Components/Navbar/ColorNavbar';
 import Navbar from './Components/Navbar/Navbar';
 import NextVisibleNavbar from './Components/NextVisibleNavbar';
 import { SearchModal } from './Components/SearchModal';
-import TopSmallNavbar from './Components/TopSmallNavbar';
 import VisibleNavbar from './Components/VisibleNavbar';
 
 const RootPageUpMaterial = ({colorNavbarHide}) => {
     return (
         <React.Fragment>
-            <Toaster/>
-            <TopSmallNavbar/>
+            <Toaster/> 
             <VisibleNavbar/>
             <Navbar/>
             <NextVisibleNavbar/>

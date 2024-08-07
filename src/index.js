@@ -24,7 +24,7 @@ root.render(
         <Provider store={store}>
             {/* here theme color mode script */}
             <ColorModeScript initialColorMode={theme.config.initialColorMode}/>
-              <Router>
+              <Router basename='/'>
                 <App />
               </Router>
         </Provider>

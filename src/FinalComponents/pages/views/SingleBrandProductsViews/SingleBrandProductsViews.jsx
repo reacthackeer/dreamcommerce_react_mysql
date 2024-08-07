@@ -44,11 +44,12 @@ const SingleBrandProductViews = () => {
     ] 
     
     useEffect(()=>{
+        document.title = `${brandName} brand product shop in Bangladesh`;
         let mainView = document.querySelector('.mobile__view__container');
         if(mainView){
             mainView.scrollTop = 0;
         } 
-    },[data, isLoading, isError, isSuccess, error])
+    },[data, isLoading, isError, isSuccess, error, brandName])
     
         
     const handleFilterResetProductByCategory = (products) => {

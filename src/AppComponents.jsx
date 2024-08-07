@@ -793,6 +793,7 @@ const AppComponents = () => {
           <Route path='/about-us' element={<h1> /about Hello world</h1>}/>
           <Route path='/privacy-policy' element={<h1> /privacy Hello world</h1>}/>
           <Route path='/terms-and-condition' element={<h1> /terms Hello world</h1>}/>
+          <Route path='/refund-policy' element={<h1> Hello refund policy</h1>}/>
           <Route path='/:visible__url/:product__id' element={  
             <React.Fragment> 
                 <RootPageUpMaterial/> 

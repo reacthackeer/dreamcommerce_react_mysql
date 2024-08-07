@@ -35,6 +35,7 @@ const SingleCategoryView = () => {
     ] 
     
     useEffect(()=>{
+        document.title = 'Everyday essential product for your daily life'
         let mainView = document.querySelector('.mobile__view__container');
         if(mainView){
             mainView.scrollTop = 0;

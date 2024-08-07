@@ -34,6 +34,8 @@ const initialState = {
     cartProduct: [],
     authChecked: false,
     editMode: false,
+    storeInfos: {},
+    contactInfos: {},
 }
 
 const authSlice = createSlice({
@@ -53,6 +55,8 @@ const authSlice = createSlice({
             state.navbar = action.payload.navbar;
             state.banners = action.payload.banners;
             state.popularCategory = action.payload.popularCategory;
+            state.storeInfos = action.payload.shopInformation[0];
+            state.contactInfos = action.payload.contactUSInfos[0];
         },
         resetPrintUserInfo: (state, action) => {
             state.printUser = {

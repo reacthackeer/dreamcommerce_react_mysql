@@ -30,8 +30,10 @@ const SingleOfferView = () => {
     
     const dispatch = useDispatch();
     useEffect(()=>{
-        dispatch(clearFilterProduct())
-    },[data, isLoading, isError, isSuccess, error, dispatch])
+        dispatch(clearFilterProduct()) 
+        let titleText = `${offerName.split('__').join(' ').toUpperCase()} - Best product for your daily gaming life`;
+        document.title = titleText
+    },[data, isLoading, isError, isSuccess, error, dispatch, offerName])
     
     let linksArray = [
         {name: 'HOME', link: '/'}, 

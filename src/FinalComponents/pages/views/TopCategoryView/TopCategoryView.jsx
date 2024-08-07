@@ -67,6 +67,7 @@ const TopCategoryView = () => {
     }
     
     useEffect(()=>{
+        document.title='Best Computer and Accessories Shop In Bangladesh | Danguli';
         let mainView = document.querySelector('.mobile__view__container');
         if(mainView){
             mainView.scrollTop = 0;

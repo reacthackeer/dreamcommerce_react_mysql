@@ -26,8 +26,9 @@ const SearchProductView = () => {
 
     const dispatch = useDispatch();
     useEffect(()=>{
+        document.title = `Best ${searchText} inline shop in Bangladesh with best price!`
         dispatch(clearFilterProduct())
-    },[data, isLoading, isError, isSuccess, error, dispatch])
+    },[data, isLoading, isError, isSuccess, error, dispatch, searchText])
     
     if(isLoading && !isError && !isSuccess){
         content = <LoadingPage/>

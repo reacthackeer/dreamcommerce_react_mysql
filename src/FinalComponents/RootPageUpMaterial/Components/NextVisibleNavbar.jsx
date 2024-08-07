@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { CgProfile } from 'react-icons/cg';
 import { MdFavoriteBorder } from 'react-icons/md';
 import { RiShoppingCart2Line } from 'react-icons/ri';
+import { useSelector } from 'react-redux';
 import { Link as RLink, useNavigate } from 'react-router-dom';
+import { server__image__host__url } from '../../../app/store';
 
 const NextVisibleNavbar = () => {
+    const {storeInfos} = useSelector((state)=> state.auth);
     const navigate = useNavigate();
     const [searchValue, setSearchValue] = useState('');
     useEffect(()=>{
@@ -52,7 +55,7 @@ const NextVisibleNavbar = () => {
                 <div className='main__container__top__container'>
                     <div className='left__side logo__container'> 
                         <RLink to='/'>
-                            <Image src='/logo.png' alt='logo'/>
+                            <Image src={server__image__host__url+storeInfos?.img__src} alt='logo'/>
                         </RLink>
                     </div> 
                     <div className='left__side search__container'>

@@ -22,8 +22,9 @@ const ViewAllBrandItems = () => {
         {name: 'BRANDS', link: `/brands`}, 
     ] 
     
-
+    
     if(!isLoading && !isError && isSuccess && data?.length > 0){
+        document.title = 'Best computer related brand product shop in Bangladesh | Danguli'
         content =  <React.Fragment>
             <div className="main__category__product__view__upper__container">
                 <div className='padding__y__25'>

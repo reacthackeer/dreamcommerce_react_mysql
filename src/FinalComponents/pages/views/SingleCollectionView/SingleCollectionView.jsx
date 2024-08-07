@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useGetAllCollectionProductQuery } from '../../../../features/collection/collectionApi';
 import { clearFilterProduct } from '../../../../features/product/productSlice';
+import { setCollectionTitleAndDescription } from '../../../PagesComponents/SetProductTitle';
 import { LoadingPage, NotFoundPage } from '../../LandingPage/Components/Loading';
 import DevelopViewSkeleton from '../SingleBrandProductsViews/ChildComponents/developViewSkeleton';
 
 const SingleCollectionView = () => {
-    const params = useParams();  
+    const params = useParams();   
     const searchParams = useSearchParams()[0];
     let page = searchParams.get('page') ? Number(searchParams.get('page')) : 1 
     let limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 45
@@ -74,6 +75,11 @@ const SingleCollectionView = () => {
     const navigate = useNavigate()
     
     if(!isLoading && !isError && isSuccess && data?.products?.length > 0){
+        let titleText = `${collection} Price in Bangladesh ${new Date().getFullYear()} | Danguli`; 
+        let descriptionText = `Buy ${collection} at Lowest Price in Bangladesh. Latest ${collection} Price & full Specs available at Danguli Online Shop. Order Your ${collection} & get delivery in BD.`; 
+        let keyWordText = `${collection}, ${category}, ${topCategory}`;  
+        setCollectionTitleAndDescription(titleText, descriptionText, keyWordText)
+        
         let resetProduct = handleFilterResetProductByCategory([...data?.products]);
             resetProduct = handleFilterResetProductByPrice([...resetProduct]);
             resetProduct = handleSearchProductBySearchString([...resetProduct]);

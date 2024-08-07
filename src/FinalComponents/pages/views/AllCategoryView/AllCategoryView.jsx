@@ -1,7 +1,8 @@
 import { Image } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useGetAllCategoryQuery } from '../../../../features/category/categoryApi';
+import { setCollectionTitleAndDescription } from '../../../PagesComponents/SetProductTitle';
 import { LoadingPage, NotFoundPage } from '../../LandingPage/Components/Loading';
 import HeaderLinkItem from '../SingleBrandProductsViews/ChildComponents/developViewSkeletonComponents/HeaderLinkItems';
 import DevelopAllCategorySingleBrandItem from './DevelopAllCategorySingleBrandItem';
@@ -16,6 +17,16 @@ const AllCategoryView = () => {
     if(isLoading && !isError && !isSuccess){
         content = <LoadingPage/>
     }
+
+    useEffect(()=> {
+        let titleText = 'Best Computer Accessories And gadget shop in Bangladesh | Danguli';
+        let descriptionArray = ['Best inline shop for']
+        data.items.forEach((info)=> {
+            descriptionArray.push(info.name);
+        });
+        let descriptionText = descriptionArray.join(', ');
+        setCollectionTitleAndDescription(titleText, descriptionText, 'Computer, Accessories, Mouse, Keyboard, Headphone')
+    },[data, isSuccess])
     if(!isLoading && isError && !isSuccess){
         content = <NotFoundPage message={error?.message}/>
     }
@@ -24,6 +35,7 @@ const AllCategoryView = () => {
         {name: 'CATEGORIES', link: `/categories`}, 
     ] 
     
+
 
     if(!isLoading && !isError && isSuccess && data?.items?.length > 0){
         content =  <React.Fragment>

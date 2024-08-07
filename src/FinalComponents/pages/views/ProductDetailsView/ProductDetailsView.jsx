@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import React, { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetSingleProductQuery } from '../../../../features/product/productApi';
+import { setCollectionTitleAndDescription } from '../../../PagesComponents/SetProductTitle';
 import BrowsingHistoryArea from './childComponents/BrowsingHistoryArea';
 import DetailsArea from './childComponents/DetailsArea';
 import FromSameBrand from './childComponents/FromSameBrand';
@@ -15,16 +16,6 @@ const ProductDetailsView = memo(() => {
     let {data, isLoading, isError, isSuccess, error} = useGetSingleProductQuery({visible__url, product__id});
     
     
-    const overviews = [
-        "Laptop Series - MacBook Pro",
-        "Processor Brand - Intel",
-        "Processor Model - Core i5",
-        "Processor Base Frequency - 2.40 GHz",
-        "Processor Max Turbo Frequency - 4.10 GHz",
-        "Display Size - 13.3 Inch"
-    ]
-    const [productCount] = useState(1)
-
     
     let images = [];
     
@@ -37,9 +28,26 @@ const ProductDetailsView = memo(() => {
     }     
     useEffect(()=>{
         let mainView = document.querySelector('.mobile__view__container');
+        
         if(mainView){
             mainView.scrollTop = 0;
         }  
+
+        if(isSuccess && data){
+            let productInfos = data.product.infos;
+            let {child, brand, parent, parent__father, specifications, title} = productInfos;
+            let titleText = data.product.infos.title;
+            let keyWordText = `${child}, ${brand},  ${parent}, ${parent__father}`;
+            let allDescription = [];
+            allDescription.push(title)
+            specifications.forEach((info)=> {
+                info.infos.forEach((infoSecond)=>{
+                    allDescription.push(`${infoSecond.title} - ${infoSecond.info}`)
+                })
+            })  
+            let descriptionText = allDescription.join(', ');
+            setCollectionTitleAndDescription(titleText, keyWordText, descriptionText)
+        }
     },[data, isLoading, isError, isSuccess, error])
     return (
         <React.Fragment>
@@ -48,7 +56,7 @@ const ProductDetailsView = memo(() => {
                 <div className='main__category__product__view__upper__container bg__white'>
                     <div className='top__single__Product__main__view padding__top'> 
                         <ImageArea images={images}/>
-                        <DetailsArea overviews={overviews} product={data?.product} productCount={productCount}/>
+                        <DetailsArea product={data?.product}/>
                     </div>
                 </div>
                 <Box className='main__category__product__view__upper__container bg__white'> 

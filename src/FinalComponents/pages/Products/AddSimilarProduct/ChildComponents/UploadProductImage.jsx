@@ -1,11 +1,11 @@
 import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Image,
-  Input,
-  Text
+    Box,
+    Button,
+    FormControl,
+    FormLabel,
+    Image,
+    Input,
+    Text
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { debounce } from 'lodash';
