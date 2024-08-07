@@ -1,8 +1,8 @@
 const asyncHandler = require('express-async-handler'); 
-const { getAllSearchProduct, getAllMultipleOffers, getSingleSqlProduct, updateSingleSqlProduct, getMultipleSqlProduct, getSingleOrMultipleSqlProduct} = require('../query/products__query');
+const { getAllSearchProduct, getAllMultipleOffers,updateSingleSqlProduct, getMultipleSqlProduct, getSingleOrMultipleSqlProduct} = require('../query/products__query');
 const { getSqlProductLength } = require('../query/lengthQuery'); 
 const { addSingleSqlProduct } = require('../query/products__query');
-const { deleteGeneralSqlOperation, getSingleOfferQuery, getSingleOffersQuery } = require('../query/offer__query');
+const { deleteGeneralSqlOperation, getSingleOffersQuery } = require('../query/offer__query');
 
 const handleGetAllSingleOfferProduct = asyncHandler(async(req, res, next)=>{
     const name = req.params.offer; 

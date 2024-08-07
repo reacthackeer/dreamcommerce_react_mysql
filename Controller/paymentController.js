@@ -10,7 +10,9 @@ const PaymentStatus = require('../model/PaymentStatus');
 
 const store_id = process.env.SSL__STORE__ID__SUB;
 const store_passwd = process.env.SSL__STORE__ID__SUB__KEY;
-const is_live = false;
+let is_live = process.env.SSL__IS__LIVE || 'false';
+    is_live = is_live === 'false' ? false :  true;
+const PORT = process.env.PORT; 
 
 const handleSuccessPayment = asyncHandler(async(req, res, next)=>{
     let {val_id} = req.body; 
@@ -206,11 +208,11 @@ const handleInitiatePayment  = asyncHandler(async(req, res, next) => {
                                                             total_amount: totalResultInfo.allTotal,
                                                             currency: 'BDT',
                                                             tran_id: order__id, // use unique tran_id for each api call
-                                                            success_url: `http://localhost:10000`+'/api/v1/payment/success/'+order__id+`/${user__id}`,
+                                                            success_url: PORT+'/api/v1/payment/success/'+order__id+`/${user__id}`,
                                                             // success_url: process.env.ORIGIN+'/payment/success/'+order__id,
-                                                            fail_url: process.env.ORIGIN+'/payment/fail/'+order__id,
-                                                            cancel_url: process.env.ORIGIN+'/payment/cancel/'+order__id,
-                                                            ipn_url: process.env.ORIGIN+'/payment/ipn/'+order__id,
+                                                            fail_url: PORT+'/payment/fail/'+order__id,
+                                                            cancel_url: PORT+'/payment/cancel/'+order__id,
+                                                            ipn_url: PORT+'/payment/ipn/'+order__id,
                                                             shipping_method: 'Courier',
                                                             product_name: 'Computer Accessories '+totalResultInfo.totalQuantity+' products',
                                                             product_category: 'Electronic',

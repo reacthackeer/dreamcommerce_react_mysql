@@ -15,26 +15,7 @@ const getAllChildNavbar = asyncHandler(async(req, res, next)=>{
             next(newError);
     }
 })
-
-// const getAllChildNavbar = asyncHandler(async(req, res, next)=>{
-//     let {name, parent} = req.query;
-//     if(name && parent){
-//         let sql = `SELECT * FROM child WHERE name="${name}" AND parent="${parent}"`;
-//         try {
-//             let result = await getAllJustSqlProduct(sql);
-//             res.json(result);
-//         } catch (error) {
-//             let newError = new Error(error.message);
-//                 newError.status = 500;
-//                 next(newError);
-//         }
-//     }else{
-//         let newError = new Error("Invalid server request");
-//             newError.status=204;
-//             next(newError);
-//     }
-// })
-
+    
 const getAllChildParentNavbar = asyncHandler(async(req, res, next)=>{
     let {parent, up} = req.query;
         

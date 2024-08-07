@@ -1,8 +1,6 @@
 const asyncHandler = require('express-async-handler');
 
-const handleCalculatePrice = asyncHandler(async(req, res, next)=>{
-    
-
+const handleCalculatePrice = asyncHandler(async(req, res, next)=>{ 
     res.json('done')
 });
 

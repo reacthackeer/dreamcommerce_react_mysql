@@ -1,6 +1,4 @@
-const { multipleFileUpload, multipleFileDelete } = require('../Controller/uploadController');
-const multer = require('multer');
-const upload = multer({dest: '/public/images/check'});
+const { multipleFileUpload, multipleFileDelete } = require('../Controller/uploadController'); 
 const uploadRouter = require('express').Router();
 
 uploadRouter.post('/multiple', multipleFileUpload);

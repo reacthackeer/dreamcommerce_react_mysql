@@ -85,28 +85,66 @@ const updateSingleUpNavbar = asyncHandler(async(req, res, next)=>{
 })
 
 const deleteSingleUpNavbar = asyncHandler(async(req, res, next)=>{
-    const ID = req.params?.item__id
-    if(ID){ 
-        const query = `DELETE FROM up WHERE ID="${ID}"`;
+    let {item__id} = req.params;
+    if(item__id){
+        let sql = `SELECT * FROM up WHERE ID="${item__id}"`;
         try {
-            const result = await deleteGeneralSqlOperation(query);
-            if(result?.status__code === 200){
-                res.json(result);
+            let result = await getSingleSqlProduct(sql);
+            if(result && result.item){ 
+                let sql = `SELECT * FROM grandfather WHERE up="${result.item.name}"`;
+                try {
+                    await getAllJustSqlProduct(sql);
+                } catch (error) {
+                    const query = `DELETE FROM up WHERE ID="${item__id}"`;
+                    try {
+                        const result = await deleteGeneralSqlOperation(query);
+                        if(result?.status__code === 200){
+                            res.json(result);
+                        }else{
+                            const errorBody = new Error('DELETED DATA NOT FOUND!');
+                            errorBody.status = 500;
+                            next(errorBody);
+                        }
+                    } catch (error) {  
+                        const errorBody = new Error('An error occurred while deleting data');
+                        errorBody.status = 500;
+                        next(errorBody);
+                    }
+                }
             }else{
-                const errorBody = new Error('DELETED DATA NOT FOUND!');
-                errorBody.status = 500;
-                next(errorBody);
+                next(new Error('Invalid request!'))
             }
-        } catch (error) {  
-            const errorBody = new Error('An error occurred while deleting data');
-            errorBody.status = 500;
-            next(errorBody);
+        } catch (error) {
+            let newError = new Error(error.message);
+            newError.status = 500;
+            next(newError);
         }
     }else{
-        const error = new Error('Invalid server request?');
-        error.status = 500;
-        next(error);
+        let newError = new Error("Invalid server request");
+        newError.status=204;
+        next(newError);
     }
+    // if(ID){ 
+        // const query = `DELETE FROM up WHERE ID="${ID}"`;
+        // try {
+        //     const result = await deleteGeneralSqlOperation(query);
+        //     if(result?.status__code === 200){
+        //         res.json(result);
+        //     }else{
+        //         const errorBody = new Error('DELETED DATA NOT FOUND!');
+        //         errorBody.status = 500;
+        //         next(errorBody);
+        //     }
+        // } catch (error) {  
+        //     const errorBody = new Error('An error occurred while deleting data');
+        //     errorBody.status = 500;
+        //     next(errorBody);
+        // }
+    // }else{
+    //     const error = new Error('Invalid server request?');
+    //     error.status = 500;
+    //     next(error);
+    // }
 })
 
 

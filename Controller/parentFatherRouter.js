@@ -122,28 +122,53 @@ const updateSingleParentFatherNavbar = asyncHandler(async(req, res, next)=>{
 
 
 const deleteSingleParentFatherNavbar = asyncHandler(async(req, res, next)=>{
-    const ID = req.params?.item__id
-    if(ID){ 
-        const query = `DELETE FROM grandfather WHERE ID="${ID}"`
+    let {item__id} = req.params;
+    if(item__id){
+        let sql = `SELECT * FROM grandfather WHERE ID="${item__id}"`;
         try {
-            const result = await deleteGeneralSqlOperation(query);
-            if(result?.status__code === 200){
-                res.json(result);
+            let result = await getSingleSqlProduct(sql);
+            if(result && result.item){   
+                let sql = `SELECT * FROM parent WHERE parent__father="${result.item.name}"`;
+                try {
+                    await getAllJustSqlProduct(sql); 
+                    res.json(new Error('Child existed!'))
+                } catch (error) { 
+                    const query = `DELETE FROM grandfather WHERE ID="${item__id}"`
+                    try {
+                        const result = await deleteGeneralSqlOperation(query);
+                        if(result?.status__code === 200){
+                            res.json(result);
+                        }else{
+                            const errorBody = new Error('DELETED DATA NOT FOUND!');
+                            errorBody.status = 500;
+                            next(errorBody);
+                        }
+                    } catch (error) {  
+                        const errorBody = new Error('An error occurred while deleting data');
+                        errorBody.status = 500;
+                        next(errorBody);
+                    }
+                }
             }else{
-                const errorBody = new Error('DELETED DATA NOT FOUND!');
-                errorBody.status = 500;
-                next(errorBody);
+                next(new Error('Invalid server request!'))
             }
-        } catch (error) {  
-            const errorBody = new Error('An error occurred while deleting data');
-            errorBody.status = 500;
-            next(errorBody);
+        } catch (error) {
+            let newError = new Error(error.message);
+            newError.status = 500;
+            next(newError);
         }
     }else{
-        const error = new Error('Invalid server request?');
-        error.status = 500;
-        next(error);
+        let newError = new Error("Invalid server request");
+        newError.status=204;
+        next(newError);
     }
+    // if(ID){ 
+
+    // }else{
+    //     const error = new Error('Invalid server request?');
+    //     error.status = 500;
+    //     next(error);
+    // }
 })
 
 

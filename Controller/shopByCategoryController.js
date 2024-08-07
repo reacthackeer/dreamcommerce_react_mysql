@@ -1,6 +1,4 @@
-const asyncHandler = require('express-async-handler');
-const { generalSqlOperation, updateGeneralSqlOperation } = require('../query/offer__query');
-const { getAllJustSqlProduct, getSingleJustSqlProduct, deleteSingleSqlProduct } = require('../query/products__query');
+const asyncHandler = require('express-async-handler'); 
 const ShopByCategory = require('../model/ShopByCategory');
 
 const addSingleShopByCategory = asyncHandler(async(req, res, next)=>{
@@ -84,6 +82,7 @@ const deleteSingleShopByCategory = asyncHandler(async(req, res, next)=>{
         next(new Error('Internal server error!'))
     }
 })
+
 module.exports = {
     addSingleShopByCategory,
     updateSingleShopByCategory,

@@ -1,5 +1,4 @@
-const asyncHandler = require('express-async-handler');  
-const StoreInformation = require('../model/StoreInformation');
+const asyncHandler = require('express-async-handler');   
 const ContactUs = require('../model/ContactUs');
 
 const handleAddSingleContactUs = asyncHandler(async(req, res, next)=>{

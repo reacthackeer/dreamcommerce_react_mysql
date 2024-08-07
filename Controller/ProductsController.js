@@ -1,5 +1,4 @@
-const asyncHandler = require('express-async-handler');
-const { dataConverterUtils } = require('../utils/dataConverterUtils');
+const asyncHandler = require('express-async-handler'); 
 const { 
     getAllSearchProduct, 
     getAllMultipleOffers, 

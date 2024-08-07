@@ -15,25 +15,6 @@ const getAllParentNavbar = asyncHandler(async(req, res, next)=>{
     }
 })
 
-
-// const getAllParentNavbar = asyncHandler(async(req, res, next)=>{
-//     let {name, parent__father} = req.query;
-//     if(name && parent__father){
-//         let sql = `SELECT * FROM parent WHERE name="${name}" AND parent__father="${parent__father}"`;
-//         try {
-//             let result = await getAllJustSqlProduct(sql);
-//             res.json(result);
-//         } catch (error) {
-//             let newError = new Error(error.message);
-//                 newError.status = 500;
-//                 next(newError);
-//         }
-//     }else{
-//         let newError = new Error("Invalid server request");
-//             newError.status=204;
-//             next(newError);
-//     }
-// })
 const getAllParentNavbarAll = asyncHandler(async(req, res, next)=>{
     let {up, parent__father} = req.query;
     up = up.replace(/anndd/g,'&');
@@ -147,27 +128,43 @@ const updateSingleParentNavbar = asyncHandler(async(req, res, next)=>{
 
 
 const deleteSingleParentNavbar = asyncHandler(async(req, res, next)=>{
-    const ID = req.params?.item__id
-    if(ID){ 
-        const query = `DELETE FROM parent WHERE ID="${ID}"`
+
+    let ID = req.params.item__id;
+    if(ID){
+        let sql = `SELECT * FROM parent WHERE ID="${ID}"`;
         try {
-            const result = await deleteGeneralSqlOperation(query);
-            if(result?.status__code === 200){
-                res.json(result);
+            let result = await getSingleSqlProduct(sql);
+            if(result && result.item){ 
+                let sql = `SELECT * FROM child WHERE parent="${result.item.name}"`;
+                try {
+                    await getAllJustSqlProduct(sql); 
+                } catch (error) {    
+                    const query = `DELETE FROM parent WHERE ID="${ID}"`
+                    try {
+                        const result = await deleteGeneralSqlOperation(query);
+                        if(result?.status__code === 200){
+                            res.json(result);
+                        }else{
+                            const errorBody = new Error('DELETED DATA NOT FOUND!');
+                            errorBody.status = 500;
+                            next(errorBody);
+                        }
+                    } catch (error) {  
+                        const errorBody = new Error('An error occurred while deleting data');
+                        errorBody.status = 500;
+                        next(errorBody);
+                    }
+                }
             }else{
-                const errorBody = new Error('DELETED DATA NOT FOUND!');
-                errorBody.status = 500;
-                next(errorBody);
+                next(new Error('Invalid server request!'))
             }
-        } catch (error) {  
-            const errorBody = new Error('An error occurred while deleting data');
-            errorBody.status = 500;
-            next(errorBody);
+        } catch (error) {
+            next(new Error(error.message))
         }
     }else{
-        const error = new Error('Invalid server request?');
-        error.status = 500;
-        next(error);
+        let newError = new Error("Invalid server request");
+        newError.status=204;
+        next(newError);
     }
 })
 

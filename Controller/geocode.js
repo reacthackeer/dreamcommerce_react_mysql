@@ -1,7 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const {getAllJustSqlProduct} = require('../query/products__query');
-const Division = require('../model/Division');
-const District = require('../model/District');
+const {getAllJustSqlProduct} = require('../query/products__query'); 
 
 const getAllDivisions = asyncHandler(async(req, res, next)=>{
     let sql = 'SELECT * FROM divisions';

@@ -23,8 +23,7 @@ const { paymentRouter } = require('./Router/PaymentRouter');
 const { popularCategory } = require('./Router/PopularCategory');
 const sequelize = require('./config/database');
 const { orderRouter } = require('./Router/Order');
-const { systemRouter } = require('./Router/SystemRouter');
-const { calculatePriceRouter } = require('./Router/CalculatePrice');
+const { systemRouter } = require('./Router/SystemRouter'); 
 const bannerRouter = require('./Router/BannerRouter'); 
 const { newProductRouter } = require('./Router/NewProductRouter');
 const { storeInformationRouter } = require('./Router/StoreInformationi');
@@ -33,12 +32,13 @@ const { contactUsRouter } = require('./Router/ContactUs');
 
 const handleSyncDatabase = async () => {
     try {
-    let result = await sequelize.sync({force: false});
-    console.log('Successfully database sync');
+    let result = await sequelize.sync({force: false}); 
+        console.log('Successfully database connected!')
     } catch (error) { 
     console.log(error.message);
     }
 }
+    
 
 handleSyncDatabase()
 
@@ -48,7 +48,18 @@ app.use(bodyParser.urlencoded({
     extended: true,
     limit: '100mb'
 }))
-const allowedOrigins = ['http://localhost:3000', 'https://sandbox.sslcommerz.com', 'https://another-domain.com'];
+let allAccessOrigin = [];
+
+let allEnv = process.env;
+for(var item in allEnv){ 
+    if(item.indexOf('ACCESS__WEB__NUMBER__') !== -1){
+        let domainValue = allEnv[item]; 
+        allAccessOrigin.push(domainValue)
+    }
+} 
+
+
+const allowedOrigins = [...allAccessOrigin]; 
 
 const corsOptions = {
     origin: allowedOrigins,
@@ -63,7 +74,7 @@ const PORT = process.env.PORT || 10000;
 app.use(express.static('public'))
 app.listen(PORT, (err)=>{
     if(!err){
-        console.log(`Server is running on PORT http://localhost:${PORT}`);
+        console.log(`Server is running on ${process.env.NODE_ENV} PORT http://localhost:${PORT}`);
     }
 })
 
@@ -99,7 +110,15 @@ app.use('/api/v1/order', orderRouter);
 app.get('/',(req, res)=>{
     res.send(`<h1>Hello world</h1>`)
 })
-
+const System = require('./model/System');
+app.get('/check-database', async (req, res)=>{
+    try {
+        let getResult = await System.findOne({where: {id: 1}});
+        res.json(getResult)
+    } catch (error) {
+        next(new Error(error.message))
+    }
+})
 // Error handling middleware
 app.use((err, req, res, next) => {
 

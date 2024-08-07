@@ -1,6 +1,6 @@
 
 const {mainDb} =  require('../config/connectDb');
-const {getAllBrandsSql, get__single__product__sql, getAllOffersSql} = require('../sql/sql')
+const {getAllBrandsSql, getAllOffersSql} = require('../sql/sql')
 
 const getSingleOfferQuery = (page, pageSize) => {
     const offset = (page-1) * pageSize;

@@ -4,9 +4,10 @@ const { generateFromEmail } = require("unique-username-generator");
 const { generateToken } = require('../utils/jsonwebtoken');
 const {addSingleSqlProduct, getSingleSqlProduct, updateSingleSqlProduct, getAllJustSqlProduct, getAllJustSqlProduct2, getAllJustSqlProduct3, getAllJustSqlProduct4, getSingleOrMultipleSqlProduct, deleteSingleSqlProduct}  = require('../query/products__query');
 const controllerUtils = require('../utils/filterUtils');
-const PopularCategory = require('../model/PopularCategory');
-const Banner = require('../model/Banner');
-const { Error } = require('sequelize');
+const PopularCategory = require('../model/popularCategory');
+const Banner = require('../model/Banner'); 
+const StoreInformation = require('../model/StoreInformation');
+const ContactUs = require('../model/ContactUs');
 
 const registerUser = asyncHandler(async(req, res, next)=>{
     let {email, password, phone, name, user__id} = req.body;
@@ -267,7 +268,18 @@ const getAllNavbarData = asyncHandler(async(req, res, next)=>{
                             // res.json(allBannerResultByType); 
                             try {
                                 let allCategoryResult = await PopularCategory.findAll({});
-                                res.json({popularCategory: allCategoryResult, banners: allBannerResultByType, navbar: result})
+                                // res.json({popularCategory: allCategoryResult, banners: allBannerResultByType, navbar: result})
+                                try {
+                                    let shopInformation = await StoreInformation.findAll({where: {id: 1}});
+                                    try {
+                                        let contactUSInfos = await ContactUs.findAll({where: {id: 1}}); 
+                                        res.json({popularCategory: allCategoryResult, banners: allBannerResultByType, navbar: result, shopInformation, contactUSInfos})
+                                    } catch (error) {
+                                        next(new Error(error.message))
+                                    }
+                                } catch (error) {
+                                    next(new Error(error.message))
+                                }
                             } catch (error) {
                                 next(new Error(error.message))
                             }

@@ -121,6 +121,7 @@ const handleDeleteSingleFilterNavbar = asyncHandler(async(req, res, next)=>{
         next(error);
     }
 })
+
 module.exports = { 
     getAllFilterNavbar,
     getSingleFilterNavbarByAll,

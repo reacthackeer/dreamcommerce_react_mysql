@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "production": "node index.js",
+    "startProduction": "pm2 start index.js --name danguli"
   },
   "keywords": [],
   "author": "",

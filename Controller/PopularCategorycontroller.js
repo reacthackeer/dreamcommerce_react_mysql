@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler'); 
-const PopularCategory = require('../model/PopularCategory');
+const PopularCategory = require('../model/popularCategory');
 
 const addSinglePopularCategory = asyncHandler(async(req, res, next)=>{
     let {name, link, img__src} = req.body;
@@ -82,6 +82,7 @@ const deleteSinglePopularCategory = asyncHandler(async(req, res, next)=>{
         next(new Error('Internal server error!'))
     }
 })
+
 module.exports = {
     addSinglePopularCategory,
     updateSinglePopularCategory,

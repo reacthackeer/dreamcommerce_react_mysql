@@ -1,6 +1,4 @@
-const asyncHandler = require('express-async-handler');
-const { generalSqlOperation, updateGeneralSqlOperation } = require('../query/offer__query');
-const { getAllJustSqlProduct, getSingleJustSqlProduct, deleteSingleSqlProduct } = require('../query/products__query');
+const asyncHandler = require('express-async-handler'); 
 const ShopByBrand = require('../model/ShopByBrand');
 
 const addSingleShopByBrand = asyncHandler(async(req, res, next)=>{
